@@ -37,75 +37,99 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 	font_data data;
 
 	std::ifstream file{glyph_path, std::ios::binary};
-	char buffer[6];
 	std::uint8_t tile_x{0}, tile_y{0};
 	while (file) {
+		char buffer[6];
 		file.read(buffer, 6);
-		std::uint16_t unicode{(std::uint16_t)(((std::uint8_t)buffer[0] << 8) + (std::uint8_t)buffer[1])};
-		data.glyph[unicode] = {tile_x, tile_y, (std::int8_t)buffer[2], (std::int8_t)buffer[3], (std::int8_t)buffer[4], (std::int8_t)buffer[5]};
+
+		std::int8_t* i8{(std::int8_t*)buffer};
+		std::uint8_t* u8{(std::uint8_t*)buffer};
+		data.glyph[(u8[0] << 8) + u8[1]] = {tile_x, tile_y, i8[2], i8[3], i8[4], i8[5]};
 		if (++tile_x == 0) {
 			++tile_y;
 		}
 	}
 
-	data.sprite = (std::size_t)gm::sprite_add(sprite_path, 1, 0, 0, 0, 0);
-	data.tile_width = (std::uint32_t)gm::sprite_get_width(data.sprite) >> 8;
-	data.tile_height = (std::uint32_t)gm::sprite_get_height(data.sprite) / (tile_y + (tile_x != 0));
+	data.sprite = gm::sprite_add(sprite_path, 1, 0, 0, 0, 0);
+	data.tile_width = gm::sprite_get_width(data.sprite) >> 8;
+	data.tile_height = gm::sprite_get_height(data.sprite) / (tile_y + (tile_x != 0));
 
 	gm_font_data.emplace_back(data);
 
 	return gm_font_data.size() - 1;
 }
 
-gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
-	auto& font_data{gm_font_data[gm_draw_setting.font]};
+gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
+	static constexpr std::uint8_t decode_tab[]{
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63,
+		52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0,
+		0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+		15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0,
+		0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+		41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0
+	};
 
-	std::vector<double> line_offset;
-	double line_width{0}, text_width{0};
-	for (const char* i{text}; true; ++i) {
-		if (*i == '\n' || *i == '\0') {
-			line_width = std::max(line_width - gm_draw_setting.letter_spacing, 0.);
-			text_width = std::max(text_width, line_width);
-			if (gm_draw_setting.halign < 0) {
-				line_offset.emplace_back(0);
-			}
-			else if (gm_draw_setting.halign == 0) {
-				line_offset.emplace_back(-line_width / 2);
+	std::size_t line_count{1};
+	std::wstring text;
+	while (*raw_text != 0) {
+		text.push_back(decode_tab[raw_text[0]] << 10 | decode_tab[raw_text[1]] << 4 | decode_tab[raw_text[2]] >> 2);
+		if (text.back() == '\n') {
+			++line_count;
+		}
+		if (raw_text[4] == 0) {
+			break;
+		}
+		text.push_back(decode_tab[raw_text[2]] << 14 | decode_tab[raw_text[3]] << 8 | decode_tab[raw_text[4]] << 2 | decode_tab[raw_text[5]] >> 4);
+		if (text.back() == '\n') {
+			++line_count;
+		}
+		if (raw_text[6] == '=') {
+			break;
+		}
+		text.push_back(decode_tab[raw_text[5]] << 12 | decode_tab[raw_text[6]] << 6 | decode_tab[raw_text[7]]);
+		if (text.back() == '\n') {
+			++line_count;
+		}
+		raw_text += 8;
+	}
+
+	auto& font_data{gm_font_data[gm_draw_setting.font]};
+	std::vector<double> line_offset(line_count);
+	if (gm_draw_setting.halign >= 0) {
+		double line_width{0};
+		auto p{line_offset.begin()};
+		for (auto& i : text) {
+			if (i == '\n') {
+				line_width = std::max(line_width - gm_draw_setting.letter_spacing, 0.);
+				*p++ = gm_draw_setting.halign == 0 ? -line_width / 2 : -line_width;
+				line_width = 0;
 			}
 			else {
-				line_offset.emplace_back(-line_width);
-			}
-			line_width = 0;
-			if (*i == '\0') {
-				break;
+				line_width += font_data.glyph[i].right + gm_draw_setting.letter_spacing;
 			}
 		}
-		else {
-			line_width += font_data.glyph[*i].right + gm_draw_setting.letter_spacing;
-		}
+		line_width = std::max(line_width - gm_draw_setting.letter_spacing, 0.);
+		*p++ = gm_draw_setting.halign == 0 ? -line_width / 2 : -line_width;
 	}
 
 	x += gm_draw_setting.offset_x;
 	y += gm_draw_setting.offset_y;
 	if (gm_draw_setting.valign >= 0) {
-		double text_height{gm_draw_setting.line_height * line_offset.size()};
-		if (gm_draw_setting.valign == 0) {
-			y -= text_height / 2;
-		}
-		else {
-			y -= text_height;
-		}
+		double text_height{gm_draw_setting.line_height * line_count};
+		y -= gm_draw_setting.valign == 0 ? text_height / 2 : text_height;
 	}
 
-	auto off{line_offset.begin()};
-	double draw_x{x + *off++}, draw_y{y};
-	for (const char* i{text}; *i != '\0'; ++i) {
-		if (*i == '\n') {
-			draw_x = x + *off++;
+	auto p{line_offset.begin()};
+	double draw_x{x + *p++}, draw_y{y};
+	for (auto& i : text) {
+		if (i == '\n') {
+			draw_x = x + *p++;
 			draw_y += gm_draw_setting.line_height;
 		}
 		else {
-			auto& glyph_data{font_data.glyph[*i]};
+			auto& glyph_data{font_data.glyph[i]};
 			gm::draw_sprite_general(
 				font_data.sprite,
 				0,

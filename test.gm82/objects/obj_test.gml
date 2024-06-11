@@ -20,8 +20,6 @@ lib_id=1
 action_id=603
 applies_to=self
 */
-external_call(global.gm_set_color,c_blue,c_purple)
+external_call(global.gm_set_color,$a879fd,$9343e8)
 external_call(global.gm_set_align,0,0)
-external_call(global.gm_draw,160,120,'114514
-One Two Three
-Nokionic-701')
+external_call(global.gm_draw,160,120,'AEwAbwByAGUAbQAgAGkAcABzAHUAbQAKTnFlcFBHZYcACk6CZXhQR2WH')

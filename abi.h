@@ -11,7 +11,7 @@
 
 GASEOUSMARBLE_API gm::real gm_init(gm::real ptr);
 GASEOUSMARBLE_API gm::real gm_font(gm::string sprite_path, gm::string glyph_path);
-GASEOUSMARBLE_API gm::real gm_draw(gm::real x, gm::real y, gm::string text);
+GASEOUSMARBLE_API gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text);
 GASEOUSMARBLE_API gm::real gm_set_font(gm::real font);
 GASEOUSMARBLE_API gm::real gm_set_color(gm::real color_top, gm::real color_bottom);
 GASEOUSMARBLE_API gm::real gm_set_alpha(gm::real alpha);

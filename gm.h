@@ -56,40 +56,40 @@ namespace gm {
 		void* _ptr;
 
 	public:
-		function(real r = 0) {
+		function(std::size_t r = 0) {
 			if (r <= 0) {
 				_ptr = nullptr;
 				return;
 			}
-			_ptr = (void*)(std::size_t)r;
+			_ptr = (void*)r;
 		}
 
 		ret_t operator()(args_t... a) {
 			if (_ptr == nullptr) {
-				return {};
+				return ret_t{};
 			}
 			var args[]{a...}, * pargs{args};
 			std::size_t count{sizeof...(a)};
 			var ret{}, * pret{&ret};
-			void* pfunc{_ptr};
+			void* pfn{_ptr};
 			__asm {
 				push pargs;
 				push count;
 				push pret;
-				call pfunc;
+				call pfn;
 			}
-			return ret;
+			return (ret_t)ret;
 		}
 	};
 
-	static function<real, string> get_function_pointer;
-	static function<real, string, real, real, real, real, real> sprite_add;
-	static function<real, real> sprite_get_width;
-	static function<real, real> sprite_get_height;
-	static function<real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
+	static function<std::size_t, string> get_function_pointer;
+	static function<std::size_t, string, real, real, real, real, real> sprite_add;
+	static function<std::uint32_t, real> sprite_get_width;
+	static function<std::uint32_t, real> sprite_get_height;
+	static function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
 
 	inline void init(real ptr) {
-		get_function_pointer = ptr;
+		get_function_pointer = (std::size_t)ptr;
 		sprite_add = get_function_pointer("sprite_add");
 		sprite_get_width = get_function_pointer("sprite_get_width");
 		sprite_get_height = get_function_pointer("sprite_get_height");
