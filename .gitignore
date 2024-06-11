@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ttf2png/font.gly
+/ttf2png/font.png
+/ttf2png/font.ttf
