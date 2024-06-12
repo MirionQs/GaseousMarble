@@ -20,13 +20,15 @@ struct draw_setting {
 	std::int8_t halign;
 	std::int8_t valign;
 	double letter_spacing;
+	double word_spacing;
 	double line_height;
 	double offset_x;
 	double offset_y;
+	double max_line_width;
 };
 
 static std::vector<font_data> gm_font_data;
-static draw_setting gm_draw_setting{0, 0xffffff, 0xffffff, 1, -1, -1, 0, 16, 0, 0};
+static draw_setting gm_draw_setting{0, 0xffffff, 0xffffff, 1, -1, -1, 0, 0, 16, 0, 0, -1};
 
 gm::real gm_init(gm::real ptr) {
 	gm::init(ptr);
@@ -108,6 +110,9 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 			}
 			else {
 				line_width += font_data.glyph[i].right + gm_draw_setting.letter_spacing;
+				if (i == ' ') {
+					line_width += gm_draw_setting.word_spacing;
+				}
 			}
 		}
 		line_width = std::max(line_width - gm_draw_setting.letter_spacing, 0.);
@@ -149,6 +154,9 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 				gm_draw_setting.alpha
 			);
 			draw_x += glyph_data.right + gm_draw_setting.letter_spacing;
+			if (i == ' ') {
+				draw_x += gm_draw_setting.word_spacing;
+			}
 		}
 	}
 
@@ -182,6 +190,11 @@ gm::real gm_set_letter_spacing(gm::real spacing) {
 	return 0;
 }
 
+gm::real gm_set_word_spacing(gm::real spacing) {
+	gm_draw_setting.word_spacing = spacing;
+	return 0;
+}
+
 gm::real gm_set_line_height(gm::real height) {
 	gm_draw_setting.line_height = height;
 	return 0;
@@ -190,5 +203,10 @@ gm::real gm_set_line_height(gm::real height) {
 gm::real gm_set_offset(gm::real x, gm::real y) {
 	gm_draw_setting.offset_x = x;
 	gm_draw_setting.offset_y = y;
+	return 0;
+}
+
+gm::real gm_set_max_line_width(gm::real width) {
+	gm_draw_setting.max_line_width = width;
 	return 0;
 }

@@ -17,5 +17,7 @@ GASEOUSMARBLE_API gm::real gm_set_color(gm::real color_top, gm::real color_botto
 GASEOUSMARBLE_API gm::real gm_set_alpha(gm::real alpha);
 GASEOUSMARBLE_API gm::real gm_set_align(gm::real halign, gm::real valign);
 GASEOUSMARBLE_API gm::real gm_set_letter_spacing(gm::real spacing);
+GASEOUSMARBLE_API gm::real gm_set_word_spacing(gm::real spacing);
 GASEOUSMARBLE_API gm::real gm_set_line_height(gm::real height);
 GASEOUSMARBLE_API gm::real gm_set_offset(gm::real x, gm::real y);
+GASEOUSMARBLE_API gm::real gm_set_max_line_width(gm::real width);
