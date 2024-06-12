@@ -6,7 +6,7 @@
 
 namespace gm {
 
-	std::wstring utf16_base64_decode(string s) {
+	std::u16string utf16_base64_decode(string s) {
 		static constexpr byte tab[]{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -18,7 +18,7 @@ namespace gm {
 			41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0
 		};
 
-		std::wstring res;
+		std::u16string res;
 		while (*s != 0) {
 			res.push_back(tab[s[0]] << 10 | tab[s[1]] << 4 | tab[s[2]] >> 2);
 			if (s[4] == 0) {
@@ -32,6 +32,10 @@ namespace gm {
 			s += 8;
 		}
 		return res;
+	}
+
+	double pt_to_px(double pt) {
+		return pt / 3 * 4;
 	}
 
 }

@@ -79,7 +79,7 @@ namespace gm {
 				push pret;
 				call pfn;
 			}
-			if constexpr (::std::is_same_v<R, void*>) {
+			if constexpr (std::is_same_v<R, void*>) {
 				return (void*)(dword)ret;
 			}
 			else {
