@@ -1,36 +1,42 @@
 #include "abi.h"
 
-struct font_data {
-	struct glyph_data {
-		std::uint8_t tile_x, tile_y;
-		std::int8_t left, top, right, bottom;
-	};
+struct glyph_data {
+	std::uint8_t tile_x, tile_y;
+	std::int8_t left, top, right, bottom;
+};
 
+struct font_data {
 	std::size_t sprite;
-	std::uint32_t tile_width, tile_height;
+	std::size_t tile_width, tile_height;
 	std::map<std::uint16_t, glyph_data> glyph;
 };
 
 struct draw_setting {
-	std::size_t font;
-	std::uint32_t color_top;
-	std::uint32_t color_bottom;
-	double alpha;
-	std::int8_t halign;
-	std::int8_t valign;
-	double letter_spacing;
-	double word_spacing;
-	double line_height;
-	double offset_x;
-	double offset_y;
-	double max_line_width;
+	std::size_t font{0};
+	std::uint32_t color_top{0xffffff}, color_bottom{0xffffff};
+	int halign{-1}, valign{-1};
+	double alpha{1};
+	double line_height{16};
+	double max_line_width{-1};
+	double letter_spacing{0}, word_spacing{0};
+	double offset_x{0}, offset_y{0};
 };
 
-static std::vector<font_data> gm_font_data;
-static draw_setting gm_draw_setting{0, 0xffffff, 0xffffff, 1, -1, -1, 0, 0, 16, 0, 0, -1};
+gm::function<void*, gm::string> get_function_pointer;
+gm::function<std::size_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real> sprite_add;
+gm::function<std::size_t, gm::real> sprite_get_width;
+gm::function<std::size_t, gm::real> sprite_get_height;
+gm::function<void, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real> draw_sprite_general;
+
+std::vector<font_data> gm_font_data;
+draw_setting gm_draw_setting;
 
 gm::real gm_init(gm::real ptr) {
-	gm::init(ptr);
+	get_function_pointer = (void*)(gm::dword)ptr;
+	sprite_add = get_function_pointer("sprite_add");
+	sprite_get_width = get_function_pointer("sprite_get_width");
+	sprite_get_height = get_function_pointer("sprite_get_height");
+	draw_sprite_general = get_function_pointer("draw_sprite_general");
 	return 0;
 }
 
@@ -46,14 +52,15 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 		std::int8_t* i8{(std::int8_t*)buffer};
 		std::uint8_t* u8{(std::uint8_t*)buffer};
 		data.glyph[(u8[0] << 8) + u8[1]] = {tile_x, tile_y, i8[2], i8[3], i8[4], i8[5]};
+
 		if (++tile_x == 0) {
 			++tile_y;
 		}
 	}
 
-	data.sprite = gm::sprite_add(sprite_path, 1, 0, 0, 0, 0);
-	data.tile_width = gm::sprite_get_width(data.sprite) >> 8;
-	data.tile_height = gm::sprite_get_height(data.sprite) / (tile_y + (tile_x != 0));
+	data.sprite = sprite_add(sprite_path, 1, 0, 0, 0, 0);
+	data.tile_width = sprite_get_width(data.sprite) >> 8;
+	data.tile_height = sprite_get_height(data.sprite) / (tile_y + (tile_x != 0));
 
 	gm_font_data.emplace_back(data);
 
@@ -61,39 +68,13 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
-	static constexpr std::uint8_t decode_tab[]{
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 63,
-		52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 0, 0, 0,
-		0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-		15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0,
-		0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-		41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0
-	};
+	std::wstring text{gm::utf16_base64_decode(raw_text)};
 
 	std::size_t line_count{1};
-	std::wstring text;
-	while (*raw_text != 0) {
-		text.push_back(decode_tab[raw_text[0]] << 10 | decode_tab[raw_text[1]] << 4 | decode_tab[raw_text[2]] >> 2);
-		if (text.back() == '\n') {
+	for (auto& i : text) {
+		if (i == '\n') {
 			++line_count;
 		}
-		if (raw_text[4] == 0) {
-			break;
-		}
-		text.push_back(decode_tab[raw_text[2]] << 14 | decode_tab[raw_text[3]] << 8 | decode_tab[raw_text[4]] << 2 | decode_tab[raw_text[5]] >> 4);
-		if (text.back() == '\n') {
-			++line_count;
-		}
-		if (raw_text[6] == '=') {
-			break;
-		}
-		text.push_back(decode_tab[raw_text[5]] << 12 | decode_tab[raw_text[6]] << 6 | decode_tab[raw_text[7]]);
-		if (text.back() == '\n') {
-			++line_count;
-		}
-		raw_text += 8;
 	}
 
 	auto& font_data{gm_font_data[gm_draw_setting.font]};
@@ -134,7 +115,7 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 		}
 		else {
 			auto& glyph_data{font_data.glyph[i]};
-			gm::draw_sprite_general(
+			draw_sprite_general(
 				font_data.sprite,
 				0,
 				glyph_data.tile_x * font_data.tile_width,
@@ -173,16 +154,27 @@ gm::real gm_set_color(gm::real color_top, gm::real color_bottom) {
 	return 0;
 }
 
-gm::real gm_set_alpha(gm::real alpha) {
-	gm_draw_setting.alpha = alpha;
-	return 0;
-}
-
 gm::real gm_set_align(gm::real halign, gm::real valign) {
 	gm_draw_setting.halign = halign == 0 ? 0 : halign < 0 ? -1 : 1;
 	gm_draw_setting.valign = valign == 0 ? 0 : valign < 0 ? -1 : 1;
 	return 0;
 }
+
+gm::real gm_set_alpha(gm::real alpha) {
+	gm_draw_setting.alpha = alpha;
+	return 0;
+}
+
+gm::real gm_set_line_height(gm::real height) {
+	gm_draw_setting.line_height = height;
+	return 0;
+}
+
+gm::real gm_set_max_line_width(gm::real width) {
+	gm_draw_setting.max_line_width = width;
+	return 0;
+}
+
 
 gm::real gm_set_letter_spacing(gm::real spacing) {
 	gm_draw_setting.letter_spacing = spacing;
@@ -194,18 +186,8 @@ gm::real gm_set_word_spacing(gm::real spacing) {
 	return 0;
 }
 
-gm::real gm_set_line_height(gm::real height) {
-	gm_draw_setting.line_height = height;
-	return 0;
-}
-
 gm::real gm_set_offset(gm::real x, gm::real y) {
 	gm_draw_setting.offset_x = x;
 	gm_draw_setting.offset_y = y;
-	return 0;
-}
-
-gm::real gm_set_max_line_width(gm::real width) {
-	gm_draw_setting.max_line_width = width;
 	return 0;
 }
