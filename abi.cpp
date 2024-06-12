@@ -12,6 +12,7 @@ struct font_data {
 };
 
 struct draw_setting {
+	bool utf16_base64{true};
 	std::size_t font{0};
 	std::uint32_t color_top{0xffffff}, color_bottom{0xffffff};
 	int halign{-1}, valign{-1};
@@ -22,14 +23,14 @@ struct draw_setting {
 	double offset_x{0}, offset_y{0};
 };
 
+std::vector<font_data> gm_font_data;
+draw_setting gm_draw_setting;
+
 gm::function<void*, gm::string> get_function_pointer;
 gm::function<std::size_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real> sprite_add;
 gm::function<std::size_t, gm::real> sprite_get_width;
 gm::function<std::size_t, gm::real> sprite_get_height;
 gm::function<void, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real> draw_sprite_general;
-
-std::vector<font_data> gm_font_data;
-draw_setting gm_draw_setting;
 
 gm::real gm_init(gm::real ptr) {
 	get_function_pointer = (void*)(gm::dword)ptr;
@@ -68,7 +69,15 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
-	std::wstring text{gm::utf16_base64_decode(raw_text)};
+	std::wstring text;
+	if (gm_draw_setting.utf16_base64) {
+		text = gm::utf16_base64_decode(raw_text);
+	}
+	else {
+		for (const char* p{raw_text}; *p != 0; ++p) {
+			text.push_back(*p);
+		}
+	}
 
 	std::size_t line_count{1};
 	for (auto& i : text) {
@@ -140,6 +149,11 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 		}
 	}
 
+	return 0;
+}
+
+gm::real gm_set_utf16_base64(gm::real enable) {
+	gm_draw_setting.utf16_base64 = enable;
 	return 0;
 }
 
