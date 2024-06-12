@@ -1,6 +1,8 @@
 #pragma once
 
-#include "pch.h"
+#include <cstring>
+#include <cstdint>
+#include <new>
 
 namespace gm {
 

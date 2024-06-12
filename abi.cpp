@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "abi.h"
 
 struct font_data {

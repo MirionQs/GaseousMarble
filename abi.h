@@ -1,7 +1,10 @@
 #pragma once
 
-#include "pch.h"
 #include "gm.h"
+
+#include <fstream>
+#include <vector>
+#include <map>
 
 #ifdef GASEOUSMARBLE_EXPORTS
 #define GASEOUSMARBLE_API extern "C" __declspec(dllexport)
