@@ -6,6 +6,10 @@
 
 namespace gm {
 
+	double pt_to_px(double pt) {
+		return pt * 4 / 3;
+	}
+
 	std::u16string utf16_base64_decode(string s) {
 		static constexpr byte tab[]{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -32,10 +36,6 @@ namespace gm {
 			s += 8;
 		}
 		return res;
-	}
-
-	double pt_to_px(double pt) {
-		return pt / 3 * 4;
 	}
 
 }

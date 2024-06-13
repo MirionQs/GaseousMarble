@@ -1,35 +1,46 @@
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageFont, ImageDraw
-import math
 
 
-def ttf2png(font_path: str, font_size: float, png_path: str, gly_path: str):
-    index = []
-    for table in TTFont(font_path)['cmap'].tables:
-        index += table.cmap.keys()
-    index = list(set(index))
-    index.sort()
-    count = len(index)
+def ttf2png(font_path: str, font_size_pt: int, png_path: str, gly_path: str, char_list: str | None = None, max_width: int = 0x3fff):
+    ttfont = TTFont(font_path)
+    char_code = []
+    for table in ttfont['cmap'].tables:
+        char_code += table.cmap.keys()
+    if char_list != None:
+        char_code += list(map(ord, char_list))
+    char_code = list(set(char_code))
+    char_code.sort()
 
-    font = ImageFont.truetype(font_path, font_size / 3 * 4)
+    font = ImageFont.truetype(font_path, font_size_pt * 4 / 3)
+    line_width = 0
+    line_count = 1
+    line_height = 0
+    for ch in char_code:
+        left, top, right, bottom = font.getbbox(chr(ch))
+        width = right - left
+        line_width += width
+        if line_width >= max_width:
+            line_width = width
+            line_count += 1
+        line_height = max(line_height, bottom)
 
-    tile_width = 0
-    tile_height = 0
-    with open(gly_path, "wb") as output:
-        output.write(b'gly' + font_size.to_bytes())
-        for i in index:
-            left, top, right, bottom = font.getbbox(chr(i))
-            tile_width = max(tile_width, right - left)
-            tile_height = max(tile_height, bottom - top)
-            output.write(i.to_bytes(2) + left.to_bytes(signed=True) + top.to_bytes(signed=True) + right.to_bytes(signed=True) + bottom.to_bytes(signed=True))
-
-    image = Image.new('RGBA', (256 * tile_width, math.ceil(count / 256) * tile_height))
+    image = Image.new('RGBA', (max_width, line_height * line_count))
     draw = ImageDraw.Draw(image)
-    for i, j in zip(index, range(count)):
-        left, top, right, bottom = font.getbbox(chr(i))
-        x = j % 256 * tile_width - left
-        y = j // 256 * tile_height - top
-        draw.text((x, y), chr(i), font=font, fill=(255, 255, 255))
+    draw.font = font
+    with open(gly_path, "wb") as gly:
+        gly.write(b'GLY\0' + font_size_pt.to_bytes() + line_height.to_bytes())
+        x = 0
+        y = 0
+        for ch in char_code:
+            left, top, right, bottom = font.getbbox(chr(ch))
+            width = right - left
+            if x + width >= max_width:
+                x = 0
+                y += line_height
+            draw.text((x - left, y), chr(ch), 'white')
+            gly.write(ch.to_bytes(2) + x.to_bytes(2) + y.to_bytes(2) + width.to_bytes() + left.to_bytes(signed=True))
+            x += width
     image.save(png_path)
 
 

@@ -1,14 +1,15 @@
 #include "abi.h"
 
 struct glyph_data {
-	std::uint8_t tile_x, tile_y;
-	std::int8_t left, top, right, bottom;
+	std::uint16_t x, y;
+	std::uint8_t width;
+	std::int8_t left;
 };
 
 struct font_data {
 	std::size_t sprite;
-	std::size_t tile_width, tile_height;
 	std::uint8_t size;
+	std::uint8_t glyph_height;
 	std::map<char16_t, glyph_data> glyph;
 };
 
@@ -30,8 +31,6 @@ draw_setting setting;
 
 gm::function<void*, gm::string> get_function_pointer;
 gm::function<std::size_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real> sprite_add;
-gm::function<std::size_t, gm::real> sprite_get_width;
-gm::function<std::size_t, gm::real> sprite_get_height;
 gm::function<void, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real> draw_sprite_general;
 
 void draw_character(font_data& font, char16_t ch, double x, double y) {
@@ -39,12 +38,12 @@ void draw_character(font_data& font, char16_t ch, double x, double y) {
 	draw_sprite_general(
 		font.sprite,
 		0,
-		glyph.tile_x * font.tile_width,
-		glyph.tile_y * font.tile_height,
-		glyph.right - glyph.left,
-		glyph.bottom - glyph.top,
+		glyph.x,
+		glyph.y,
+		glyph.width,
+		font.glyph_height,
 		x + glyph.left * setting.scale_x,
-		y + glyph.top * setting.scale_y,
+		y,
 		setting.scale_x,
 		setting.scale_y,
 		0,
@@ -60,8 +59,9 @@ void draw_line(font_data& font, std::u16string_view line, double x, double y) {
 	double letter_spacing{setting.letter_spacing * setting.scale_x};
 	double word_spacing{setting.word_spacing * setting.scale_x};
 	for (char16_t ch : line) {
+		glyph_data& glyph{font.glyph[ch]};
 		draw_character(font, ch, x, y);
-		x += font.glyph[ch].right * setting.scale_x + letter_spacing;
+		x += (glyph.left + glyph.width) * setting.scale_x + letter_spacing;
 		if (ch == ' ') {
 			x += word_spacing;
 		}
@@ -72,7 +72,8 @@ void draw_line_ralign(font_data& font, std::u16string_view line, double x, doubl
 	double letter_spacing{setting.letter_spacing * setting.scale_x};
 	double word_spacing{setting.word_spacing * setting.scale_x};
 	for (char16_t ch : line | std::views::reverse) {
-		x -= font.glyph[ch].right * setting.scale_x;
+		glyph_data& glyph{font.glyph[ch]};
+		x -= (glyph.left + glyph.width) * setting.scale_x;
 		draw_character(font, ch, x, y);
 		x -= letter_spacing;
 		if (ch == ' ') {
@@ -84,40 +85,39 @@ void draw_line_ralign(font_data& font, std::u16string_view line, double x, doubl
 gm::real gm_init(gm::real ptr) {
 	get_function_pointer = (void*)(gm::dword)ptr;
 	sprite_add = get_function_pointer("sprite_add");
-	sprite_get_width = get_function_pointer("sprite_get_width");
-	sprite_get_height = get_function_pointer("sprite_get_height");
 	draw_sprite_general = get_function_pointer("draw_sprite_general");
 	return 0;
 }
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
-	font_data data;
-
 	std::ifstream file{glyph_path, std::ios::binary};
-	char header[4];
-	file.read(header, 4);
-	if (header[0] != 'g' || header[1] != 'l' || header[2] != 'y') {
+	char header[6];
+	file.read(header, 6);
+	if (std::strcmp(header, "GLY") != 0) {
 		return 0;
 	}
-	data.size = (std::uint8_t)header[3];
 
-	std::uint8_t tile_x{0}, tile_y{0};
+	std::uint8_t* view{(std::uint8_t*)header};
+	font_data font{
+		sprite_add(sprite_path, 1, false, false, 0, 0),
+		view[4],
+		view[5]
+	};
+
 	while (file) {
-		char buffer[6];
-		file.read(buffer, 6);
-		std::int8_t* i8{(std::int8_t*)buffer};
-		std::uint8_t* u8{(std::uint8_t*)buffer};
-		data.glyph[(u8[0] << 8) + u8[1]] = {tile_x, tile_y, i8[2], i8[3], i8[4], i8[5]};
-		if (++tile_x == 0) {
-			++tile_y;
-		}
+		char buffer[8];
+		file.read(buffer, 8);
+
+		std::uint8_t* view{(std::uint8_t*)buffer};
+		font.glyph[view[0] << 8 | view[1]] = {
+			(std::uint16_t)(view[2] << 8 | view[3]),
+			(std::uint16_t)(view[4] << 8 | view[5]),
+			view[6],
+			(std::int8_t)view[7]
+		};
 	}
 
-	data.sprite = sprite_add(sprite_path, 1, false, false, 0, 0);
-	data.tile_width = sprite_get_width(data.sprite) >> 8;
-	data.tile_height = sprite_get_height(data.sprite) / (tile_y + (tile_x != 0));
-
-	font_list.emplace_back(data);
+	font_list.push_back(std::move(font));
 
 	return font_list.size() - 1;
 }
@@ -150,13 +150,14 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 		auto begin{text.begin()}, end{text.end()};
 		for (auto p{begin}; p != end; ++p) {
 			if (*p == '\n') {
-				offset.emplace_back((letter_spacing - line_width) / 2);
+				offset.push_back((letter_spacing - line_width) / 2);
 				line.emplace_back(begin, p);
 				line_width = 0;
 				begin = p + 1;
 			}
 			else {
-				double char_width{font.glyph[*p].right * setting.scale_x + letter_spacing};
+				glyph_data& glyph{font.glyph[*p]};
+				double char_width{(glyph.left + glyph.width) * setting.scale_x + letter_spacing};
 				if (*p == ' ') {
 					char_width += word_spacing;
 				}
@@ -164,14 +165,14 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text) {
 					line_width += char_width;
 				}
 				else {
-					offset.emplace_back((letter_spacing - line_width) / 2);
+					offset.push_back((letter_spacing - line_width) / 2);
 					line.emplace_back(begin, p);
 					line_width = char_width;
 					begin = p;
 				}
 			}
 		}
-		offset.emplace_back((letter_spacing - line_width) / 2);
+		offset.push_back((letter_spacing - line_width) / 2);
 		line.emplace_back(begin, end);
 	}
 
