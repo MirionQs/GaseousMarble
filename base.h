@@ -26,23 +26,24 @@ namespace gm {
 		}
 
 		var(string s) {
-			_type = 1;
-			_real = 0;
 			if (s == nullptr) {
-				_string = nullptr;
-				return;
+				std::abort();
 			}
+
 			dword size{std::strlen(s)};
 			char* data{new char[size + 13]};
 			new(data) dword(0);
 			new(data + 4) dword(0);
 			new(data + 8) dword(size);
 			std::memcpy(data + 12, s, size + 1);
+
+			_type = 1;
+			_real = 0;
 			_string = data + 12;
 		}
 
 		~var() {
-			if (_string != nullptr) {
+			if (_type == 1) {
 				delete[](_string - 12);
 			}
 		}
@@ -67,8 +68,9 @@ namespace gm {
 
 		R operator()(Args... a) const {
 			if (_ptr == nullptr) {
-				return R{};
+				std::abort();
 			}
+
 			var args[]{a...}, * pargs{args};
 			constexpr dword count{sizeof...(a)};
 			var ret, * pret{&ret};
@@ -79,6 +81,7 @@ namespace gm {
 				push pret;
 				call pfn;
 			}
+
 			if constexpr (std::is_same_v<R, void*>) {
 				return (void*)(dword)ret;
 			}

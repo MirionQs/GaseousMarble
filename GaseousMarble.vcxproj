@@ -137,13 +137,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="draw.h" />
     <ClInclude Include="marble.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="marble.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="type.h" />
+    <ClCompile Include="base.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

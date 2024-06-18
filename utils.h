@@ -1,16 +1,12 @@
 #pragma once
 
-#include "type.h"
+#include "base.h"
 
 #include <string>
 
 namespace gm {
 
-	double pt_to_px(double pt) {
-		return pt * 4 / 3;
-	}
-
-	std::u16string utf16_base64_decode(string s) {
+	std::u16string utf16be_base64_decode(string s) {
 		static constexpr byte tab[]{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
