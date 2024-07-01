@@ -35,7 +35,7 @@ namespace gm {
 		std::size_t sprite_id;
 		std::uint8_t size;
 		std::uint8_t glyph_height;
-		std::unordered_map<char16_t, glyph_data> glyph;
+		std::unordered_map<wchar_t, glyph_data> glyph;
 
 		operator bool() {
 			return size != 0;
@@ -44,7 +44,6 @@ namespace gm {
 
 	struct draw_setting {
 		std::size_t font_id{0};
-		bool utf16be_base64{true};
 		std::uint32_t color_top{0xffffff}, color_bottom{0xffffff};
 		double alpha{1};
 		int halign{-1}, valign{-1};
@@ -118,7 +117,7 @@ namespace gm {
 			font.glyph.clear();
 		}
 
-		void draw_character(double x, double y, char16_t ch) {
+		void draw_character(double x, double y, wchar_t ch) {
 			font_data& font{_font_set[_setting.font_id]};
 			glyph_data& glyph{font.glyph[ch]};
 			_api.draw_sprite_general(
@@ -141,11 +140,11 @@ namespace gm {
 			);
 		}
 
-		void draw_line(double x, double y, std::u16string_view line) {
+		void draw_line(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
 			font_data& font{_font_set[_setting.font_id]};
-			for (char16_t ch : line) {
+			for (wchar_t ch : line) {
 				glyph_data& glyph{font.glyph[ch]};
 				draw_character(x, y, ch);
 				x += (glyph.left + glyph.width) * _setting.scale_x + scaled_letter_spacing;
@@ -155,11 +154,11 @@ namespace gm {
 			}
 		}
 
-		void draw_line_ralign(double x, double y, std::u16string_view line) {
+		void draw_line_ralign(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
 			font_data& font{_font_set[_setting.font_id]};
-			for (char16_t ch : line | std::views::reverse) {
+			for (wchar_t ch : line | std::views::reverse) {
 				glyph_data& glyph{font.glyph[ch]};
 				x -= (glyph.left + glyph.width) * _setting.scale_x;
 				draw_character(x, y, ch);
@@ -170,7 +169,7 @@ namespace gm {
 			}
 		}
 
-		bool draw_text(double x, double y, std::u16string_view text) {
+		bool draw_text(double x, double y, std::wstring_view text) {
 			if (_setting.font_id >= _font_set.size() || !_font_set[_setting.font_id]) {
 				return false;
 			}
@@ -183,7 +182,7 @@ namespace gm {
 			double scaled_offset_x{_setting.offset_x * _setting.scale_x};
 			double scaled_offset_y{_setting.offset_y * _setting.scale_y};
 
-			std::vector<std::u16string_view> line;
+			std::vector<std::wstring_view> line;
 			std::vector<double> offset;
 			if (_setting.halign != 0 && scaled_max_line_width == 0) {
 				for (auto&& i : text | std::views::split('\n')) {

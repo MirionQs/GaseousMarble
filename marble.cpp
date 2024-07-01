@@ -15,16 +15,7 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
-	std::u16string str;
-	if (draw.setting().utf16be_base64) {
-		str = gm::utf16be_base64_decode(text);
-	}
-	else {
-		for (auto p{text}; *p != 0; ++p) {
-			str.push_back(*p);
-		}
-	}
-	return draw.draw_text(x, y, str);
+	return draw.draw_text(x, y, gm::utf8_to_ucs2(text));
 }
 
 gm::real gm_free(gm::real font_id) {
@@ -34,11 +25,6 @@ gm::real gm_free(gm::real font_id) {
 
 gm::real gm_set_font(gm::real font_id) {
 	return draw.set_font((std::size_t)font_id);
-}
-
-gm::real gm_set_utf16be_base64(gm::real enable) {
-	draw.setting().utf16be_base64 = enable;
-	return true;
 }
 
 gm::real gm_set_color(gm::real color_top, gm::real color_bottom) {
@@ -104,10 +90,6 @@ gm::real gm_set_scale(gm::real x, gm::real y) {
 
 gm::real gm_get_font() {
 	return draw.setting().font_id;
-}
-
-gm::real gm_is_utf16be_base64() {
-	return draw.setting().utf16be_base64;
 }
 
 gm::real gm_get_color_top() {

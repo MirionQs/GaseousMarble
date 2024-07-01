@@ -10,11 +10,10 @@
 
 GASEOUSMARBLE_API gm::real gm_init(gm::real ptr);
 GASEOUSMARBLE_API gm::real gm_font(gm::string sprite_path, gm::string glyph_path);
-GASEOUSMARBLE_API gm::real gm_draw(gm::real x, gm::real y, gm::string raw_text);
+GASEOUSMARBLE_API gm::real gm_draw(gm::real x, gm::real y, gm::string text);
 GASEOUSMARBLE_API gm::real gm_free(gm::real font_id);
 
 GASEOUSMARBLE_API gm::real gm_set_font(gm::real font_id);
-GASEOUSMARBLE_API gm::real gm_set_utf16be_base64(gm::real enable);
 GASEOUSMARBLE_API gm::real gm_set_color(gm::real color_top, gm::real color_bottom);
 GASEOUSMARBLE_API gm::real gm_set_alpha(gm::real alpha);
 GASEOUSMARBLE_API gm::real gm_set_align(gm::real halign, gm::real valign);
@@ -26,7 +25,6 @@ GASEOUSMARBLE_API gm::real gm_set_offset(gm::real x, gm::real y);
 GASEOUSMARBLE_API gm::real gm_set_scale(gm::real x, gm::real y);
 
 GASEOUSMARBLE_API gm::real gm_get_font();
-GASEOUSMARBLE_API gm::real gm_is_utf16be_base64();
 GASEOUSMARBLE_API gm::real gm_get_color_top();
 GASEOUSMARBLE_API gm::real gm_get_color_bottom();
 GASEOUSMARBLE_API gm::real gm_get_alpha();

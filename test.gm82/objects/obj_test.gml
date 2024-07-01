@@ -22,4 +22,6 @@ applies_to=self
 */
 external_call(global.gm_set_color,c_yellow,c_orange)
 external_call(global.gm_set_align,0,0)
-external_call(global.gm_draw,160,120,'AEwAbwByAGUAbQAgAGkAcABzAHUAbQAKTnFlcFBHZYcACk6CZXhQR2WH')
+external_call(global.gm_draw,160,120,'Lorem Ipsum
+乱数假文
+一去二三里，烟村四五家')
