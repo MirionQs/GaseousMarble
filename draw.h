@@ -178,7 +178,7 @@ namespace gm {
 			double scaled_max_line_width{_setting.max_line_width * _setting.scale_x};
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-			double scaled_line_height{_setting.line_height * _setting.scale_y * font.size * 4 / 3};
+			double scaled_line_height{_setting.line_height * _setting.scale_y * font.size};
 			double scaled_offset_x{_setting.offset_x * _setting.scale_x};
 			double scaled_offset_y{_setting.offset_y * _setting.scale_y};
 
