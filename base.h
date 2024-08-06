@@ -6,17 +6,13 @@
 
 namespace gm {
 
-	using byte = std::uint8_t;
-	using word = std::uint16_t;
-	using dword = std::uint32_t;
-
 	using real = double;
 	using string = const char*;
 
 	class var {
-		dword _type;
-		double _real;
-		char* _string;
+		uint32_t _type;
+		real _real;
+		string _string;
 
 	public:
 		var(real r = 0) {
@@ -27,15 +23,15 @@ namespace gm {
 
 		var(string s) {
 			if (s == nullptr) {
-				std::abort();
+				s = "";
 			}
 
-			dword size{std::strlen(s)};
+			size_t size{strlen(s)};
 			char* data{new char[size + 13]};
-			new(data) dword(0);
-			new(data + 4) dword(0);
-			new(data + 8) dword(size);
-			std::memcpy(data + 12, s, size + 1);
+			new(data) uint32_t(0);
+			new(data + 4) uint32_t(0);
+			new(data + 8) uint32_t(size);
+			memcpy(data + 12, s, size + 1);
 
 			_type = 1;
 			_real = 0;
@@ -68,11 +64,11 @@ namespace gm {
 
 		R operator()(Args... a) const {
 			if (_ptr == nullptr) {
-				std::abort();
+				return R{};
 			}
 
 			var args[]{a...}, * pargs{args};
-			constexpr dword count{sizeof...(a)};
+			constexpr uint32_t count{sizeof...(a)};
 			var ret, * pret{&ret};
 			void* pfn{_ptr};
 			__asm {
@@ -82,8 +78,8 @@ namespace gm {
 				call pfn;
 			}
 
-			if constexpr (std::is_same_v<R, void*>) {
-				return (void*)(dword)ret;
+			if constexpr (std::is_pointer_v<R>) {
+				return (R)(uintptr_t)ret;
 			}
 			else {
 				return (R)ret;

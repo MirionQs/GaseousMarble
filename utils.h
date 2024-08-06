@@ -8,7 +8,7 @@ namespace gm {
 
 	std::wstring utf8_to_ucs2(string str) {
 		std::wstring res;
-		byte* view{(byte*)str};
+		uint8_t* view{(uint8_t*)str};
 		while (*view != 0) {
 			if (view[0] >> 7 == 0) {
 				res.push_back(view[0]);

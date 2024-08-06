@@ -10,7 +10,7 @@ namespace gm {
 
 	struct gm_api {
 		function<void*, string> get_function_pointer;
-		function<std::size_t, string, real, real, real, real, real> sprite_add;
+		function<size_t, string, real, real, real, real, real> sprite_add;
 		function<void, real> sprite_delete;
 		function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
 
@@ -26,25 +26,21 @@ namespace gm {
 	};
 
 	struct glyph_data {
-		std::uint16_t x, y;
-		std::uint8_t width;
-		std::int8_t left;
+		uint16_t x, y;
+		uint8_t width;
+		int8_t left;
 	};
 
 	struct font_data {
-		std::size_t sprite_id;
-		std::uint8_t size;
-		std::uint8_t glyph_height;
+		size_t sprite_id;
+		uint8_t size;
+		uint8_t glyph_height;
 		std::unordered_map<wchar_t, glyph_data> glyph;
-
-		operator bool() {
-			return size != 0;
-		}
 	};
 
 	struct draw_setting {
-		std::size_t font_id{0};
-		std::uint32_t color_top{0xffffff}, color_bottom{0xffffff};
+		size_t font_id{0};
+		uint32_t color_top{0xffffff}, color_bottom{0xffffff};
 		double alpha{1};
 		int halign{-1}, valign{-1};
 		double max_line_width{0};
@@ -57,68 +53,15 @@ namespace gm {
 
 	class draw_system {
 		gm_api _api;
+		std::vector<font_data> _fontList;
 		draw_setting _setting;
-		std::vector<font_data> _font_set;
 
-	public:
-		draw_system(const gm_api& api = nullptr) {
-			_api = api;
+		bool _isFontValid(size_t font_id) {
+			return font_id < _fontList.size() && _fontList[font_id].size != 0;
 		}
 
-		draw_setting& setting() {
-			return _setting;
-		}
-
-		std::size_t add_font(std::string_view sprite_path, std::string_view glyph_path) {
-			std::ifstream file{glyph_path.data(), std::ios::binary};
-			char header[6];
-			file.read(header, 6);
-			if (std::strcmp(header, "GLY") != 0) {
-				return -1;
-			}
-
-			font_data font;
-			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
-			font.size = (std::uint8_t)header[4];
-			font.glyph_height = (std::uint8_t)header[5];
-
-			while (file) {
-				char buffer[8];
-				file.read(buffer, 8);
-
-				std::uint8_t* view{(std::uint8_t*)buffer};
-				font.glyph[view[0] << 8 | view[1]] = {
-					(std::uint16_t)(view[2] << 8 | view[3]),
-					(std::uint16_t)(view[4] << 8 | view[5]),
-					view[6],
-					(std::int8_t)view[7]
-				};
-			}
-
-			_font_set.push_back(std::move(font));
-			return _font_set.size() - 1;
-		}
-
-		bool set_font(std::size_t font_id) {
-			if (font_id >= _font_set.size() || !_font_set[font_id]) {
-				return false;
-			}
-			_setting.font_id = font_id;
-			return true;
-		}
-
-		void remove_font(std::size_t font_id) {
-			if (font_id >= _font_set.size()) {
-				return;
-			}
-			font_data& font{_font_set[_setting.font_id]};
-			_api.sprite_delete(font.sprite_id);
-			font.size = 0;
-			font.glyph.clear();
-		}
-
-		void draw_character(double x, double y, wchar_t ch) {
-			font_data& font{_font_set[_setting.font_id]};
+		void _drawChar(double x, double y, wchar_t ch) {
+			font_data& font{_fontList[_setting.font_id]};
 			glyph_data& glyph{font.glyph[ch]};
 			_api.draw_sprite_general(
 				font.sprite_id,
@@ -140,13 +83,13 @@ namespace gm {
 			);
 		}
 
-		void draw_line(double x, double y, std::wstring_view line) {
+		void _drawLine(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-			font_data& font{_font_set[_setting.font_id]};
+			font_data& font{_fontList[_setting.font_id]};
 			for (wchar_t ch : line) {
 				glyph_data& glyph{font.glyph[ch]};
-				draw_character(x, y, ch);
+				_drawChar(x, y, ch);
 				x += (glyph.left + glyph.width) * _setting.scale_x + scaled_letter_spacing;
 				if (ch == ' ') {
 					x += scaled_word_spacing;
@@ -154,14 +97,14 @@ namespace gm {
 			}
 		}
 
-		void draw_line_ralign(double x, double y, std::wstring_view line) {
+		void _drawLineR(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-			font_data& font{_font_set[_setting.font_id]};
+			font_data& font{_fontList[_setting.font_id]};
 			for (wchar_t ch : line | std::views::reverse) {
 				glyph_data& glyph{font.glyph[ch]};
 				x -= (glyph.left + glyph.width) * _setting.scale_x;
-				draw_character(x, y, ch);
+				_drawChar(x, y, ch);
 				x -= scaled_letter_spacing;
 				if (ch == ' ') {
 					x -= scaled_word_spacing;
@@ -169,12 +112,69 @@ namespace gm {
 			}
 		}
 
+	public:
+		draw_system(const gm_api& api = nullptr) {
+			_api = api;
+		}
+
+		draw_setting& setting() {
+			return _setting;
+		}
+
+		ptrdiff_t add_font(std::string_view sprite_path, std::string_view glyph_path) {
+			std::ifstream file{glyph_path.data(), std::ios::binary};
+
+			char magic[4];
+			file.read(magic, 4);
+			if (strcmp(magic, "GLY") != 0) {
+				return -1;
+			}
+
+			font_data font;
+			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
+			file.read((char*)&font.size, 1);
+			file.read((char*)&font.glyph_height, 1);
+			if (font.size == 0 || font.glyph_height == 0) {
+				return -1;
+			}
+
+			while (file) {
+				wchar_t ch;
+				glyph_data glyph;
+				file.read((char*)&ch, 2);
+				file.read((char*)&glyph, 6);
+				font.glyph[ch] = std::move(glyph);
+			}
+
+			_fontList.push_back(std::move(font));
+			return _fontList.size() - 1;
+		}
+
+		bool set_font(size_t font_id) {
+			if (!_isFontValid(font_id)) {
+				return false;
+			}
+			_setting.font_id = font_id;
+			return true;
+		}
+
+		bool remove_font(size_t font_id) {
+			if (!_isFontValid(font_id)) {
+				return false;
+			}
+			font_data& font{_fontList[_setting.font_id]};
+			_api.sprite_delete(font.sprite_id);
+			font.size = 0;
+			font.glyph.clear();
+			return true;
+		}
+
 		bool draw_text(double x, double y, std::wstring_view text) {
-			if (_setting.font_id >= _font_set.size() || !_font_set[_setting.font_id]) {
+			if (!_isFontValid(_setting.font_id)) {
 				return false;
 			}
 
-			font_data& font{_font_set[_setting.font_id]};
+			font_data& font{_fontList[_setting.font_id]};
 			double scaled_max_line_width{_setting.max_line_width * _setting.scale_x};
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
@@ -229,20 +229,20 @@ namespace gm {
 
 			if (_setting.halign < 0) {
 				for (auto& i : line) {
-					draw_line(x, y, i);
+					_drawLine(x, y, i);
 					y += scaled_line_height;
 				}
 			}
 			else if (_setting.halign == 0) {
 				auto q{offset.begin()};
 				for (auto& i : line) {
-					draw_line(x + *q++, y, i);
+					_drawLine(x + *q++, y, i);
 					y += scaled_line_height;
 				}
 			}
 			else {
 				for (auto& i : line) {
-					draw_line_ralign(x, y, i);
+					_drawLineR(x, y, i);
 					y += scaled_line_height;
 				}
 			}
