@@ -32,7 +32,7 @@ def generate_font(font_path: str, font_size: int, png_path: str, gly_path: str,
 
     if total_width <= 1023:
         max_width = total_width
-        image = Image.new('RGBA', (max_width, 1))
+        image = Image.new('RGBA', (max_width, line_height))
     else:
         max_width = math.ceil((line_height + math.sqrt(line_height * (line_height + 4 * total_width))) / 2)  # x == h * (w / x + 1)
         line_width = 0
