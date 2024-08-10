@@ -25,6 +25,11 @@ gm::real gm_free(gm::real font_id) {
 	return draw.font().remove((size_t)font_id);
 }
 
+gm::real gm_clear() {
+	draw.font().clear();
+	return true;
+}
+
 gm::real gm_set_font(gm::real font_id) {
 	if (!draw.font().contains((size_t)font_id)) {
 		return false;

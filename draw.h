@@ -94,6 +94,13 @@ namespace gm {
 			font.glyph.clear();
 			return true;
 		}
+
+		void clear() {
+			for (auto& i : *this) {
+				_api.sprite_delete(i.sprite_id);
+			}
+			base::clear();
+		}
 	};
 
 	struct draw_setting {
