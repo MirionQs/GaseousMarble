@@ -38,6 +38,64 @@ namespace gm {
 		std::unordered_map<wchar_t, glyph_data> glyph;
 	};
 
+	class font_system : std::vector<font_data> {
+		using base = std::vector<font_data>;
+
+		gm_api _api;
+
+	public:
+		using base::size;
+		using base::operator[];
+
+		font_system(const gm_api& api = nullptr) {
+			_api = api;
+		}
+
+		bool contains(size_t font_id) {
+			return font_id < size() && (*this)[font_id].size != 0;
+		}
+
+		bool add(std::string_view sprite_path, std::string_view glyph_path) {
+			std::ifstream file{glyph_path.data(), std::ios::binary};
+
+			char magic[4];
+			file.read(magic, 4);
+			if (strcmp(magic, "GLY") != 0) {
+				return false;
+			}
+
+			font_data font;
+			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
+			file.read((char*)&font.size, 1);
+			file.read((char*)&font.glyph_height, 1);
+			if (font.size == 0 || font.glyph_height == 0) {
+				return false;
+			}
+
+			while (file) {
+				wchar_t ch;
+				glyph_data glyph;
+				file.read((char*)&ch, 2);
+				file.read((char*)&glyph, 6);
+				font.glyph[ch] = std::move(glyph);
+			}
+
+			push_back(std::move(font));
+			return true;
+		}
+
+		bool remove(size_t font_id) {
+			if (!contains(font_id)) {
+				return false;
+			}
+			font_data& font{(*this)[font_id]};
+			_api.sprite_delete(font.sprite_id);
+			font.size = 0;
+			font.glyph.clear();
+			return true;
+		}
+	};
+
 	struct draw_setting {
 		size_t font_id{0};
 		uint32_t color_top{0xffffff}, color_bottom{0xffffff};
@@ -53,15 +111,11 @@ namespace gm {
 
 	class draw_system {
 		gm_api _api;
-		std::vector<font_data> _fontList;
+		font_system _font;
 		draw_setting _setting;
 
-		bool _isFontValid(size_t font_id) {
-			return font_id < _fontList.size() && _fontList[font_id].size != 0;
-		}
-
 		void _drawChar(double x, double y, wchar_t ch) {
-			font_data& font{_fontList[_setting.font_id]};
+			font_data& font{_font[_setting.font_id]};
 			glyph_data& glyph{font.glyph[ch]};
 			_api.draw_sprite_general(
 				font.sprite_id,
@@ -86,7 +140,8 @@ namespace gm {
 		void _drawLine(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-			font_data& font{_fontList[_setting.font_id]};
+
+			font_data& font{_font[_setting.font_id]};
 			for (wchar_t ch : line) {
 				glyph_data& glyph{font.glyph[ch]};
 				_drawChar(x, y, ch);
@@ -100,7 +155,8 @@ namespace gm {
 		void _drawLineR(double x, double y, std::wstring_view line) {
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-			font_data& font{_fontList[_setting.font_id]};
+
+			font_data& font{_font[_setting.font_id]};
 			for (wchar_t ch : line | std::views::reverse) {
 				glyph_data& glyph{font.glyph[ch]};
 				x -= (glyph.left + glyph.width) * _setting.scale_x;
@@ -115,66 +171,24 @@ namespace gm {
 	public:
 		draw_system(const gm_api& api = nullptr) {
 			_api = api;
+			_font = api;
+		}
+
+		font_system& font() {
+			return _font;
 		}
 
 		draw_setting& setting() {
 			return _setting;
 		}
 
-		ptrdiff_t add_font(std::string_view sprite_path, std::string_view glyph_path) {
-			std::ifstream file{glyph_path.data(), std::ios::binary};
-
-			char magic[4];
-			file.read(magic, 4);
-			if (strcmp(magic, "GLY") != 0) {
-				return -1;
-			}
-
-			font_data font;
-			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
-			file.read((char*)&font.size, 1);
-			file.read((char*)&font.glyph_height, 1);
-			if (font.size == 0 || font.glyph_height == 0) {
-				return -1;
-			}
-
-			while (file) {
-				wchar_t ch;
-				glyph_data glyph;
-				file.read((char*)&ch, 2);
-				file.read((char*)&glyph, 6);
-				font.glyph[ch] = std::move(glyph);
-			}
-
-			_fontList.push_back(std::move(font));
-			return _fontList.size() - 1;
-		}
-
-		bool set_font(size_t font_id) {
-			if (!_isFontValid(font_id)) {
-				return false;
-			}
-			_setting.font_id = font_id;
-			return true;
-		}
-
-		bool remove_font(size_t font_id) {
-			if (!_isFontValid(font_id)) {
-				return false;
-			}
-			font_data& font{_fontList[_setting.font_id]};
-			_api.sprite_delete(font.sprite_id);
-			font.size = 0;
-			font.glyph.clear();
-			return true;
-		}
-
-		bool draw_text(double x, double y, std::wstring_view text) {
-			if (!_isFontValid(_setting.font_id)) {
+		bool draw(double x, double y, std::wstring_view text) {
+			if (!_font.contains(_setting.font_id)) {
 				return false;
 			}
 
-			font_data& font{_fontList[_setting.font_id]};
+			font_data& font{_font[_setting.font_id]};
+
 			double scaled_max_line_width{_setting.max_line_width * _setting.scale_x};
 			double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
 			double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
