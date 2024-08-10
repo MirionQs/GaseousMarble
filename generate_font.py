@@ -64,7 +64,7 @@ def generate_font(font_path: str | list[str], font_size: int, png_path: str, gly
             for ch in cp:
                 (left, _, right, _) = font.getbbox(chr(ch))
                 width = right - left + stroke_width * 2 + glyph_spacing
-                if x + width >= max_width:
+                if x + width > max_width:
                     x = 0
                     y += line_height
                 draw.text((x - left + stroke_width, y + stroke_width), chr(ch), 'white', stroke_width=stroke_width, stroke_fill='black')
@@ -74,11 +74,10 @@ def generate_font(font_path: str | list[str], font_size: int, png_path: str, gly
 
 
 generate_font(
-    ['./example.gm82/plugins/font_default.ttf', './example.gm82/plugins/font_supplemental.ttf'],
+    ['./example.gm82/plugins/font_default.ttf', './example.gm82/plugins/font_alternate.ttf'],
     16,
     './example.gm82/plugins/font_default.png',
     './example.gm82/plugins/font_default.gly',
     char_list='To be or not to be, that is the question\n生存还是毁灭，这是一个值得考虑的问题\n生存還是毀滅，這是一個值得考慮的問題',
-    anti_aliasing=False,
     stroke_width=1
 )
