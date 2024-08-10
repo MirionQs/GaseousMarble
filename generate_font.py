@@ -56,7 +56,7 @@ def generate_font(font_path: str | list[str], font_size: int, png_path: str, gly
     if not anti_aliasing:
         draw.fontmode = '1'
     with open(gly_path, "wb") as gly:
-        gly.write(b'GLY\0' + struct.pack("2B", font_size + stroke_width * 2, line_height))
+        gly.write(b'GLY\0' + struct.pack("2H", font_size + stroke_width * 2, line_height))
         x = 0
         y = 0
         for (font, cp) in zip(font_list, cp_dict.values()):
@@ -68,7 +68,7 @@ def generate_font(font_path: str | list[str], font_size: int, png_path: str, gly
                     x = 0
                     y += line_height
                 draw.text((x - left + stroke_width, y + stroke_width), chr(ch), 'white', stroke_width=stroke_width, stroke_fill='black')
-                gly.write(struct.pack("3HBb", ch, x, y, width, left - stroke_width))
+                gly.write(struct.pack("4Hh", ch, x, y, width, left - stroke_width))
                 x += width
     image.save(png_path)
 

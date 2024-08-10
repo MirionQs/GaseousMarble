@@ -27,14 +27,14 @@ namespace gm {
 
 	struct glyph_data {
 		uint16_t x, y;
-		uint8_t width;
-		int8_t left;
+		uint16_t width;
+		int16_t left;
 	};
 
 	struct font_data {
 		size_t sprite_id;
-		uint8_t size;
-		uint8_t glyph_height;
+		uint16_t size;
+		uint16_t glyph_height;
 		std::unordered_map<wchar_t, glyph_data> glyph;
 	};
 
@@ -66,8 +66,8 @@ namespace gm {
 
 			font_data font;
 			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
-			file.read((char*)&font.size, 1);
-			file.read((char*)&font.glyph_height, 1);
+			file.read((char*)&font.size, 2);
+			file.read((char*)&font.glyph_height, 2);
 			if (font.size == 0 || font.glyph_height == 0) {
 				return false;
 			}
@@ -76,7 +76,7 @@ namespace gm {
 				wchar_t ch;
 				glyph_data glyph;
 				file.read((char*)&ch, 2);
-				file.read((char*)&glyph, 6);
+				file.read((char*)&glyph, 8);
 				font.glyph[ch] = std::move(glyph);
 			}
 
