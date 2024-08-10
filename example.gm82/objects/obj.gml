@@ -33,6 +33,6 @@ applies_to=self
 */
 external_call(global.gm_set_color2, c_yellow, c_orange)
 external_call(global.gm_set_align, 0, 0)
-external_call(global.gm_draw, 160, 120, 'Lorem Ipsum
-乱数假文
-一去二三里，烟村四五家')
+external_call(global.gm_draw, 160, 120, 'To be or not to be, that is the question
+生存还是毁灭，这是一个值得考虑的问题
+生存還是毀滅，這是一個值得考慮的問題')
