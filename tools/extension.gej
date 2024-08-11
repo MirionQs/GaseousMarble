@@ -1,0 +1,351 @@
+{
+	"name": "GaseousMarble",
+	"folder": "temp_GaseousMarble",
+	"version": "0.7.0",
+	"author": "Mirion",
+	"date": "8/11/2024",
+	"license": "MIT",
+	"description": "Draw CJK characters in GameMaker 8.2.",
+	"helpfile": "",
+	"hidden": false,
+	"dependencies": [],
+	"files": [
+		{
+			"filename": "GaseousMarble.dll",
+			"origname": "../Release/GaseousMarble.dll",
+			"kind": 1,
+			"init": "gm_init",
+			"final": "gm_clear",
+			"functions": [
+				{
+					"name": "gm_init",
+					"extname": "gm_init",
+					"calltype": 12,
+					"helpline": "gm_init()",
+					"hidden": true,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_font",
+					"extname": "gm_font",
+					"calltype": 12,
+					"helpline": "gm_font(sprite_path,glyph_path)",
+					"hidden": false,
+					"argtypes": [
+						1,
+						1
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_draw",
+					"extname": "gm_draw",
+					"calltype": 12,
+					"helpline": "gm_draw(x,y,text)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2,
+						1
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_free",
+					"extname": "gm_free",
+					"calltype": 12,
+					"helpline": "gm_free(font_id)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_clear",
+					"extname": "gm_clear",
+					"calltype": 12,
+					"helpline": "gm_clear()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_font",
+					"extname": "gm_set_font",
+					"calltype": 12,
+					"helpline": "gm_set_font(font_id)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_color",
+					"extname": "gm_set_color",
+					"calltype": 12,
+					"helpline": "gm_set_color(color)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_color2",
+					"extname": "gm_set_color2",
+					"calltype": 12,
+					"helpline": "gm_set_color2(color_top,color_bottom)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_alpha",
+					"extname": "gm_set_alpha",
+					"calltype": 12,
+					"helpline": "gm_set_alpha(alpha)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_halign",
+					"extname": "gm_set_halign",
+					"calltype": 12,
+					"helpline": "gm_set_halign(align)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_valign",
+					"extname": "gm_set_valign",
+					"calltype": 12,
+					"helpline": "gm_set_valign(align)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_align",
+					"extname": "gm_set_align",
+					"calltype": 12,
+					"helpline": "gm_set_align(halign,valign)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_max_line_width",
+					"extname": "gm_set_max_line_width",
+					"calltype": 12,
+					"helpline": "gm_set_max_line_width(max_width)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_letter_spacing",
+					"extname": "gm_set_letter_spacing",
+					"calltype": 12,
+					"helpline": "gm_set_letter_spacing(spacing)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_word_spacing",
+					"extname": "gm_set_word_spacing",
+					"calltype": 12,
+					"helpline": "gm_set_word_spacing(spacing)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_line_height",
+					"extname": "gm_set_line_height",
+					"calltype": 12,
+					"helpline": "gm_set_line_height(height)",
+					"hidden": false,
+					"argtypes": [
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_offset",
+					"extname": "gm_set_offset",
+					"calltype": 12,
+					"helpline": "gm_set_offset(x,y)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_set_scale",
+					"extname": "gm_set_scale",
+					"calltype": 12,
+					"helpline": "gm_set_scale(x,y)",
+					"hidden": false,
+					"argtypes": [
+						2,
+						2
+					],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_font",
+					"extname": "gm_get_font",
+					"calltype": 12,
+					"helpline": "gm_get_font()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_color_top",
+					"extname": "gm_get_color_top",
+					"calltype": 12,
+					"helpline": "gm_get_color_top()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_color_bottom",
+					"extname": "gm_get_color_bottom",
+					"calltype": 12,
+					"helpline": "gm_get_color_bottom()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_alpha",
+					"extname": "gm_get_alpha",
+					"calltype": 12,
+					"helpline": "gm_get_alpha()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_halign",
+					"extname": "gm_get_halign",
+					"calltype": 12,
+					"helpline": "gm_get_halign()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_valign",
+					"extname": "gm_get_valign",
+					"calltype": 12,
+					"helpline": "gm_get_valign()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_max_line_width",
+					"extname": "gm_get_max_line_width",
+					"calltype": 12,
+					"helpline": "gm_get_max_line_width()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_letter_spacing",
+					"extname": "gm_get_letter_spacing",
+					"calltype": 12,
+					"helpline": "gm_get_letter_spacing()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_word_spacing",
+					"extname": "gm_get_word_spacing",
+					"calltype": 12,
+					"helpline": "gm_get_word_spacing()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_line_height",
+					"extname": "gm_get_line_height",
+					"calltype": 12,
+					"helpline": "gm_get_line_height()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_offset_x",
+					"extname": "gm_get_offset_x",
+					"calltype": 12,
+					"helpline": "gm_get_offset_x()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_offset_y",
+					"extname": "gm_get_offset_y",
+					"calltype": 12,
+					"helpline": "gm_get_offset_y()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_scale_x",
+					"extname": "gm_get_scale_x",
+					"calltype": 12,
+					"helpline": "gm_get_scale_x()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				},
+				{
+					"name": "gm_get_scale_y",
+					"extname": "gm_get_scale_y",
+					"calltype": 12,
+					"helpline": "gm_get_scale_y()",
+					"hidden": false,
+					"argtypes": [],
+					"returntype": 2
+				}
+			],
+			"constants": []
+		}
+	]
+}

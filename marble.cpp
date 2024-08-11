@@ -2,11 +2,8 @@
 
 gm::draw_system draw;
 
-gm::real gm_init(gm::real ptr) {
-	if (ptr <= 0) {
-		return false;
-	}
-	draw = {(void*)(uintptr_t)ptr};
+gm::real gm_init() {
+	gm::api.init();
 	return true;
 }
 

@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="api.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="marble.h" />
     <ClInclude Include="utils.h" />

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "utils.h"
 #include "draw.h"
 
 #ifdef GASEOUSMARBLE_EXPORTS
@@ -8,7 +9,7 @@
 #define GASEOUSMARBLE_API extern "C" __declspec(dllimport)
 #endif
 
-GASEOUSMARBLE_API gm::real gm_init(gm::real ptr);
+GASEOUSMARBLE_API gm::real gm_init();
 GASEOUSMARBLE_API gm::real gm_font(gm::string sprite_path, gm::string glyph_path);
 GASEOUSMARBLE_API gm::real gm_draw(gm::real x, gm::real y, gm::string text);
 GASEOUSMARBLE_API gm::real gm_free(gm::real font_id);

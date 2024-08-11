@@ -1,29 +1,12 @@
 #pragma once
 
-#include "utils.h"
+#include "api.h"
 
 #include <fstream>
 #include <ranges>
 #include <unordered_map>
 
 namespace gm {
-
-	struct gm_api {
-		function<void*, string> get_function_pointer;
-		function<size_t, string, real, real, real, real, real> sprite_add;
-		function<void, real> sprite_delete;
-		function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
-
-		gm_api(void* ptr = nullptr) {
-			if (ptr == nullptr) {
-				return;
-			}
-			get_function_pointer = ptr;
-			sprite_add = get_function_pointer("sprite_add");
-			sprite_delete = get_function_pointer("sprite_delete");
-			draw_sprite_general = get_function_pointer("draw_sprite_general");
-		}
-	};
 
 	struct glyph_data {
 		uint16_t x, y;
@@ -41,15 +24,9 @@ namespace gm {
 	class font_system : std::vector<font_data> {
 		using base = std::vector<font_data>;
 
-		gm_api _api;
-
 	public:
 		using base::size;
 		using base::operator[];
-
-		font_system(const gm_api& api = nullptr) {
-			_api = api;
-		}
 
 		bool contains(size_t font_id) {
 			return font_id < size() && (*this)[font_id].size != 0;
@@ -65,7 +42,7 @@ namespace gm {
 			}
 
 			font_data font;
-			font.sprite_id = _api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
+			font.sprite_id = api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
 			file.read((char*)&font.size, 2);
 			file.read((char*)&font.glyph_height, 2);
 			if (font.size == 0 || font.glyph_height == 0) {
@@ -89,7 +66,7 @@ namespace gm {
 				return false;
 			}
 			font_data& font{(*this)[font_id]};
-			_api.sprite_delete(font.sprite_id);
+			api.sprite_delete(font.sprite_id);
 			font.size = 0;
 			font.glyph.clear();
 			return true;
@@ -97,7 +74,7 @@ namespace gm {
 
 		void clear() {
 			for (auto& i : *this) {
-				_api.sprite_delete(i.sprite_id);
+				api.sprite_delete(i.sprite_id);
 			}
 			base::clear();
 		}
@@ -117,14 +94,13 @@ namespace gm {
 	};
 
 	class draw_system {
-		gm_api _api;
 		font_system _font;
 		draw_setting _setting;
 
 		void _drawChar(double x, double y, wchar_t ch) {
 			font_data& font{_font[_setting.font_id]};
 			glyph_data& glyph{font.glyph[ch]};
-			_api.draw_sprite_general(
+			api.draw_sprite_general(
 				font.sprite_id,
 				0,
 				glyph.x,
@@ -176,11 +152,6 @@ namespace gm {
 		}
 
 	public:
-		draw_system(const gm_api& api = nullptr) {
-			_api = api;
-			_font = api;
-		}
-
 		font_system& font() {
 			return _font;
 		}
