@@ -6,7 +6,7 @@
 
 namespace gm {
 
-	std::wstring utf8_to_ucs2(string str) {
+	inline std::wstring utf8_to_ucs2(string str) {
 		std::wstring res;
 		uint8_t* view{(uint8_t*)str};
 		while (*view != 0) {
