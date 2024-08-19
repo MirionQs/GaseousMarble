@@ -1,14 +1,12 @@
 #pragma once
 
-#include "base.h"
-
 #include <string>
 
 namespace gm {
 
-	inline std::wstring utf8_to_ucs2(string str) {
+	inline std::wstring utf8_to_ucs2(std::string_view str) {
 		std::wstring res;
-		uint8_t* view{(uint8_t*)str};
+		uint8_t* view{(uint8_t*)str.data()};
 		while (*view != 0) {
 			if (view[0] >> 7 == 0) {
 				res.push_back(view[0]);

@@ -32,7 +32,7 @@
     <ClCompile Include="marble.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="base.h">
+    <ClCompile Include="api.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

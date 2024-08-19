@@ -137,7 +137,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="api.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="marble.h" />
     <ClInclude Include="utils.h" />
@@ -145,7 +144,7 @@
   <ItemGroup>
     <ClCompile Include="marble.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="base.h" />
+    <ClCompile Include="api.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="generate_font.py" />

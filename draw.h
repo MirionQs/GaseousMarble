@@ -42,7 +42,7 @@ namespace gm {
 			}
 
 			font_data font;
-			font.sprite_id = api.sprite_add(sprite_path.data(), 1, false, false, 0, 0);
+			font.sprite_id = sprite_add(sprite_path.data(), 1, false, false, 0, 0);
 			file.read((char*)&font.size, 2);
 			file.read((char*)&font.glyph_height, 2);
 			if (font.size == 0 || font.glyph_height == 0) {
@@ -66,7 +66,7 @@ namespace gm {
 				return false;
 			}
 			font_data& font{(*this)[font_id]};
-			api.sprite_delete(font.sprite_id);
+			sprite_delete(font.sprite_id);
 			font.size = 0;
 			font.glyph.clear();
 			return true;
@@ -74,7 +74,7 @@ namespace gm {
 
 		void clear() {
 			for (auto& i : *this) {
-				api.sprite_delete(i.sprite_id);
+				sprite_delete(i.sprite_id);
 			}
 			base::clear();
 		}
@@ -100,7 +100,7 @@ namespace gm {
 		void _drawChar(double x, double y, wchar_t ch) {
 			font_data& font{_font[_setting.font_id]};
 			glyph_data& glyph{font.glyph[ch]};
-			api.draw_sprite_general(
+			draw_sprite_general(
 				font.sprite_id,
 				0,
 				glyph.x,
