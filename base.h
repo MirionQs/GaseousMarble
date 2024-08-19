@@ -10,13 +10,13 @@ namespace gm {
 	using string = const char*;
 
 	class var {
-		bool _type;
+		bool _isString;
 		real _real;
 		string _string;
 
 	public:
 		var(real r = 0) {
-			_type = 0;
+			_isString = false;
 			_real = r;
 			_string = nullptr;
 		}
@@ -33,13 +33,13 @@ namespace gm {
 			new(data + 8) uint32_t(size);
 			memcpy(data + 12, s, size + 1);
 
-			_type = 1;
+			_isString = true;
 			_real = 0;
 			_string = data + 12;
 		}
 
 		~var() {
-			if (_type == 1) {
+			if (_isString) {
 				delete[](_string - 12);
 			}
 		}
@@ -68,7 +68,7 @@ namespace gm {
 			}
 
 			var args[]{a...}, * pargs{args};
-			constexpr uint32_t count{sizeof...(a)};
+			constexpr uint32_t count{sizeof...(Args)};
 			var ret, * pret{&ret};
 			void* pfn{_ptr};
 			__asm {

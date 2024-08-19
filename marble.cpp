@@ -2,11 +2,6 @@
 
 gm::draw_system draw;
 
-gm::real gm_init() {
-	gm::api.init();
-	return true;
-}
-
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
 	if (!draw.font().add(sprite_path, glyph_path)) {
 		return -1;

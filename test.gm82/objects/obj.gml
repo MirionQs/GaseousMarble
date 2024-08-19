@@ -5,7 +5,6 @@ action_id=603
 applies_to=self
 */
 var dllpath { dllpath = '../Debug/GaseousMarble.dll' }
-global.gm_init = external_define(dllpath, 'gm_init', dll_cdecl, ty_real, 0)
 global.gm_font = external_define(dllpath, 'gm_font', dll_cdecl, ty_real, 2, ty_string, ty_string)
 global.gm_draw = external_define(dllpath, 'gm_draw', dll_cdecl, ty_real, 3, ty_real, ty_real, ty_string)
 global.gm_clear = external_define(dllpath, 'gm_clear', dll_cdecl, ty_real, 0)
@@ -13,7 +12,6 @@ global.gm_set_font = external_define(dllpath, 'gm_set_font', dll_cdecl, ty_real,
 global.gm_set_color2 = external_define(dllpath, 'gm_set_color2', dll_cdecl, ty_real, 2, ty_real, ty_real)
 global.gm_set_align = external_define(dllpath, 'gm_set_align', dll_cdecl, ty_real, 2, ty_real, ty_real)
 
-external_call(global.gm_init)
 global.font_default = external_call(global.gm_font, './plugins/font_default.png', './plugins/font_default.gly')
 external_call(global.gm_set_font, global.font_default)
 #define Keyboard_82

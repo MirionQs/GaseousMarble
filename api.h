@@ -4,7 +4,7 @@
 
 namespace gm {
 
-	struct {
+	struct gm_api {
 		function<size_t, string, real, real, real, real, real> sprite_add;
 		function<void, real> sprite_delete;
 		function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
@@ -14,6 +14,8 @@ namespace gm {
 			sprite_delete = get_function_pointer("sprite_delete");
 			draw_sprite_general = get_function_pointer("draw_sprite_general");
 		}
-	} api;
+	};
+
+	inline gm_api api;
 
 }
