@@ -53,7 +53,7 @@ namespace gm {
 
 		void _drawChar(double x, double y, wchar_t ch);
 		void _drawLine(double x, double y, std::wstring_view line);
-		void _drawLineR(double x, double y, std::wstring_view line);
+		void _drawLineBackward(double x, double y, std::wstring_view line);
 
 	public:
 		font_system& font();

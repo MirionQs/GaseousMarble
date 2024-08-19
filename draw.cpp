@@ -75,32 +75,32 @@ void gm::draw_system::_drawChar(double x, double y, wchar_t ch) {
 }
 
 void gm::draw_system::_drawLine(double x, double y, std::wstring_view line) {
-	double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
-	double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
+	double scaledLetterSpacing{_setting.letter_spacing * _setting.scale_x};
+	double scaledWordSpacing{_setting.word_spacing * _setting.scale_x};
 
 	font_data& font{_font[_setting.font_id]};
 	for (wchar_t ch : line) {
 		glyph_data& glyph{font.glyph[ch]};
 		_drawChar(x, y, ch);
-		x += (glyph.left + glyph.width) * _setting.scale_x + scaled_letter_spacing;
+		x += (glyph.left + glyph.width) * _setting.scale_x + scaledLetterSpacing;
 		if (ch == ' ') {
-			x += scaled_word_spacing;
+			x += scaledWordSpacing;
 		}
 	}
 }
 
-void gm::draw_system::_drawLineR(double x, double y, std::wstring_view line) {
-	double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
-	double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
+void gm::draw_system::_drawLineBackward(double x, double y, std::wstring_view line) {
+	double scaledLetterSpacing{_setting.letter_spacing * _setting.scale_x};
+	double scaledWordSpacing{_setting.word_spacing * _setting.scale_x};
 
 	font_data& font{_font[_setting.font_id]};
 	for (wchar_t ch : line | std::views::reverse) {
 		glyph_data& glyph{font.glyph[ch]};
 		x -= (glyph.left + glyph.width) * _setting.scale_x;
 		_drawChar(x, y, ch);
-		x -= scaled_letter_spacing;
+		x -= scaledLetterSpacing;
 		if (ch == ' ') {
-			x -= scaled_word_spacing;
+			x -= scaledWordSpacing;
 		}
 	}
 }
@@ -120,75 +120,75 @@ bool gm::draw_system::draw(double x, double y, std::wstring_view text) {
 
 	font_data& font{_font[_setting.font_id]};
 
-	double scaled_max_line_width{_setting.max_line_width * _setting.scale_x};
-	double scaled_letter_spacing{_setting.letter_spacing * _setting.scale_x};
-	double scaled_word_spacing{_setting.word_spacing * _setting.scale_x};
-	double scaled_line_height{_setting.line_height * _setting.scale_y * font.size};
-	double scaled_offset_x{_setting.offset_x * _setting.scale_x};
-	double scaled_offset_y{_setting.offset_y * _setting.scale_y};
+	double scaledMaxLineWidth{_setting.max_line_width * _setting.scale_x};
+	double scaledLetterSpacing{_setting.letter_spacing * _setting.scale_x};
+	double scaledWordSpacing{_setting.word_spacing * _setting.scale_x};
+	double scaledLineHeight{_setting.line_height * _setting.scale_y * font.size};
+	double scaledOffsetX{_setting.offset_x * _setting.scale_x};
+	double scaledOffsetY{_setting.offset_y * _setting.scale_y};
 
 	std::vector<std::wstring_view> line;
 	std::vector<double> offset;
-	if (_setting.halign != 0 && scaled_max_line_width == 0) {
+	if (_setting.halign != 0 && scaledMaxLineWidth == 0) {
 		for (auto&& i : text | std::views::split('\n')) {
 			line.emplace_back(i);
 		}
 	}
 	else {
-		double line_width{0};
+		double lineWidth{0};
 		auto begin{text.begin()}, end{text.end()};
 		for (auto p{begin}; p != end; ++p) {
 			if (*p == '\n') {
-				offset.push_back((scaled_letter_spacing - line_width) / 2);
+				offset.push_back((scaledLetterSpacing - lineWidth) / 2);
 				line.emplace_back(begin, p);
-				line_width = 0;
+				lineWidth = 0;
 				begin = p + 1;
 			}
 			else {
 				glyph_data& glyph{font.glyph[*p]};
-				double char_width{(glyph.left + glyph.width) * _setting.scale_x + scaled_letter_spacing};
+				double charWidth{(glyph.left + glyph.width) * _setting.scale_x + scaledLetterSpacing};
 				if (*p == ' ') {
-					char_width += scaled_word_spacing;
+					charWidth += scaledWordSpacing;
 				}
-				if (scaled_max_line_width == 0 || line_width + char_width <= scaled_max_line_width) {
-					line_width += char_width;
+				if (scaledMaxLineWidth == 0 || lineWidth + charWidth <= scaledMaxLineWidth) {
+					lineWidth += charWidth;
 				}
 				else {
-					offset.push_back((scaled_letter_spacing - line_width) / 2);
+					offset.push_back((scaledLetterSpacing - lineWidth) / 2);
 					line.emplace_back(begin, p);
-					line_width = char_width;
+					lineWidth = charWidth;
 					begin = p;
 				}
 			}
 		}
-		offset.push_back((scaled_letter_spacing - line_width) / 2);
+		offset.push_back((scaledLetterSpacing - lineWidth) / 2);
 		line.emplace_back(begin, end);
 	}
 
-	x += scaled_offset_x;
-	y += scaled_offset_y;
+	x += scaledOffsetX;
+	y += scaledOffsetY;
 	if (_setting.valign >= 0) {
-		double text_height{scaled_line_height * line.size()};
-		y -= _setting.valign == 0 ? text_height / 2 : text_height;
+		double textHeight{scaledLineHeight * line.size()};
+		y -= _setting.valign == 0 ? textHeight / 2 : textHeight;
 	}
 
 	if (_setting.halign < 0) {
 		for (auto& i : line) {
 			_drawLine(x, y, i);
-			y += scaled_line_height;
+			y += scaledLineHeight;
 		}
 	}
 	else if (_setting.halign == 0) {
 		auto q{offset.begin()};
 		for (auto& i : line) {
 			_drawLine(x + *q++, y, i);
-			y += scaled_line_height;
+			y += scaledLineHeight;
 		}
 	}
 	else {
 		for (auto& i : line) {
-			_drawLineR(x, y, i);
-			y += scaled_line_height;
+			_drawLineBackward(x, y, i);
+			y += scaledLineHeight;
 		}
 	}
 
