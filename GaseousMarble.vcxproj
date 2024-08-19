@@ -142,9 +142,12 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="api.cpp" />
+    <ClCompile Include="draw.cpp" />
     <ClCompile Include="marble.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="api.h" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="generate_font.py" />
