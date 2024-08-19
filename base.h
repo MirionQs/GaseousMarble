@@ -10,7 +10,7 @@ namespace gm {
 	using string = const char*;
 
 	class var {
-		uint32_t _type;
+		bool _type;
 		real _real;
 		string _string;
 
@@ -86,5 +86,7 @@ namespace gm {
 			}
 		}
 	};
+
+	inline function<void*, string> get_function_pointer{(void*)0x0064c89c};
 
 }
