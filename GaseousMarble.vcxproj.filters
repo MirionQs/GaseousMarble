@@ -47,6 +47,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="generate_font.py" />
   </ItemGroup>
 </Project>

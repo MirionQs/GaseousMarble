@@ -4,7 +4,7 @@ lib_id=1
 action_id=603
 applies_to=self
 */
-global.font_default = gm_font('./plugins/font_default.png', './plugins/font_default.gly')
+global.font_default = gm_font('../test.gm82/plugins/font_default.png', '../test.gm82/plugins/font_default.gly')
 gm_set_font(global.font_default)
 #define Keyboard_82
 /*"/*'/**//* YYD ACTION

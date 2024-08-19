@@ -1,9 +1,9 @@
 {
 	"name": "GaseousMarble",
 	"folder": "temp_GaseousMarble",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"author": "Mirion",
-	"date": "8/11/2024",
+	"date": "8/19/2024",
 	"license": "MIT",
 	"description": "Draw CJK characters in GameMaker 8.2.",
 	"helpfile": "",
@@ -14,18 +14,9 @@
 			"filename": "GaseousMarble.dll",
 			"origname": "../Release/GaseousMarble.dll",
 			"kind": 1,
-			"init": "gm_init",
+			"init": "",
 			"final": "gm_clear",
 			"functions": [
-				{
-					"name": "gm_init",
-					"extname": "gm_init",
-					"calltype": 12,
-					"helpline": "gm_init()",
-					"hidden": true,
-					"argtypes": [],
-					"returntype": 2
-				},
 				{
 					"name": "gm_font",
 					"extname": "gm_font",
