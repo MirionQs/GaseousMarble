@@ -19,7 +19,7 @@ class font_generator:
         self.font_size = font_size
         self.char_list = char_list
         self.outlined = outlined
-        self.anti_aliasing = smoothing
+        self.smoothing = smoothing
         self.stroke_width = stroke_width
         self.code_point = {}
 
@@ -86,7 +86,7 @@ class font_generator:
             image = Image.new('RGBA', (max_width, line_height * line_count))
 
         draw = ImageDraw.Draw(image)
-        if not self.anti_aliasing:
+        if not self.smoothing:
             draw.fontmode = '1'
 
         with open(glyph_path, "wb") as file:
