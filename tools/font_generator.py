@@ -47,7 +47,7 @@ class font_generator:
                 char_list -= cp
 
             if len(char_list) != 0:
-                raise Exception('Unable to find a suitable font for following characters: ' + ''.join(map(chr, char_list)))
+                raise Exception('Unable to find a suitable font for following characters: {}'.format(list(map(lambda i: (i, chr(i)), char_list))))
 
         self.code_point = {path: sorted(cp) for (path, cp) in cp_dict.items()}
 
