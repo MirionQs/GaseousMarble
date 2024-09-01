@@ -6,7 +6,7 @@ import struct
 
 class font_generator:
     def __init__(self, font_path: str | list[str], font_size=16, char_list: str | None = None, *,
-                 smoothing=True, outlined=False, stroke_width=0):
+                 smoothing=True, outlined=False, glyph_spacing=0, stroke_width=0):
         if isinstance(font_path, str):
             font_path = [font_path]
         if isinstance(char_list, str):
@@ -20,6 +20,7 @@ class font_generator:
         self.char_list = char_list
         self.outlined = outlined
         self.smoothing = smoothing
+        self.glyph_spacing = glyph_spacing
         self.stroke_width = stroke_width
         self.code_point = {}
 
@@ -59,7 +60,7 @@ class font_generator:
         for (font, cp) in zip(font_list, self.code_point.values()):
             for i in cp:
                 (left, _, right, bottom) = font.getbbox(chr(i))
-                width = right - left + self.stroke_width * 2
+                width = right - left + self.stroke_width * 2 + self.glyph_spacing
                 height = bottom + self.stroke_width * 2
 
                 total_width += width
@@ -76,7 +77,7 @@ class font_generator:
             for (font, cp) in zip(font_list, self.code_point.values()):
                 for i in cp:
                     (left, _, right, _) = font.getbbox(chr(i))
-                    width = right - left + self.stroke_width * 2
+                    width = right - left + self.stroke_width * 2 + self.glyph_spacing
 
                     if line_width + width > max_width:
                         line_width = 0
@@ -98,7 +99,7 @@ class font_generator:
                 draw.font = font
                 for i in cp:
                     (left, _, right, _) = font.getbbox(chr(i))
-                    width = right - left + self.stroke_width * 2
+                    width = right - left + self.stroke_width * 2 + self.glyph_spacing
                     if x + width > max_width:
                         x = 0
                         y += line_height
