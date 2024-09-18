@@ -113,16 +113,3 @@ class font_generator:
 
                     x += width
         image.save(sprite_path)
-
-
-font_dir = '../test.gm82/plugins/'
-
-char_list = '''
-To be or not to be, that is the question
-生存还是毁灭，这是一个值得考虑的问题
-生存還是毀滅，這是一個值得考慮的問題
-'''
-
-generator = font_generator([font_dir + 'font_default.ttf', font_dir + 'font_alternate.ttf'], 16, char_list, stroke_width=1)
-
-generator.generate(font_dir + 'font_default.png', font_dir + 'font_default.gly')
