@@ -103,7 +103,7 @@ class font_generator:
                     if x + width > max_width:
                         x = 0
                         y += line_height
-                    file.write(struct.pack("4Hh", i, x, y, width, left - self.stroke_width))
+                    file.write(struct.pack("4Hh", i, x, y, width - self.glyph_spacing, left - self.stroke_width))
 
                     pos = (x - left + self.stroke_width, y + self.stroke_width)
                     if self.outlined:
