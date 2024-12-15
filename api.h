@@ -15,12 +15,42 @@ namespace gm {
 		string _string;
 
 	public:
-		var(real r = 0);
-		var(string s);
-		~var();
+		var(real r = 0) {
+			_isString = false;
+			_real = r;
+			_string = nullptr;
+		}
 
-		operator gm::real() const;
-		operator gm::string() const;
+		var(string s) {
+			if (s == nullptr) {
+				s = "";
+			}
+
+			size_t size{ strlen(s) };
+			char* data{ new char[size + 13] };
+			new(data) uint32_t(0);
+			new(data + 4) uint32_t(0);
+			new(data + 8) uint32_t(size);
+			memcpy(data + 12, s, size + 1);
+
+			_isString = true;
+			_real = 0;
+			_string = data + 12;
+		}
+
+		~var() {
+			if (_isString) {
+				delete[](_string - 12);
+			}
+		}
+
+		operator gm::real() const {
+			return _real;
+		}
+
+		operator gm::string() const {
+			return _string;
+		}
 	};
 
 	template<class R, class... Args>
@@ -37,10 +67,10 @@ namespace gm {
 				return R{};
 			}
 
-			var args[]{a...}, * pargs{args};
-			constexpr uint32_t count{sizeof...(Args)};
-			var ret, * pret{&ret};
-			void* pfn{_ptr};
+			var args[]{ a... }, * pargs{ args };
+			constexpr uint32_t count{ sizeof...(Args) };
+			var ret, * pret{ &ret };
+			void* pfn{ _ptr };
 			__asm {
 				push pargs;
 				push count;
@@ -62,6 +92,11 @@ namespace gm {
 	inline function<void, real> sprite_delete;
 	inline function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
 
-	void init();
+	inline void init() {
+		get_function_pointer = (void*)0x0064c89c;
+		sprite_add = get_function_pointer("sprite_add");
+		sprite_delete = get_function_pointer("sprite_delete");
+		draw_sprite_general = get_function_pointer("draw_sprite_general");
+	}
 
 }
