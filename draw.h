@@ -28,7 +28,7 @@ namespace gm {
 		using base::size;
 		using base::operator[];
 
-		bool contains(size_t font_id) {
+		bool contains(size_t font_id) const {
 			return font_id < size() && (*this)[font_id].size != 0;
 		}
 
@@ -37,24 +37,23 @@ namespace gm {
 
 			char magic[4];
 			file.read(magic, 4);
+			magic[3] = 0;
 			if (strcmp(magic, "GLY") != 0) {
 				return false;
 			}
 
 			font_data font;
 			font.sprite_id = sprite_add(sprite_path.data(), 1, false, false, 0, 0);
-			file.read((char*)&font.size, 2);
-			file.read((char*)&font.glyph_height, 2);
+			file.read((char*)&font.size, sizeof(uint16_t));
+			file.read((char*)&font.glyph_height, sizeof(uint16_t));
 			if (font.size == 0 || font.glyph_height == 0) {
 				return false;
 			}
 
 			while (file) {
 				wchar_t ch;
-				glyph_data glyph;
-				file.read((char*)&ch, 2);
-				file.read((char*)&glyph, 8);
-				font.glyph[ch] = std::move(glyph);
+				file.read((char*)&ch, sizeof(wchar_t));
+				file.read((char*)&font.glyph[ch], sizeof(glyph_data));
 			}
 
 			push_back(std::move(font));
