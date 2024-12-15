@@ -28,9 +28,8 @@ namespace gm {
 
 			size_t size{ strlen(s) };
 			char* data{ new char[size + 13] };
-			new(data) uint32_t(0);
-			new(data + 4) uint32_t(0);
-			new(data + 8) uint32_t(size);
+			new(data) uint64_t{};
+			new(data + 8) uint32_t{ size };
 			memcpy(data + 12, s, size + 1);
 
 			_isString = true;
@@ -44,11 +43,11 @@ namespace gm {
 			}
 		}
 
-		operator gm::real() const {
+		operator real() const {
 			return _real;
 		}
 
-		operator gm::string() const {
+		operator string() const {
 			return _string;
 		}
 	};
