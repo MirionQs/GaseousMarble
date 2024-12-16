@@ -78,12 +78,12 @@
   <ItemGroup>
     <ClInclude Include="draw.h" />
     <ClInclude Include="font.h" />
-    <ClInclude Include="marble.h" />
+    <ClInclude Include="gm.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="api.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="marble.cpp" />
+    <ClCompile Include="gm.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,7 @@
-#include "marble.h"
+#include "draw.h"
+#include "utils.h"
+
+#include "gm.h"
 
 gm::draw_system draw;
 
