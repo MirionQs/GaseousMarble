@@ -64,7 +64,7 @@ namespace gm {
                 throw std::runtime_error{ "Cannot call nullptr." };
             }
 
-            var arg[]{ args... }, * parg{ args };
+            var arg[]{ args... }, * parg{ arg };
             constexpr uint32_t count{ sizeof...(Args) };
             var ret, * pret{ &ret };
             void* pfn{ _ptr };
