@@ -3,30 +3,30 @@
 
 #include "gm.h"
 
-gm::draw_system draw;
+gm::draw draw;
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
-    if (!draw.font().add(sprite_path, glyph_path)) {
+    if (!draw.font_list().add(sprite_path, glyph_path)) {
         return -1;
     }
-    return draw.font().size() - 1;
+    return draw.font_list().size() - 1;
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
-    return draw.draw(x, y, gm::utf8_to_ucs2(text));
+    return draw.text(x, y, gm::utf8_to_ucs2(text));
 }
 
 gm::real gm_free(gm::real font_id) {
-    return draw.font().remove((size_t)font_id);
+    return draw.font_list().remove((size_t)font_id);
 }
 
 gm::real gm_clear() {
-    draw.font().clear();
+    draw.font_list().clear();
     return true;
 }
 
 gm::real gm_set_font(gm::real font_id) {
-    if (!draw.font().contains((size_t)font_id)) {
+    if (!draw.font_list().contains((size_t)font_id)) {
         return false;
     }
     draw.setting().font_id = (size_t)font_id;

@@ -13,15 +13,15 @@ namespace gm {
         int16_t left;
     };
 
-    struct font_data {
+    struct font {
         size_t sprite_id;
         uint16_t size;
         uint16_t glyph_height;
         std::unordered_map<wchar_t, glyph_data> glyph;
     };
 
-    class font_system : std::vector<font_data> {
-        using base = std::vector<font_data>;
+    class font_system : std::vector<font> {
+        using base = std::vector<font>;
 
     public:
         using base::size;
@@ -41,7 +41,7 @@ namespace gm {
                 return false;
             }
 
-            font_data font;
+            font font;
             font.sprite_id = sprite_add(sprite_path.data(), 1, false, false, 0, 0);
             file.read((char*)&font.size, sizeof(uint16_t));
             file.read((char*)&font.glyph_height, sizeof(uint16_t));
@@ -63,7 +63,7 @@ namespace gm {
             if (!contains(font_id)) {
                 return false;
             }
-            font_data& font{ (*this)[font_id] };
+            font& font{ (*this)[font_id] };
             sprite_delete(font.sprite_id);
             font.size = 0;
             font.glyph.clear();
