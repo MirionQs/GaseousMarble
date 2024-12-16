@@ -8,13 +8,13 @@ namespace gm {
     using string = const char*;
 
     class var {
-        bool _isString;
+        bool _is_string;
         real _real;
         string _string;
 
     public:
         var(real num = 0) noexcept {
-            _isString = false;
+            _is_string = false;
             _real = num;
             _string = nullptr;
         }
@@ -30,13 +30,13 @@ namespace gm {
             new(data + 8) uint32_t{ size };
             memcpy(data + 12, str, size + 1);
 
-            _isString = true;
+            _is_string = true;
             _real = 0;
             _string = data + 12;
         }
 
         ~var() noexcept {
-            if (_isString) {
+            if (_is_string) {
                 delete[](_string - 12);
             }
         }
