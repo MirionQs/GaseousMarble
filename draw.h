@@ -7,7 +7,7 @@
 namespace gm {
 
     struct draw_setting {
-        size_t font_id{ 0 };
+        uint32_t font_id{ 0 };
         uint32_t color_top{ 0xffffff }, color_bottom{ 0xffffff };
         double alpha{ 1 };
         int halign{ -1 }, valign{ -1 };
@@ -32,7 +32,7 @@ namespace gm {
                 glyph.x,
                 glyph.y,
                 glyph.width,
-                font.glyph_height,
+                font.height,
                 x + glyph.left * _setting.scale_x,
                 y,
                 _setting.scale_x,
