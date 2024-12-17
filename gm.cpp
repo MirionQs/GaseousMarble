@@ -3,10 +3,18 @@
 
 #include "gm.h"
 
+std::unordered_map<uint32_t, gm::font> font;
 gm::draw draw;
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
-    return draw.font_list().add(sprite_path, glyph_path);
+    gm::font font{ sprite_path, glyph_path };
+    uint32_t font_id{ font.id() };
+    if (font_id == 0) {
+        return 0;
+    }
+
+    ::font.emplace(font_id, std::move(font));
+    return font_id;
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
@@ -14,19 +22,26 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
 }
 
 gm::real gm_free(gm::real font_id) {
-    return draw.font_list().remove((size_t)font_id);
+    auto iter{ font.find((uint32_t)font_id) };
+    if (iter == font.end() || &iter->second == draw.setting().font) {
+        return false;
+    }
+
+    font.erase(iter);
+    return true;
 }
 
 gm::real gm_clear() {
-    draw.font_list().clear();
+    font.clear();
     return true;
 }
 
 gm::real gm_set_font(gm::real font_id) {
-    if (!draw.font_list().contains((size_t)font_id)) {
+    auto iter{ font.find((uint32_t)font_id) };
+    if (iter == font.end()) {
         return false;
     }
-    draw.setting().font = &draw.font_list()[(size_t)font_id];
+    draw.setting().font = &iter->second;
     return true;
 }
 

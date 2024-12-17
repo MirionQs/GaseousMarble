@@ -19,18 +19,11 @@ namespace gm {
     };
 
     class draw {
-        font_system _font;
         draw_setting _setting;
 
         void _char(double x, double y, wchar_t ch) {
             font& font{ *_setting.font };
-
-            auto iter{ font.glyph().find(ch) };
-            if (iter == font.glyph().end()) {
-                return;
-            }
-            const glyph_data& glyph{ iter->second };
-
+            auto& glyph{ font.glyph().at(ch) };
             draw_sprite_general(
                 font.sprite_id(),
                 0,
@@ -52,8 +45,8 @@ namespace gm {
         }
 
         void _line(double x, double y, std::wstring_view line) {
-            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
+            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
             font& font{ *_setting.font };
             for (wchar_t ch : line) {
@@ -61,7 +54,7 @@ namespace gm {
                 if (iter == font.glyph().end()) {
                     continue;
                 }
-                const glyph_data& glyph{ iter->second };
+                auto& glyph{ iter->second };
 
                 _char(x, y, ch);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
@@ -72,8 +65,8 @@ namespace gm {
         }
 
         void _line_backward(double x, double y, std::wstring_view line) {
-            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
+            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
             font& font{ *_setting.font };
             for (wchar_t ch : line | std::views::reverse) {
@@ -81,7 +74,7 @@ namespace gm {
                 if (iter == font.glyph().end()) {
                     continue;
                 }
-                const glyph_data& glyph{ iter->second };
+                auto& glyph{ iter->second };
 
                 x -= (glyph.left + glyph.width) * _setting.scale_x;
                 _char(x, y, ch);
@@ -103,10 +96,6 @@ namespace gm {
             _setting.line_height = 1;
             _setting.offset_x = _setting.offset_y = 0;
             _setting.scale_x = _setting.scale_y = 1;
-        }
-
-        font_system& font_list() {
-            return _font;
         }
 
         draw_setting& setting() noexcept {
@@ -148,7 +137,7 @@ namespace gm {
                         if (iter == font.glyph().end()) {
                             continue;
                         }
-                        const glyph_data& glyph{ iter->second };
+                        auto& glyph{ iter->second };
 
                         double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
                         if (*p == ' ') {
@@ -199,4 +188,5 @@ namespace gm {
             return true;
         }
     };
+
 }

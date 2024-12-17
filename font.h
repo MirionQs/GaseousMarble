@@ -59,7 +59,7 @@ namespace gm {
         }
 
         ~font() noexcept {
-            if (!empty()) {
+            if (_id != 0) {
                 // The code below will throw an exception when quitting the game 
                 // because the GameMaker functions have become invalid. However,
                 // it doesn't matter.
@@ -74,10 +74,6 @@ namespace gm {
             _height = other._height;
             _glyph = std::move(other._glyph);
             return *this;
-        }
-
-        bool empty() const noexcept {
-            return _id == 0;
         }
 
         uint32_t id() const noexcept {
@@ -98,38 +94,6 @@ namespace gm {
 
         const auto& glyph() const noexcept {
             return _glyph;
-        }
-    };
-
-    class font_system {
-        std::unordered_map<uint32_t, font> _font;
-
-    public:
-        font& operator[](uint32_t font_id) {
-            return _font.at(font_id);
-        }
-
-        bool contains(uint32_t font_id) {
-            return _font.contains(font_id);
-        }
-
-        uint32_t add(std::string_view sprite_path, std::string_view glyph_path) {
-            font f{ sprite_path, glyph_path };
-            if (f.empty()) {
-                return 0;
-            }
-            uint32_t font_id{ f.id() };
-            _font.emplace(font_id, std::move(f));
-            return font_id;
-        }
-
-        bool remove(uint32_t font_id) {
-            _font.erase(font_id);
-            return true;
-        }
-
-        void clear() {
-            _font.clear();
         }
     };
 
