@@ -23,19 +23,30 @@ namespace gm {
         std::unordered_map<wchar_t, glyph_data> _glyph;
 
     public:
-        font(std::string_view sprite_path, std::string_view glyph_path) {
+        font() noexcept :
+            _id{},
+            _sprite_id{},
+            _size{},
+            _height{} {}
+
+        font(font&& other) noexcept {
+            *this = std::move(other);
+        }
+
+        font(std::string_view sprite_path, std::string_view glyph_path) :
+            _id{ ++_counter } {
+
             std::ifstream file{ glyph_path.data(), std::ios::binary };
             if (!file.is_open()) {
-                throw std::runtime_error{ "Cannot open files." };
+                return;
             }
 
             char magic[4];
             file.read(magic, sizeof(magic));
             if (strncmp(magic, "GLY", sizeof(magic)) != 0) {
-                throw std::runtime_error{ "Incorrect file format." };
+                return;
             }
 
-            _id = _counter++;
             _sprite_id = sprite_add(sprite_path.data(), 1, false, false, 0, 0);
             file.read((char*)&_size, sizeof(_size));
             file.read((char*)&_height, sizeof(_height));
@@ -48,7 +59,24 @@ namespace gm {
         }
 
         ~font() noexcept {
-            sprite_delete(_sprite_id);
+            if (!empty()) {
+                sprite_delete(_sprite_id);
+            }
+        }
+
+        font& operator=(const font&) noexcept = default;
+
+        font& operator=(font&& other) noexcept {
+            _id = std::exchange(other._id, 0);
+            _sprite_id = other._sprite_id;
+            _size = other._size;
+            _height = other._height;
+            _glyph = std::move(other._glyph);
+            return *this;
+        }
+
+        bool empty() const noexcept {
+            return _id == 0;
         }
 
         uint32_t& id() noexcept {
@@ -72,43 +100,35 @@ namespace gm {
         }
     };
 
-    class font_system : std::vector<font> {
-        using base = std::vector<font>;
+    class font_system {
+        std::unordered_map<uint32_t, font> _font;
 
     public:
-        using base::size;
-        using base::operator[];
-
-        bool contains(uint32_t font_id) {
-            return font_id < size() && (*this)[font_id].size() != 0;
+        font& operator[](uint32_t font_id) {
+            return _font.at(font_id);
         }
 
-        bool add(std::string_view sprite_path, std::string_view glyph_path) {
-            try {
-                emplace_back(sprite_path, glyph_path);
-                return true;
+        bool contains(uint32_t font_id) {
+            return _font.contains(font_id);
+        }
+
+        uint32_t add(std::string_view sprite_path, std::string_view glyph_path) {
+            font f{ sprite_path, glyph_path };
+            if (f.empty()) {
+                return 0;
             }
-            catch (...) {
-                return false;
-            }
+            uint32_t font_id{ f.id() };
+            _font.emplace(font_id, std::move(f));
+            return font_id;
         }
 
         bool remove(uint32_t font_id) {
-            if (!contains(font_id)) {
-                return false;
-            }
-            font& font{ (*this)[font_id] };
-            sprite_delete(font.sprite_id());
-            font.size() = 0;
-            font.glyph().clear();
+            _font.erase(font_id);
             return true;
         }
 
         void clear() {
-            for (auto& i : *this) {
-                sprite_delete(i.sprite_id());
-            }
-            base::clear();
+            _font.clear();
         }
     };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <stdexcept>
 
 namespace gm {
@@ -13,26 +14,28 @@ namespace gm {
         string _string;
 
     public:
-        var(real num = 0) noexcept {
-            _is_string = false;
-            _real = num;
-            _string = nullptr;
-        }
+        var() noexcept :
+            _is_string{},
+            _real{},
+            _string{} {}
 
-        var(string str) {
-            if (str == nullptr) {
-                throw std::invalid_argument{ "Cannot initialize var with nullptr." };
-            }
+        var(real num) noexcept :
+            _is_string{},
+            _real{ num },
+            _string{} {}
 
-            size_t size{ strlen(str) };
-            char* data{ new char[size + 13] };
-            new(data) uint64_t{};
-            new(data + 8) uint32_t{ size };
-            memcpy(data + 12, str, size + 1);
+        var(string str) :
+            _is_string{ true },
+            _real{} {
+            
+            assert(str != nullptr);
 
-            _is_string = true;
-            _real = 0;
-            _string = data + 12;
+            size_t len{ strlen(str) };
+            char* pstr{ new char[len + 13] };
+            new(pstr) uint64_t{};
+            new(pstr + 8) uint32_t{ len };
+            memcpy(pstr + 12, str, len + 1);
+            _string = pstr + 12;
         }
 
         ~var() noexcept {
@@ -55,14 +58,11 @@ namespace gm {
         void* _ptr;
 
     public:
-        function(void* ptr = nullptr) noexcept {
-            _ptr = ptr;
-        }
+        function(void* ptr = nullptr) noexcept :
+            _ptr{ ptr } {}
 
         R operator()(Args... args) const {
-            if (_ptr == nullptr) {
-                throw std::runtime_error{ "Cannot call nullptr." };
-            }
+            assert(_ptr != nullptr);
 
             var arg[]{ args... }, * parg{ arg };
             constexpr uint32_t count{ sizeof...(Args) };

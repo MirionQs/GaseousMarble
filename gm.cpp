@@ -6,10 +6,7 @@
 gm::draw draw;
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
-    if (!draw.font_list().add(sprite_path, glyph_path)) {
-        return -1;
-    }
-    return draw.font_list().size() - 1;
+    return draw.font_list().add(sprite_path, glyph_path);
 }
 
 gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
