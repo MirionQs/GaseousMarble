@@ -60,11 +60,12 @@ namespace gm {
 
         ~font() noexcept {
             if (!empty()) {
+                // The code below will throw an exception when quitting the game 
+                // because the GameMaker functions have become invalid. But it 
+                // doesn't matter.
                 sprite_delete(_sprite_id);
             }
         }
-
-        font& operator=(const font&) noexcept = default;
 
         font& operator=(font&& other) noexcept {
             _id = std::exchange(other._id, 0);
