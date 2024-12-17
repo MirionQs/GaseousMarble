@@ -25,7 +25,13 @@ namespace gm {
 
         void _char(double x, double y, wchar_t ch) {
             font& font{ _font[_setting.font_id] };
-            glyph_data& glyph{ font.glyph()[ch] };
+
+            auto iter{ font.glyph().find(ch) };
+            if (iter == font.glyph().end()) {
+                return;
+            }
+            const glyph_data& glyph{ iter->second };
+
             draw_sprite_general(
                 font.sprite_id(),
                 0,
@@ -52,7 +58,12 @@ namespace gm {
 
             font& font{ _font[_setting.font_id] };
             for (wchar_t ch : line) {
-                glyph_data& glyph{ font.glyph()[ch] };
+                auto iter{ font.glyph().find(ch) };
+                if (iter == font.glyph().end()) {
+                    continue;
+                }
+                const glyph_data& glyph{ iter->second };
+
                 _char(x, y, ch);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
                 if (ch == ' ') {
@@ -67,7 +78,12 @@ namespace gm {
 
             font& font{ _font[_setting.font_id] };
             for (wchar_t ch : line | std::views::reverse) {
-                glyph_data& glyph{ font.glyph()[ch] };
+                auto iter{ font.glyph().find(ch) };
+                if (iter == font.glyph().end()) {
+                    continue;
+                }
+                const glyph_data& glyph{ iter->second };
+
                 x -= (glyph.left + glyph.width) * _setting.scale_x;
                 _char(x, y, ch);
                 x -= letter_spacing;
@@ -96,7 +112,7 @@ namespace gm {
             double max_line_width{ _setting.max_line_width * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
-            double line_height{ _setting.line_height * _setting.scale_y * font.size()};
+            double line_height{ _setting.line_height * _setting.scale_y * font.size() };
             double offset_x{ _setting.offset_x * _setting.scale_x };
             double offset_y{ _setting.offset_y * _setting.scale_y };
 
@@ -118,7 +134,12 @@ namespace gm {
                         begin = p + 1;
                     }
                     else {
-                        glyph_data& glyph{ font.glyph()[*p] };
+                        auto iter{ font.glyph().find(*p) };
+                        if (iter == font.glyph().end()) {
+                            continue;
+                        }
+                        const glyph_data& glyph{ iter->second };
+
                         double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
                         if (*p == ' ') {
                             char_width += word_spacing;

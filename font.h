@@ -80,23 +80,23 @@ namespace gm {
             return _id == 0;
         }
 
-        uint32_t& id() noexcept {
+        uint32_t id() const noexcept {
             return _id;
         }
 
-        uint32_t& sprite_id() noexcept {
+        uint32_t sprite_id() const noexcept {
             return _sprite_id;
         }
 
-        uint16_t& size() noexcept {
+        uint16_t size() const noexcept {
             return _size;
         }
 
-        uint16_t& height() noexcept {
+        uint16_t height() const noexcept {
             return _height;
         }
 
-        auto& glyph() noexcept {
+        const auto& glyph() const noexcept {
             return _glyph;
         }
     };
