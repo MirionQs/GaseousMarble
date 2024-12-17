@@ -61,8 +61,8 @@ namespace gm {
         ~font() noexcept {
             if (!empty()) {
                 // The code below will throw an exception when quitting the game 
-                // because the GameMaker functions have become invalid. But it 
-                // doesn't matter.
+                // because the GameMaker functions have become invalid. However,
+                // it doesn't matter.
                 sprite_delete(_sprite_id);
             }
         }

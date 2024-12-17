@@ -7,16 +7,15 @@
 namespace gm {
 
     struct draw_setting {
-        uint32_t font_id{ 0 };
-        uint32_t color_top{ 0xffffff }, color_bottom{ 0xffffff };
-        double alpha{ 1 };
-        int halign{ -1 }, valign{ -1 };
-        double max_line_width{ 0 };
-        double letter_spacing{ 0 };
-        double word_spacing{ 0 };
-        double line_height{ 1 };
-        double offset_x{ 0 }, offset_y{ 0 };
-        double scale_x{ 1 }, scale_y{ 1 };
+        font* font;
+        uint32_t color_top, color_bottom;
+        double alpha;
+        int halign, valign;
+        double word_spacing, letter_spacing;
+        double max_line_width;
+        double line_height;
+        double offset_x, offset_y;
+        double scale_x, scale_y;
     };
 
     class draw {
@@ -24,7 +23,7 @@ namespace gm {
         draw_setting _setting;
 
         void _char(double x, double y, wchar_t ch) {
-            font& font{ _font[_setting.font_id] };
+            font& font{ *_setting.font };
 
             auto iter{ font.glyph().find(ch) };
             if (iter == font.glyph().end()) {
@@ -56,7 +55,7 @@ namespace gm {
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
 
-            font& font{ _font[_setting.font_id] };
+            font& font{ *_setting.font };
             for (wchar_t ch : line) {
                 auto iter{ font.glyph().find(ch) };
                 if (iter == font.glyph().end()) {
@@ -76,7 +75,7 @@ namespace gm {
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
 
-            font& font{ _font[_setting.font_id] };
+            font& font{ *_setting.font };
             for (wchar_t ch : line | std::views::reverse) {
                 auto iter{ font.glyph().find(ch) };
                 if (iter == font.glyph().end()) {
@@ -94,24 +93,35 @@ namespace gm {
         }
 
     public:
+        draw() noexcept {
+            _setting.font = nullptr;
+            _setting.color_top = _setting.color_bottom = 0xffffff;
+            _setting.alpha = 1;
+            _setting.halign = _setting.valign = -1;
+            _setting.word_spacing = _setting.letter_spacing = 0;
+            _setting.max_line_width = 0;
+            _setting.line_height = 1;
+            _setting.offset_x = _setting.offset_y = 0;
+            _setting.scale_x = _setting.scale_y = 1;
+        }
+
         font_system& font_list() {
             return _font;
         }
 
-        draw_setting& setting() {
+        draw_setting& setting() noexcept {
             return _setting;
         }
 
         bool text(double x, double y, std::wstring_view text) {
-            if (!_font.contains(_setting.font_id)) {
+            if (_setting.font == nullptr) {
                 return false;
             }
 
-            font& font{ _font[_setting.font_id] };
-
+            font& font{ *_setting.font };
             double max_line_width{ _setting.max_line_width * _setting.scale_x };
-            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
+            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
             double line_height{ _setting.line_height * _setting.scale_y * font.size() };
             double offset_x{ _setting.offset_x * _setting.scale_x };
             double offset_y{ _setting.offset_y * _setting.scale_y };
@@ -124,7 +134,7 @@ namespace gm {
                 }
             }
             else {
-                double line_width{ 0 };
+                double line_width{};
                 auto begin{ text.begin() }, end{ text.end() };
                 for (auto p{ begin }; p != end; ++p) {
                     if (*p == '\n') {

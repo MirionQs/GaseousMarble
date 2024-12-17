@@ -26,7 +26,7 @@ gm::real gm_set_font(gm::real font_id) {
     if (!draw.font_list().contains((size_t)font_id)) {
         return false;
     }
-    draw.setting().font_id = (size_t)font_id;
+    draw.setting().font = &draw.font_list()[(size_t)font_id];
     return true;
 }
 
@@ -106,7 +106,7 @@ gm::real gm_set_scale(gm::real x, gm::real y) {
 }
 
 gm::real gm_get_font() {
-    return draw.setting().font_id;
+    return draw.setting().font->id();
 }
 
 gm::real gm_get_color_top() {
