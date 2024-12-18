@@ -24,6 +24,7 @@ namespace gm {
         std::wstring _filter(std::wstring_view text) const noexcept {
             std::wstring filtered;
             auto& glyph_map{ _setting.font->glyph() };
+
             for (auto& ch : text) {
                 if (iswblank(ch)) {
                     filtered.push_back(' ');
@@ -35,7 +36,42 @@ namespace gm {
             return filtered;
         }
 
-        void _glyph(double x, double y, const glyph_data& glyph) const noexcept {
+        auto _split(std::wstring_view text) const noexcept {
+            std::vector<std::pair<std::wstring, double>> line;
+            auto& glyph_map{ _setting.font->glyph() };
+            double max_line_width{ _setting.max_line_width * _setting.scale_x };
+            double word_spacing{ _setting.word_spacing * _setting.scale_x };
+            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
+
+            auto begin{ text.begin() }, end{ text.end() };
+            double line_width{};
+            for (auto i{ begin }; i != end; ++i) {
+                if (*i == '\n') {
+                    line.emplace_back(std::wstring{ begin, i }, line_width - letter_spacing);
+                    line_width = 0;
+                    begin = i + 1;
+                }
+                else {
+                    auto& glyph{ glyph_map.at(*i) };
+                    double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
+                    if (*i == ' ') {
+                        char_width += word_spacing;
+                    }
+                    if (max_line_width == 0 || line_width + char_width <= max_line_width) {
+                        line_width += char_width;
+                    }
+                    else {
+                        line.emplace_back(std::wstring{ begin, i }, line_width - letter_spacing);
+                        line_width = char_width;
+                        begin = i;
+                    }
+                }
+            }
+            line.emplace_back(std::wstring{ begin, end }, line_width - letter_spacing);
+            return line;
+        }
+
+        void _char(double x, double y, const glyph_data& glyph) const noexcept {
             draw_sprite_general(
                 _setting.font->sprite_id(),
                 0,
@@ -56,33 +92,17 @@ namespace gm {
             );
         }
 
-        void _line(double x, double y, std::wstring_view line) const noexcept {
+        void _line(double x, double y, std::wstring_view text) const noexcept {
             auto& glyph_map{ _setting.font->glyph() };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
-            for (auto& ch : line) {
+            for (auto& ch : text) {
                 auto& glyph{ glyph_map.at(ch) };
-                _glyph(x, y, glyph);
+                _char(x, y, glyph);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
                 if (ch == ' ') {
                     x += word_spacing;
-                }
-            }
-        }
-
-        void _line_backward(double x, double y, std::wstring_view line) const noexcept {
-            auto& glyph_map{ _setting.font->glyph() };
-            double word_spacing{ _setting.word_spacing * _setting.scale_x };
-            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
-
-            for (auto& ch : line | std::views::reverse) {
-                auto& glyph{ glyph_map.at(ch) };
-                x -= (glyph.left + glyph.width) * _setting.scale_x;
-                _glyph(x, y, glyph);
-                x -= letter_spacing;
-                if (ch == ' ') {
-                    x -= word_spacing;
                 }
             }
         }
@@ -118,75 +138,38 @@ namespace gm {
             }
 
             std::wstring filtered{ _filter(text) };
-            double max_line_width{ _setting.max_line_width * _setting.scale_x };
-            double word_spacing{ _setting.word_spacing * _setting.scale_x };
-            double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
+            auto line{ _split(filtered) };
             double line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
             double offset_x{ _setting.offset_x * _setting.scale_x };
             double offset_y{ _setting.offset_y * _setting.scale_y };
 
-            std::vector<std::wstring_view> line;
-            std::vector<double> offset;
-            if (_setting.halign != 0 && max_line_width == 0) {
-                for (auto&& i : filtered | std::views::split('\n')) {
-                    line.emplace_back(i);
-                }
-            }
-            else {
-                auto& glyph_map{ _setting.font->glyph() };
-                double line_width{};
-                auto begin{ filtered.begin() }, end{ filtered.end() };
-                for (auto i{ begin }; i != end; ++i) {
-                    if (*i == '\n') {
-                        offset.push_back((letter_spacing - line_width) / 2);
-                        line.emplace_back(begin, i);
-                        line_width = 0;
-                        begin = i + 1;
-                    }
-                    else {
-                        auto& glyph{ glyph_map.at(*i) };
-                        double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
-                        if (*i == ' ') {
-                            char_width += word_spacing;
-                        }
-                        if (max_line_width == 0 || line_width + char_width <= max_line_width) {
-                            line_width += char_width;
-                        }
-                        else {
-                            offset.push_back((letter_spacing - line_width) / 2);
-                            line.emplace_back(begin, i);
-                            line_width = char_width;
-                            begin = i;
-                        }
-                    }
-                }
-                offset.push_back((letter_spacing - line_width) / 2);
-                line.emplace_back(begin, end);
-            }
-
             x += offset_x;
             y += offset_y;
-            if (_setting.valign >= 0) {
-                double text_height{ line_height * line.size() };
-                y -= _setting.valign == 0 ? text_height / 2 : text_height;
+            if (_setting.valign < 0) {
+                // do nothing
+            }
+            if (_setting.valign == 0) {
+                y -= line_height * line.size() / 2;
+            }
+            else {
+                y -= line_height * line.size();
             }
 
             if (_setting.halign < 0) {
-                for (auto& i : line) {
-                    _line(x, y, i);
+                for (auto& [text, width] : line) {
+                    _line(x, y, text);
                     y += line_height;
                 }
             }
             else if (_setting.halign == 0) {
-                auto q{ offset.begin() };
-                for (auto& i : line) {
-                    _line(x + *q++, y, i);
+                for (auto& [text, width] : line) {
+                    _line(x - width / 2, y, text);
                     y += line_height;
                 }
             }
             else {
-                for (auto& i : line) {
-                    _line_backward(x, y, i);
+                for (auto& [text, width] : line) {
+                    _line(x - width, y, text);
                     y += line_height;
                 }
             }
