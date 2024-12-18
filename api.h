@@ -8,23 +8,23 @@ namespace gm {
     using real = double;
     using string = const char*;
 
-    class var {
+    class value {
         bool _is_string;
         real _real;
         string _string;
 
     public:
-        var() noexcept :
+        value() noexcept :
             _is_string{},
             _real{},
             _string{} {}
 
-        var(real num) noexcept :
+        value(real num) noexcept :
             _is_string{},
             _real{ num },
             _string{} {}
 
-        var(string str) :
+        value(string str) :
             _is_string{ true },
             _real{} {
             
@@ -38,7 +38,7 @@ namespace gm {
             _string = pstr + 12;
         }
 
-        ~var() noexcept {
+        ~value() noexcept {
             if (_is_string) {
                 delete[](_string - 12);
             }
@@ -64,9 +64,9 @@ namespace gm {
         R operator()(Args... args) const {
             assert(_ptr != nullptr);
 
-            var arg[]{ args... }, * parg{ arg };
+            value arg[]{ args... }, * parg{ arg };
             constexpr uint32_t count{ sizeof...(Args) };
-            var ret, * pret{ &ret };
+            value ret, * pret{ &ret };
             void* pfn{ _ptr };
             __asm {
                 push parg;
