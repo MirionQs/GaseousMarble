@@ -21,7 +21,7 @@ namespace gm {
     class draw {
         draw_setting _setting;
 
-        void _char(double x, double y, wchar_t ch) {
+        void _char(double x, double y, wchar_t ch) const noexcept {
             font& font{ *_setting.font };
             auto& glyph{ font.glyph().at(ch) };
             draw_sprite_general(
@@ -44,7 +44,7 @@ namespace gm {
             );
         }
 
-        void _line(double x, double y, std::wstring_view line) {
+        void _line(double x, double y, std::wstring_view line) const noexcept {
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
@@ -64,7 +64,7 @@ namespace gm {
             }
         }
 
-        void _line_backward(double x, double y, std::wstring_view line) {
+        void _line_backward(double x, double y, std::wstring_view line) const noexcept {
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
@@ -102,7 +102,7 @@ namespace gm {
             return _setting;
         }
 
-        bool text(double x, double y, std::wstring_view text) {
+        bool text(double x, double y, std::wstring_view text) const noexcept {
             if (_setting.font == nullptr) {
                 return false;
             }
