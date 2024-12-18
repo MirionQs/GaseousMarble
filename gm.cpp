@@ -12,7 +12,6 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
     if (font_id == 0) {
         return 0;
     }
-
     ::font.emplace(font_id, std::move(font));
     return font_id;
 }
@@ -26,7 +25,6 @@ gm::real gm_free(gm::real font_id) {
     if (iter == font.end() || &iter->second == draw.setting().font) {
         return false;
     }
-
     font.erase(iter);
     return true;
 }
@@ -80,7 +78,7 @@ gm::real gm_set_align(gm::real halign, gm::real valign) {
 }
 
 gm::real gm_set_max_line_width(gm::real max_width) {
-    if (max_width <= 0) {
+    if (max_width < 0) {
         return false;
     }
     draw.setting().max_line_width = abs(max_width);
