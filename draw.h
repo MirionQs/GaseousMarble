@@ -125,11 +125,18 @@ namespace gm {
         }
 
         double width(std::wstring_view text) const noexcept {
-
+            auto line{ _split(_filter(text)) };
+            double max_width{};
+            for (auto& [text, width] : line) {
+                max_width = std::max(max_width, width);
+            }
+            return max_width;
         }
 
         double height(std::wstring_view text) const noexcept {
-
+            auto line{ _split(_filter(text)) };
+            double line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
+            return line_height * line.size();
         }
 
         bool text(double x, double y, std::wstring_view text) const noexcept {

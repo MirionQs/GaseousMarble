@@ -16,6 +16,14 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) {
     return font_id;
 }
 
+gm::real gm_width(gm::string text) {
+    return draw.width(gm::utf8_to_ucs2(text));
+}
+
+gm::real gm_height(gm::string text) {
+    return draw.height(gm::utf8_to_ucs2(text));
+}
+
 gm::real gm_draw(gm::real x, gm::real y, gm::string text) {
     return draw.text(x, y, gm::utf8_to_ucs2(text));
 }
