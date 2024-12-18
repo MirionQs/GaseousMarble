@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include <stdexcept>
+#include <new>
 
 namespace gm {
 

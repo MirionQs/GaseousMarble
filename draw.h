@@ -2,8 +2,6 @@
 
 #include "font.h"
 
-#include <ranges>
-
 namespace gm {
 
     struct draw_setting {
@@ -71,7 +69,7 @@ namespace gm {
             return line;
         }
 
-        void _char(double x, double y, const glyph_data& glyph) const noexcept {
+        void _glyph(double x, double y, const glyph_data& glyph) const noexcept {
             draw_sprite_general(
                 _setting.font->sprite_id(),
                 0,
@@ -99,7 +97,7 @@ namespace gm {
 
             for (auto& ch : text) {
                 auto& glyph{ glyph_map.at(ch) };
-                _char(x, y, glyph);
+                _glyph(x, y, glyph);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
                 if (ch == ' ') {
                     x += word_spacing;
