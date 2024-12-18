@@ -21,16 +21,18 @@ namespace gm {
     class draw {
         draw_setting _setting;
 
-        void _char(double x, double y, wchar_t ch) const noexcept {
-            font& font{ *_setting.font };
-            auto& glyph{ font.glyph().at(ch) };
+        std::wstring _filter(std::wstring_view text) const noexcept {
+
+        }
+
+        void _glyph(double x, double y, const glyph_data& glyph) const noexcept {
             draw_sprite_general(
-                font.sprite_id(),
+                _setting.font->sprite_id(),
                 0,
                 glyph.x,
                 glyph.y,
                 glyph.width,
-                font.height(),
+                _setting.font->height(),
                 x + glyph.left * _setting.scale_x,
                 y,
                 _setting.scale_x,
@@ -45,18 +47,13 @@ namespace gm {
         }
 
         void _line(double x, double y, std::wstring_view line) const noexcept {
+            auto& glyph_map{ _setting.font->glyph() };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
-            font& font{ *_setting.font };
-            for (wchar_t ch : line) {
-                auto iter{ font.glyph().find(ch) };
-                if (iter == font.glyph().end()) {
-                    continue;
-                }
-                auto& glyph{ iter->second };
-
-                _char(x, y, ch);
+            for (auto& ch : line) {
+                auto& glyph{ glyph_map.at(ch) };
+                _glyph(x, y, glyph);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
                 if (ch == ' ') {
                     x += word_spacing;
@@ -65,19 +62,14 @@ namespace gm {
         }
 
         void _line_backward(double x, double y, std::wstring_view line) const noexcept {
+            auto& glyph_map{ _setting.font->glyph() };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
-            font& font{ *_setting.font };
-            for (wchar_t ch : line | std::views::reverse) {
-                auto iter{ font.glyph().find(ch) };
-                if (iter == font.glyph().end()) {
-                    continue;
-                }
-                auto& glyph{ iter->second };
-
+            for (auto& ch : line | std::views::reverse) {
+                auto& glyph{ glyph_map.at(ch) };
                 x -= (glyph.left + glyph.width) * _setting.scale_x;
-                _char(x, y, ch);
+                _glyph(x, y, glyph);
                 x -= letter_spacing;
                 if (ch == ' ') {
                     x -= word_spacing;
@@ -102,16 +94,23 @@ namespace gm {
             return _setting;
         }
 
+        double width(std::wstring_view text) const noexcept {
+
+        }
+
+        double height(std::wstring_view text) const noexcept {
+
+        }
+
         bool text(double x, double y, std::wstring_view text) const noexcept {
             if (_setting.font == nullptr) {
                 return false;
             }
 
-            font& font{ *_setting.font };
             double max_line_width{ _setting.max_line_width * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
-            double line_height{ _setting.line_height * _setting.scale_y * font.size() };
+            double line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
             double offset_x{ _setting.offset_x * _setting.scale_x };
             double offset_y{ _setting.offset_y * _setting.scale_y };
 
@@ -123,6 +122,8 @@ namespace gm {
                 }
             }
             else {
+                auto& glyph_map{ _setting.font->glyph() };
+
                 double line_width{};
                 auto begin{ text.begin() }, end{ text.end() };
                 for (auto p{ begin }; p != end; ++p) {
@@ -133,12 +134,11 @@ namespace gm {
                         begin = p + 1;
                     }
                     else {
-                        auto iter{ font.glyph().find(*p) };
-                        if (iter == font.glyph().end()) {
+                        auto iter{ glyph_map.find(*p) };
+                        if (iter == glyph_map.end()) {
                             continue;
                         }
                         auto& glyph{ iter->second };
-
                         double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
                         if (*p == ' ') {
                             char_width += word_spacing;
