@@ -41,31 +41,35 @@ namespace gm {
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
-            auto begin{ text.begin() }, end{ text.end() };
-            double line_width{};
-            for (auto i{ begin }; i != end; ++i) {
+            auto begin{ text.begin() }, end{ text.end() }, i{ begin };
+            double line_width{}, last_spacing{};
+            while (i != end) {
                 if (*i == '\n') {
-                    line.emplace_back(std::wstring{ begin, i }, line_width - letter_spacing);
-                    line_width = 0;
-                    begin = i + 1;
+                    line.emplace_back(std::wstring{ begin, i }, line_width - last_spacing);
+                    line_width = last_spacing = 0;
+                    begin = ++i;
+                    continue;
+                }
+
+                double spacing{ letter_spacing };
+                if (*i == ' ') {
+                    spacing += word_spacing;
+                }
+                auto& glyph{ glyph_map.at(*i) };
+                double char_width{ (glyph.left + glyph.width) * _setting.scale_x + spacing };
+
+                if (max_line_width == 0 || line_width + char_width - spacing <= max_line_width) {
+                    line_width += char_width;
                 }
                 else {
-                    auto& glyph{ glyph_map.at(*i) };
-                    double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
-                    if (*i == ' ') {
-                        char_width += word_spacing;
-                    }
-                    if (max_line_width == 0 || line_width + char_width <= max_line_width) {
-                        line_width += char_width;
-                    }
-                    else {
-                        line.emplace_back(std::wstring{ begin, i }, line_width - letter_spacing);
-                        line_width = char_width;
-                        begin = i;
-                    }
+                    line.emplace_back(std::wstring{ begin, i }, line_width - last_spacing);
+                    line_width = char_width;
+                    begin = i;
                 }
+                last_spacing = spacing;
+                ++i;
             }
-            line.emplace_back(std::wstring{ begin, end }, line_width - letter_spacing);
+            line.emplace_back(std::wstring{ begin, end }, line_width - last_spacing);
             return line;
         }
 
