@@ -22,7 +22,17 @@ namespace gm {
         draw_setting _setting;
 
         std::wstring _filter(std::wstring_view text) const noexcept {
-
+            std::wstring filtered;
+            auto& glyph_map{ _setting.font->glyph() };
+            for (auto& ch : text) {
+                if (iswblank(ch)) {
+                    filtered.push_back(' ');
+                }
+                else if (ch == '\n' || !iswcntrl(ch) && glyph_map.find(ch) != glyph_map.end()) {
+                    filtered.push_back(ch);
+                }
+            }
+            return filtered;
         }
 
         void _glyph(double x, double y, const glyph_data& glyph) const noexcept {
@@ -107,6 +117,7 @@ namespace gm {
                 return false;
             }
 
+            std::wstring filtered{ _filter(text) };
             double max_line_width{ _setting.max_line_width * _setting.scale_x };
             double word_spacing{ _setting.word_spacing * _setting.scale_x };
             double letter_spacing{ _setting.letter_spacing * _setting.scale_x };
@@ -117,30 +128,25 @@ namespace gm {
             std::vector<std::wstring_view> line;
             std::vector<double> offset;
             if (_setting.halign != 0 && max_line_width == 0) {
-                for (auto&& i : text | std::views::split('\n')) {
+                for (auto&& i : filtered | std::views::split('\n')) {
                     line.emplace_back(i);
                 }
             }
             else {
                 auto& glyph_map{ _setting.font->glyph() };
-
                 double line_width{};
-                auto begin{ text.begin() }, end{ text.end() };
-                for (auto p{ begin }; p != end; ++p) {
-                    if (*p == '\n') {
+                auto begin{ filtered.begin() }, end{ filtered.end() };
+                for (auto i{ begin }; i != end; ++i) {
+                    if (*i == '\n') {
                         offset.push_back((letter_spacing - line_width) / 2);
-                        line.emplace_back(begin, p);
+                        line.emplace_back(begin, i);
                         line_width = 0;
-                        begin = p + 1;
+                        begin = i + 1;
                     }
                     else {
-                        auto iter{ glyph_map.find(*p) };
-                        if (iter == glyph_map.end()) {
-                            continue;
-                        }
-                        auto& glyph{ iter->second };
+                        auto& glyph{ glyph_map.at(*i) };
                         double char_width{ (glyph.left + glyph.width) * _setting.scale_x + letter_spacing };
-                        if (*p == ' ') {
+                        if (*i == ' ') {
                             char_width += word_spacing;
                         }
                         if (max_line_width == 0 || line_width + char_width <= max_line_width) {
@@ -148,9 +154,9 @@ namespace gm {
                         }
                         else {
                             offset.push_back((letter_spacing - line_width) / 2);
-                            line.emplace_back(begin, p);
+                            line.emplace_back(begin, i);
                             line_width = char_width;
-                            begin = p;
+                            begin = i;
                         }
                     }
                 }
@@ -185,7 +191,7 @@ namespace gm {
                 }
             }
 
-            return true;
+            return text.size() == filtered.size();
         }
     };
 
