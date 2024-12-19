@@ -33,7 +33,7 @@ namespace gm {
             *this = std::move(other);
         }
 
-        font(std::string_view sprite_path, std::string_view glyph_path) :
+        font(std::string_view sprite_path, std::string_view glyph_path) noexcept :
             _id{ ++_counter } {
 
             std::ifstream file{ glyph_path.data(), std::ios::binary };

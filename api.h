@@ -28,7 +28,7 @@ namespace gm {
             _real{ num },
             _string{} {}
 
-        value(string str) :
+        value(string str) noexcept :
             _is_string{ true },
             _real{} {
 
@@ -72,7 +72,7 @@ namespace gm {
         function(void* ptr = nullptr) noexcept :
             _ptr{ ptr } {}
 
-        R operator()(Args... args) const {
+        R operator()(Args... args) const noexcept {
             assert(_ptr != nullptr);
 
             value wrapped[]{ args... }, ret;
