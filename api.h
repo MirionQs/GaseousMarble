@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include <new>
+#include <utility>
 
 namespace gm {
 
@@ -19,6 +19,10 @@ namespace gm {
             _real{},
             _string{} {}
 
+        value(value&& other) noexcept {
+            *this = std::move(other);
+        }
+
         value(real num) noexcept :
             _is_string{},
             _real{ num },
@@ -27,7 +31,7 @@ namespace gm {
         value(string str) :
             _is_string{ true },
             _real{} {
-            
+
             assert(str != nullptr);
 
             size_t len{ strlen(str) };
@@ -42,6 +46,13 @@ namespace gm {
             if (_is_string) {
                 delete[](_string - 12);
             }
+        }
+
+        value& operator=(value&& other) noexcept {
+            _is_string = other._is_string;
+            _real = other._real;
+            _string = std::exchange(other._string, nullptr);
+            return *this;
         }
 
         operator real() const noexcept {
@@ -64,12 +75,12 @@ namespace gm {
         R operator()(Args... args) const {
             assert(_ptr != nullptr);
 
-            value arg[]{ args... }, * parg{ arg };
-            constexpr uint32_t count{ sizeof...(Args) };
-            value ret, * pret{ &ret };
+            value wrapped[]{ args... }, ret;
+            value* pargs{ wrapped }, * pret{ &ret };
+            constexpr uint32_t count{ sizeof...(args) };
             void* pfn{ _ptr };
             __asm {
-                push parg;
+                push pargs;
                 push count;
                 push pret;
                 call pfn;
