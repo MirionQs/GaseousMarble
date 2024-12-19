@@ -81,18 +81,22 @@ namespace gm {
         }
 
         uint32_t sprite_id() const noexcept {
+            assert(_id != 0);
             return _sprite_id;
         }
 
         uint16_t size() const noexcept {
+            assert(_id != 0);
             return _size;
         }
 
         uint16_t height() const noexcept {
+            assert(_id != 0);
             return _height;
         }
 
         const auto& glyph() const noexcept {
+            assert(_id != 0);
             return _glyph;
         }
     };

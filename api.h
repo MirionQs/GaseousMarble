@@ -56,10 +56,12 @@ namespace gm {
         }
 
         operator real() const noexcept {
+            assert(!_is_string);
             return _real;
         }
 
         operator string() const noexcept {
+            assert(_is_string);
             return _string;
         }
     };
