@@ -92,7 +92,7 @@ namespace gm {
     };
 
     inline function<void*, string> get_function_pointer;
-    inline function<size_t, string, real, real, real, real, real> sprite_add;
+    inline function<uint32_t, string, real, real, real, real, real> sprite_add;
     inline function<void, real> sprite_delete;
     inline function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
 

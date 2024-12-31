@@ -1,6 +1,6 @@
 #pragma once
 
-#include "api.h"
+#include "sprite.h"
 
 #include <fstream>
 #include <unordered_map>
@@ -17,24 +17,23 @@ namespace gm {
         static inline uint32_t _counter{};
 
         uint32_t _id;
-        uint32_t _sprite_id;
         uint16_t _size;
         uint16_t _height;
+        std::unique_ptr<sprite_handle, sprite_deleter> _sprite;
         std::unordered_map<wchar_t, glyph_data> _glyph;
 
     public:
         font() noexcept :
             _id{},
-            _sprite_id{},
             _size{},
-            _height{} {}
-
-        font(font&& other) noexcept {
-            *this = std::move(other);
-        }
+            _height{},
+            _sprite{} {}
 
         font(std::string_view sprite_path, std::string_view glyph_path) noexcept :
-            _id{ ++_counter } {
+            _id{ ++_counter },
+            _size{},
+            _height{},
+            _sprite{ sprite_add(sprite_path.data(), 1, false, false, 0, 0) } {
 
             std::ifstream file{ glyph_path.data(), std::ios::binary };
             if (!file.is_open()) {
@@ -47,7 +46,6 @@ namespace gm {
                 return;
             }
 
-            _sprite_id = sprite_add(sprite_path.data(), 1, false, false, 0, 0);
             file.read((char*)&_size, sizeof(_size));
             file.read((char*)&_height, sizeof(_height));
 
@@ -58,31 +56,16 @@ namespace gm {
             }
         }
 
-        ~font() noexcept {
-            if (_id != 0) {
-                // The code below will throw an exception when quitting the game 
-                // because the GameMaker functions have become invalid. However,
-                // it doesn't matter.
-                sprite_delete(_sprite_id);
-            }
+        operator bool() const noexcept {
+            return _id != 0;
         }
 
-        font& operator=(font&& other) noexcept {
-            _id = std::exchange(other._id, 0);
-            _sprite_id = other._sprite_id;
-            _size = other._size;
-            _height = other._height;
-            _glyph = std::move(other._glyph);
-            return *this;
+        bool operator==(const font& other) const noexcept {
+            return _id == other.id();
         }
 
         uint32_t id() const noexcept {
             return _id;
-        }
-
-        uint32_t sprite_id() const noexcept {
-            assert(_id != 0);
-            return _sprite_id;
         }
 
         uint16_t size() const noexcept {
@@ -93,6 +76,11 @@ namespace gm {
         uint16_t height() const noexcept {
             assert(_id != 0);
             return _height;
+        }
+
+        sprite_handle sprite() const noexcept {
+            assert(_id != 0);
+            return _sprite.get();
         }
 
         const auto& glyph() const noexcept {

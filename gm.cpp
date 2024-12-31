@@ -8,10 +8,10 @@ gm::draw draw;
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) noexcept {
     gm::font font{ sprite_path, glyph_path };
-    uint32_t font_id{ font.id() };
-    if (font_id == 0) {
+    if (!font) {
         return 0;
     }
+    uint32_t font_id{ font.id() };
     ::font.emplace(font_id, std::move(font));
     return font_id;
 }
