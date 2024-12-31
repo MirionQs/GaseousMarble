@@ -1,6 +1,6 @@
 #pragma once
 
-#include "api.h"
+#include "type.h"
 
 #ifdef GASEOUSMARBLE_EXPORTS
 #define GASEOUSMARBLE_API __declspec(dllexport)

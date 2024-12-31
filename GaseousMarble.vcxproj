@@ -76,12 +76,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="api.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="type.h" />
     <ClInclude Include="utils.h" />
-    <ClInclude Include="api.h" />
+    <ClInclude Include="function.h" />
+    <ClInclude Include="value.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp" />

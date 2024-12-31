@@ -13,25 +13,40 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\api">
+      <UniqueIdentifier>{c496aa6a-ad0b-42f6-85af-ddbe2d9f9f8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gm">
+      <UniqueIdentifier>{e56a3f25-8075-4a91-99bd-093217f3d38a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="draw.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="function.h">
+      <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="api.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="draw.h">
+      <Filter>Header Files\gm</Filter>
     </ClInclude>
     <ClInclude Include="font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gm.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gm</Filter>
     </ClInclude>
     <ClInclude Include="sprite.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="gm.h">
+      <Filter>Header Files\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="api.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
+    <ClInclude Include="type.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
+    <ClInclude Include="value.h">
+      <Filter>Header Files\api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
