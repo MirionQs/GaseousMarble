@@ -19,10 +19,6 @@ namespace gm {
             _real{},
             _string{} {}
 
-        value(value&& other) noexcept {
-            *this = std::move(other);
-        }
-
         value(real num) noexcept :
             _is_string{},
             _real{ num },
@@ -35,24 +31,18 @@ namespace gm {
             assert(str != nullptr);
 
             size_t len{ strlen(str) };
-            char* pstr{ new char[len + 13] };
-            new(pstr) uint64_t{};
-            new(pstr + 8) uint32_t{ len };
-            memcpy(pstr + 12, str, len + 1);
-            _string = pstr + 12;
+            char* pas_str{ new char[len + 13] };
+            new(pas_str) uint64_t{};
+            new(pas_str + 8) uint32_t{ len };
+            memcpy(pas_str + 12, str, len + 1);
+
+            _string = pas_str + 12;
         }
 
         ~value() noexcept {
             if (_is_string) {
                 delete[](_string - 12);
             }
-        }
-
-        value& operator=(value&& other) noexcept {
-            _is_string = other._is_string;
-            _real = other._real;
-            _string = std::exchange(other._string, nullptr);
-            return *this;
         }
 
         operator real() const noexcept {
@@ -64,6 +54,10 @@ namespace gm {
             assert(_is_string);
             return _string;
         }
+
+        value(const value&) = delete;
+
+        value& operator=(const value&) = delete;
     };
 
     template<class R, class... Args>
@@ -78,12 +72,12 @@ namespace gm {
             assert(_ptr != nullptr);
 
             value wrapped[]{ args... }, ret;
-            value* pargs{ wrapped }, * pret{ &ret };
-            constexpr uint32_t count{ sizeof...(args) };
+            value* argv{ wrapped }, * pret{ &ret };
+            constexpr uint32_t argc{ sizeof...(args) };
             void* pfn{ _ptr };
             __asm {
-                push pargs;
-                push count;
+                push argv;
+                push argc;
                 push pret;
                 call pfn;
             }
