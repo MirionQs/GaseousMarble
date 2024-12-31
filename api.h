@@ -39,10 +39,39 @@ namespace gm {
             _string = pas_str + 12;
         }
 
+        value(const value& other) noexcept {
+            *this = other;
+        };
+
+        value(value&& other) noexcept {
+            *this = std::move(other);
+        };
+
         ~value() noexcept {
             if (_is_string) {
                 delete[](_string - 12);
             }
+        }
+
+        value& operator=(const value& other) noexcept {
+            _is_string = other._is_string;
+            if (_is_string) {
+                size_t len{ strlen(other._string - 12) };
+                char* str{ new char[len + 1] };
+                memcpy(str, other._string - 12, len + 1);
+                _string = str;
+            }
+            else {
+                _real = other._real;
+            }
+            return *this;
+        }
+
+        value& operator=(value&& other) noexcept {
+            _is_string = other._is_string;
+            _real = other._real;
+            _string = std::exchange(other._string, nullptr);
+            return *this;
         }
 
         operator real() const noexcept {
@@ -54,10 +83,6 @@ namespace gm {
             assert(_is_string);
             return _string;
         }
-
-        value(const value&) = delete;
-
-        value& operator=(const value&) = delete;
     };
 
     template<class R, class... Args>
