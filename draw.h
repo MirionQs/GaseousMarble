@@ -2,6 +2,8 @@
 
 #include "font.h"
 
+#include <cwctype>
+
 namespace gm {
 
     struct draw_setting {
@@ -24,10 +26,10 @@ namespace gm {
             auto& glyph_map{ _setting.font->glyph() };
 
             for (auto& ch : text) {
-                if (iswblank(ch)) {
+                if (std::iswblank(ch)) {
                     filtered.push_back(' ');
                 }
-                else if (ch == '\n' || !iswcntrl(ch) && glyph_map.find(ch) != glyph_map.end()) {
+                else if (ch == '\n' || !std::iswcntrl(ch) && glyph_map.find(ch) != glyph_map.end()) {
                     filtered.push_back(ch);
                 }
             }

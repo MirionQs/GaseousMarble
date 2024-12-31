@@ -30,11 +30,11 @@ namespace gm {
 
             assert(str != nullptr);
 
-            std::size_t len{ strlen(str) };
+            std::size_t len{ std::strlen(str) };
             char* pas_str{ new char[len + 13] };
             new(pas_str) std::uint64_t{};
             new(pas_str + 8) std::uint32_t{ len };
-            memcpy(pas_str + 12, str, len + 1);
+            std::memcpy(pas_str + 12, str, len + 1);
 
             _string = pas_str + 12;
         }
@@ -56,9 +56,9 @@ namespace gm {
         value& operator=(const value& other) noexcept {
             _is_string = other._is_string;
             if (_is_string) {
-                std::size_t len{ strlen(other._string - 12) };
+                std::size_t len{ std::strlen(other._string - 12) };
                 char* str{ new char[len + 1] };
-                memcpy(str, other._string - 12, len + 1);
+                std::memcpy(str, other._string - 12, len + 1);
                 _string = str;
             }
             else {

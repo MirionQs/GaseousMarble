@@ -42,7 +42,7 @@ namespace gm {
 
             char magic[4];
             file.read(magic, sizeof(magic));
-            if (strncmp(magic, "GLY", sizeof(magic)) != 0) {
+            if (std::strncmp(magic, "GLY", sizeof(magic)) != 0) {
                 return;
             }
 
