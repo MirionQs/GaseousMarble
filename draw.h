@@ -5,8 +5,8 @@
 namespace gm {
 
     struct draw_setting {
-        font* font;
-        uint32_t color_top, color_bottom;
+        gm::font* font;
+        std::uint32_t color_top, color_bottom;
         double alpha;
         int halign, valign;
         double word_spacing, letter_spacing;
@@ -17,7 +17,7 @@ namespace gm {
     };
 
     class draw {
-        draw_setting _setting;
+        gm::draw_setting _setting;
 
         std::wstring _filter(std::wstring_view text) const noexcept {
             std::wstring filtered;
@@ -73,7 +73,7 @@ namespace gm {
             return line;
         }
 
-        void _glyph(double x, double y, const glyph_data& glyph) const noexcept {
+        void _glyph(double x, double y, const gm::glyph_data& glyph) const noexcept {
             draw_sprite_general(
                 _setting.font->sprite().id(),
                 0,
@@ -122,7 +122,7 @@ namespace gm {
             _setting.scale_x = _setting.scale_y = 1;
         }
 
-        draw_setting& setting() noexcept {
+        gm::draw_setting& setting() noexcept {
             return _setting;
         }
 

@@ -5,7 +5,7 @@
 namespace gm {
 
     class sprite_handle {
-        uint32_t _id;
+        std::uint32_t _id;
 
     public:
         sprite_handle() noexcept :
@@ -14,7 +14,7 @@ namespace gm {
         sprite_handle(std::nullptr_t) noexcept :
             _id{} {}
 
-        sprite_handle(uint32_t id) noexcept :
+        sprite_handle(std::uint32_t id) noexcept :
             _id{ id } {}
 
         operator bool() const noexcept {
@@ -25,16 +25,16 @@ namespace gm {
             return _id == other._id;
         }
 
-        uint32_t id() const noexcept {
+        std::uint32_t id() const noexcept {
             return _id;
         }
     };
 
     struct sprite_deleter {
-        using pointer = sprite_handle;
+        using pointer = gm::sprite_handle;
 
-        void operator()(sprite_handle handle) const noexcept {
-            sprite_delete(handle.id());
+        void operator()(gm::sprite_handle handle) const noexcept {
+            gm::sprite_delete(handle.id());
         }
     };
 

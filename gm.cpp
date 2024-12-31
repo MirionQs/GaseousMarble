@@ -3,7 +3,8 @@
 
 #include "gm.h"
 
-std::unordered_map<uint32_t, gm::font> font;
+std::unordered_map<std::uint32_t, gm::font> font;
+
 gm::draw draw;
 
 gm::real gm_font(gm::string sprite_path, gm::string glyph_path) noexcept {
@@ -11,7 +12,7 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) noexcept {
     if (!font) {
         return 0;
     }
-    uint32_t font_id{ font.id() };
+    std::uint32_t font_id{ font.id() };
     ::font.emplace(font_id, std::move(font));
     return font_id;
 }
@@ -29,7 +30,7 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string text) noexcept {
 }
 
 gm::real gm_free(gm::real font_id) noexcept {
-    auto iter{ font.find((uint32_t)font_id) };
+    auto iter{ font.find(static_cast<std::uint32_t>(font_id)) };
     if (iter == font.end() || &iter->second == draw.setting().font) {
         return false;
     }
@@ -43,7 +44,7 @@ gm::real gm_clear() noexcept {
 }
 
 gm::real gm_set_font(gm::real font_id) noexcept {
-    auto iter{ font.find((uint32_t)font_id) };
+    auto iter{ font.find(static_cast<std::uint32_t>(font_id)) };
     if (iter == font.end()) {
         return false;
     }
@@ -56,8 +57,8 @@ gm::real gm_set_color(gm::real color) noexcept {
 }
 
 gm::real gm_set_color2(gm::real color_top, gm::real color_bottom) noexcept {
-    draw.setting().color_top = (uint32_t)color_top;
-    draw.setting().color_bottom = (uint32_t)color_bottom;
+    draw.setting().color_top = static_cast<std::uint32_t>(color_top);
+    draw.setting().color_bottom = static_cast<std::uint32_t>(color_bottom);
     return true;
 }
 
@@ -89,7 +90,7 @@ gm::real gm_set_max_line_width(gm::real max_width) noexcept {
     if (max_width < 0) {
         return false;
     }
-    draw.setting().max_line_width = abs(max_width);
+    draw.setting().max_line_width = std::abs(max_width);
     return true;
 }
 

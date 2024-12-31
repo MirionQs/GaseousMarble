@@ -10,8 +10,8 @@ namespace gm {
 
     class value {
         bool _is_string;
-        real _real;
-        string _string;
+        gm::real _real;
+        gm::string _string;
 
     public:
         value() noexcept :
@@ -19,21 +19,21 @@ namespace gm {
             _real{},
             _string{} {}
 
-        value(real num) noexcept :
+        value(gm::real num) noexcept :
             _is_string{},
             _real{ num },
             _string{} {}
 
-        value(string str) noexcept :
+        value(gm::string str) noexcept :
             _is_string{ true },
             _real{} {
 
             assert(str != nullptr);
 
-            size_t len{ strlen(str) };
+            std::size_t len{ strlen(str) };
             char* pas_str{ new char[len + 13] };
-            new(pas_str) uint64_t{};
-            new(pas_str + 8) uint32_t{ len };
+            new(pas_str) std::uint64_t{};
+            new(pas_str + 8) std::uint32_t{ len };
             memcpy(pas_str + 12, str, len + 1);
 
             _string = pas_str + 12;
@@ -56,7 +56,7 @@ namespace gm {
         value& operator=(const value& other) noexcept {
             _is_string = other._is_string;
             if (_is_string) {
-                size_t len{ strlen(other._string - 12) };
+                std::size_t len{ strlen(other._string - 12) };
                 char* str{ new char[len + 1] };
                 memcpy(str, other._string - 12, len + 1);
                 _string = str;
@@ -74,12 +74,12 @@ namespace gm {
             return *this;
         }
 
-        operator real() const noexcept {
+        operator gm::real() const noexcept {
             assert(!_is_string);
             return _real;
         }
 
-        operator string() const noexcept {
+        operator gm::string() const noexcept {
             assert(_is_string);
             return _string;
         }
@@ -96,11 +96,11 @@ namespace gm {
         R operator()(Args... args) const noexcept {
             assert(_ptr != nullptr);
 
-            value args_wrapped[]{ args... }, ret;
+            gm::value args_wrapped[]{ args... }, ret;
 
-            value* argv{ args_wrapped };
-            constexpr uint32_t argc{ sizeof...(args) };
-            value* pret{ &ret };
+            gm::value* argv{ args_wrapped };
+            constexpr std::uint32_t argc{ sizeof...(args) };
+            gm::value* pret{ &ret };
             void* pfn{ _ptr };
             __asm {
                 push argv;
@@ -110,24 +110,28 @@ namespace gm {
             }
 
             if constexpr (std::is_pointer_v<R>) {
-                return (R)(uintptr_t)ret;
+                return reinterpret_cast<R>(static_cast<std::uintptr_t>(ret));
             }
             else {
-                return (R)ret;
+                return static_cast<R>(ret);
             }
         }
     };
 
-    inline function<void*, string> get_function_pointer;
-    inline function<uint32_t, string, real, real, real, real, real> sprite_add;
-    inline function<void, real> sprite_delete;
-    inline function<void, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real, real> draw_sprite_general;
+    inline gm::function<void*, gm::string>
+        get_function_pointer;
+    inline gm::function<std::uint32_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real>
+        sprite_add;
+    inline gm::function<void, gm::real>
+        sprite_delete;
+    inline gm::function<void, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real>
+        draw_sprite_general;
 
     inline void init() noexcept {
-        get_function_pointer = (void*)0x0064c89c;
-        sprite_add = get_function_pointer("sprite_add");
-        sprite_delete = get_function_pointer("sprite_delete");
-        draw_sprite_general = get_function_pointer("draw_sprite_general");
+        gm::get_function_pointer = reinterpret_cast<void*>(0x0064c89c);
+        gm::sprite_add = gm::get_function_pointer("sprite_add");
+        gm::sprite_delete = gm::get_function_pointer("sprite_delete");
+        gm::draw_sprite_general = gm::get_function_pointer("draw_sprite_general");
     }
 
 }

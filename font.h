@@ -8,19 +8,19 @@
 namespace gm {
 
     struct glyph_data {
-        uint16_t x, y;
-        uint16_t width;
-        int16_t left;
+        std::uint16_t x, y;
+        std::uint16_t width;
+        std::int16_t left;
     };
 
     class font {
-        static inline uint32_t _counter{};
+        static inline std::uint32_t _counter{};
 
-        uint32_t _id;
-        uint16_t _size;
-        uint16_t _height;
-        std::unique_ptr<sprite_handle, sprite_deleter> _sprite;
-        std::unordered_map<wchar_t, glyph_data> _glyph;
+        std::uint32_t _id;
+        std::uint16_t _size;
+        std::uint16_t _height;
+        std::unique_ptr<gm::sprite_handle, gm::sprite_deleter> _sprite;
+        std::unordered_map<wchar_t, gm::glyph_data> _glyph;
 
     public:
         font() noexcept :
@@ -33,7 +33,7 @@ namespace gm {
             _id{ ++_counter },
             _size{},
             _height{},
-            _sprite{ sprite_add(sprite_path.data(), 1, false, false, 0, 0) } {
+            _sprite{ gm::sprite_add(sprite_path.data(), 1, false, false, 0, 0) } {
 
             std::ifstream file{ glyph_path.data(), std::ios::binary };
             if (!file.is_open()) {
@@ -46,13 +46,13 @@ namespace gm {
                 return;
             }
 
-            file.read((char*)&_size, sizeof(_size));
-            file.read((char*)&_height, sizeof(_height));
+            file.read(reinterpret_cast<char*>(&_size), sizeof(_size));
+            file.read(reinterpret_cast<char*>(&_height), sizeof(_height));
 
             while (file) {
                 wchar_t ch;
-                file.read((char*)&ch, sizeof(ch));
-                file.read((char*)&_glyph[ch], sizeof(_glyph[ch]));
+                file.read(reinterpret_cast<char*>(&ch), sizeof(ch));
+                file.read(reinterpret_cast<char*>(&_glyph[ch]), sizeof(_glyph[ch]));
             }
         }
 
@@ -64,21 +64,21 @@ namespace gm {
             return _id == other.id();
         }
 
-        uint32_t id() const noexcept {
+        std::uint32_t id() const noexcept {
             return _id;
         }
 
-        uint16_t size() const noexcept {
+        std::uint16_t size() const noexcept {
             assert(_id != 0);
             return _size;
         }
 
-        uint16_t height() const noexcept {
+        std::uint16_t height() const noexcept {
             assert(_id != 0);
             return _height;
         }
 
-        sprite_handle sprite() const noexcept {
+        gm::sprite_handle sprite() const noexcept {
             assert(_id != 0);
             return _sprite.get();
         }
