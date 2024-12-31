@@ -96,9 +96,11 @@ namespace gm {
         R operator()(Args... args) const noexcept {
             assert(_ptr != nullptr);
 
-            value wrapped[]{ args... }, ret;
-            value* argv{ wrapped }, * pret{ &ret };
+            value args_wrapped[]{ args... }, ret;
+
+            value* argv{ args_wrapped };
             constexpr uint32_t argc{ sizeof...(args) };
+            value* pret{ &ret };
             void* pfn{ _ptr };
             __asm {
                 push argv;
