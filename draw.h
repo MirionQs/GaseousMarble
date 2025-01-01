@@ -76,7 +76,7 @@ namespace gm {
         }
 
         void _glyph(double x, double y, const gm::glyph_data& glyph) const noexcept {
-            draw_sprite_general(
+            gm::api::draw_sprite_general(
                 _setting.font->sprite().id(),
                 0,
                 glyph.x,

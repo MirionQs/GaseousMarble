@@ -33,7 +33,7 @@ namespace gm {
             _id{ ++_counter },
             _size{},
             _height{},
-            _sprite{ gm::sprite_add(sprite_path.data(), 1, false, false, 0, 0) } {
+            _sprite{ gm::api::sprite_add(sprite_path.data(), 1, false, false, 0, 0) } {
 
             std::ifstream file{ glyph_path.data(), std::ios::binary };
             if (!file.is_open()) {

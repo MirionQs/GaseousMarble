@@ -4,20 +4,22 @@
 
 namespace gm {
 
-    inline gm::function<void*, gm::string>
+    namespace api {
+
+        inline gm::api::function<void*, gm::api::string>
         get_function_address;
-    inline gm::function<std::size_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real>
+        inline gm::api::function<std::size_t, gm::api::string, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real>
         sprite_add;
-    inline gm::function<void, gm::real>
+        inline gm::api::function<void, gm::api::real>
         sprite_delete;
-    inline gm::function<void, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real, gm::real>
+        inline gm::api::function<void, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real, gm::api::real>
         draw_sprite_general;
 
     inline void init() noexcept {
-        gm::get_function_address = reinterpret_cast<void*>(0x0064c89c);
-        gm::sprite_add = gm::get_function_address("sprite_add");
-        gm::sprite_delete = gm::get_function_address("sprite_delete");
-        gm::draw_sprite_general = gm::get_function_address("draw_sprite_general");
+            gm::api::get_function_address = reinterpret_cast<void*>(0x0064c89c);
+            gm::api::sprite_add = gm::api::get_function_address("sprite_add");
+            gm::api::sprite_delete = gm::api::get_function_address("sprite_delete");
+            gm::api::draw_sprite_general = gm::api::get_function_address("draw_sprite_general");
     }
 
 }

@@ -34,7 +34,7 @@ namespace gm {
         using pointer = gm::sprite_handle;
 
         void operator()(gm::sprite_handle handle) const noexcept {
-            gm::sprite_delete(handle.id());
+            gm::api::sprite_delete(handle.id());
         }
     };
 

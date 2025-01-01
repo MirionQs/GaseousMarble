@@ -2,7 +2,11 @@
 
 namespace gm {
 
-    using real = double;
-    using string = const char*;
+    namespace api {
+
+        using real = double;
+        using string = const char*;
+
+    }
 
 }
