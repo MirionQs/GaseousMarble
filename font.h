@@ -14,9 +14,9 @@ namespace gm {
     };
 
     class font {
-        static inline std::uint32_t _counter{};
+        static inline std::size_t _counter{};
 
-        std::uint32_t _id;
+        std::size_t _id;
         std::uint16_t _size;
         std::uint16_t _height;
         std::unique_ptr<gm::sprite_handle, gm::sprite_deleter> _sprite;
@@ -64,7 +64,7 @@ namespace gm {
             return _id == other.id();
         }
 
-        std::uint32_t id() const noexcept {
+        std::size_t id() const noexcept {
             return _id;
         }
 

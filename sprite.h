@@ -5,7 +5,7 @@
 namespace gm {
 
     class sprite_handle {
-        std::uint32_t _id;
+        std::size_t _id;
 
     public:
         sprite_handle() noexcept :
@@ -14,7 +14,7 @@ namespace gm {
         sprite_handle(std::nullptr_t) noexcept :
             _id{} {}
 
-        sprite_handle(std::uint32_t id) noexcept :
+        sprite_handle(std::size_t id) noexcept :
             _id{ id } {}
 
         operator bool() const noexcept {
@@ -25,7 +25,7 @@ namespace gm {
             return _id == other._id;
         }
 
-        std::uint32_t id() const noexcept {
+        std::size_t id() const noexcept {
             return _id;
         }
     };

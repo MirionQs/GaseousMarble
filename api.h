@@ -6,7 +6,7 @@ namespace gm {
 
     inline gm::function<void*, gm::string>
         get_function_address;
-    inline gm::function<std::uint32_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real>
+    inline gm::function<std::size_t, gm::string, gm::real, gm::real, gm::real, gm::real, gm::real>
         sprite_add;
     inline gm::function<void, gm::real>
         sprite_delete;

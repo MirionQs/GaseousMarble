@@ -12,7 +12,7 @@ gm::real gm_font(gm::string sprite_path, gm::string glyph_path) noexcept {
     if (!font) {
         return 0;
     }
-    std::uint32_t font_id{ font.id() };
+    std::size_t font_id{ font.id() };
     ::font.emplace(font_id, std::move(font));
     return font_id;
 }
@@ -30,7 +30,7 @@ gm::real gm_draw(gm::real x, gm::real y, gm::string text) noexcept {
 }
 
 gm::real gm_free(gm::real font_id) noexcept {
-    auto iter{ font.find(static_cast<std::uint32_t>(font_id)) };
+    auto iter{ font.find(static_cast<std::size_t>(font_id)) };
     if (iter == font.end() || &iter->second == draw.setting().font) {
         return false;
     }
@@ -44,7 +44,7 @@ gm::real gm_clear() noexcept {
 }
 
 gm::real gm_set_font(gm::real font_id) noexcept {
-    auto iter{ font.find(static_cast<std::uint32_t>(font_id)) };
+    auto iter{ font.find(static_cast<std::size_t>(font_id)) };
     if (iter == font.end()) {
         return false;
     }
