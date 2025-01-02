@@ -24,9 +24,6 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
     <ClInclude Include="draw.h">
       <Filter>Header Files\gm</Filter>
     </ClInclude>
@@ -39,7 +36,7 @@
     <ClInclude Include="gm.h">
       <Filter>Header Files\gm</Filter>
     </ClInclude>
-    <ClInclude Include="api.h">
+    <ClInclude Include="function.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
     <ClInclude Include="type.h">
@@ -50,9 +47,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
