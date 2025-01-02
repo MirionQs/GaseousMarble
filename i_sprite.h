@@ -18,8 +18,8 @@ namespace gm {
                 void* rtti;
                 std::size_t size;
                 BitmapData** bitmaps;
-                std::int32_t x, y;
-                std::int32_t left, top, right, bottom;
+                std::int32_t origin_x, origin_y;
+                std::int32_t bbox_left, bbox_top, bbox_right, bbox_bottom;
                 void* masks;
                 bool seperate_masks;
                 std::size_t* texture_ids;
