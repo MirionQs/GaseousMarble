@@ -1,6 +1,6 @@
 #pragma once
 
-#include "function.h"
+#include "i_function.h"
 
 namespace gm {
 

@@ -36,7 +36,7 @@
     <ClInclude Include="gm.h">
       <Filter>Header Files\gm</Filter>
     </ClInclude>
-    <ClInclude Include="function.h">
+    <ClInclude Include="i_function.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
     <ClInclude Include="type.h">

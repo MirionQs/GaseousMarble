@@ -76,7 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="function.h" />
+    <ClInclude Include="i_function.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
