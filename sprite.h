@@ -4,24 +4,24 @@
 
 namespace gm {
 
-    class sprite_handle {
+    class SpriteHandle {
         std::size_t _id;
 
     public:
-        sprite_handle() noexcept :
+        SpriteHandle() noexcept :
             _id{} {}
 
-        sprite_handle(std::nullptr_t) noexcept :
+        SpriteHandle(std::nullptr_t) noexcept :
             _id{} {}
 
-        sprite_handle(std::size_t id) noexcept :
+        SpriteHandle(std::size_t id) noexcept :
             _id{ id } {}
 
         operator bool() const noexcept {
             return _id != 0;
         }
 
-        bool operator==(sprite_handle other) const noexcept {
+        bool operator==(SpriteHandle other) const noexcept {
             return _id == other._id;
         }
 
@@ -30,10 +30,10 @@ namespace gm {
         }
     };
 
-    struct sprite_deleter {
-        using pointer = gm::sprite_handle;
+    struct SpriteDeleter {
+        using pointer = gm::SpriteHandle;
 
-        void operator()(gm::sprite_handle handle) const noexcept {
+        void operator()(gm::SpriteHandle handle) const noexcept {
             gm::api::function.sprite_delete(handle.id());
         }
     };

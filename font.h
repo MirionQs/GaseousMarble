@@ -7,29 +7,29 @@
 
 namespace gm {
 
-    struct glyph_data {
+    struct GlyphData {
         std::uint16_t x, y;
         std::uint16_t width;
         std::int16_t left;
     };
 
-    class font {
-        static inline std::size_t _counter{};
+    class Font {
+        static inline std::size_t _counter;
 
         std::size_t _id;
         std::uint16_t _size;
         std::uint16_t _height;
-        std::unique_ptr<gm::sprite_handle, gm::sprite_deleter> _sprite;
-        std::unordered_map<wchar_t, gm::glyph_data> _glyph;
+        std::unique_ptr<gm::SpriteHandle, gm::SpriteDeleter> _sprite;
+        std::unordered_map<wchar_t, gm::GlyphData> _glyph;
 
     public:
-        font() noexcept :
+        Font() noexcept :
             _id{},
             _size{},
             _height{},
             _sprite{} {}
 
-        font(std::string_view sprite_path, std::string_view glyph_path) noexcept :
+        Font(std::string_view sprite_path, std::string_view glyph_path) noexcept :
             _id{ ++_counter },
             _size{},
             _height{},
@@ -60,7 +60,7 @@ namespace gm {
             return _id != 0;
         }
 
-        bool operator==(const font& other) const noexcept {
+        bool operator==(const Font& other) const noexcept {
             return _id == other.id();
         }
 
@@ -78,7 +78,7 @@ namespace gm {
             return _height;
         }
 
-        gm::sprite_handle sprite() const noexcept {
+        gm::SpriteHandle sprite() const noexcept {
             assert(_id != 0);
             return _sprite.get();
         }

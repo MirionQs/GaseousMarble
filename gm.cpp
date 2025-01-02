@@ -3,17 +3,17 @@
 
 #include "gm.h"
 
-std::unordered_map<std::size_t, gm::font> font;
+std::unordered_map<std::size_t, gm::Font> font_map;
 
-gm::draw draw;
+gm::Draw draw;
 
 gm::api::Real gm_font(gm::api::String sprite_path, gm::api::String glyph_path) noexcept {
-    gm::font font{ sprite_path, glyph_path };
+    gm::Font font{ sprite_path, glyph_path };
     if (!font) {
         return 0;
     }
     std::size_t font_id{ font.id() };
-    ::font.emplace(font_id, std::move(font));
+    font_map.emplace(font_id, std::move(font));
     return font_id;
 }
 
@@ -30,22 +30,22 @@ gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::String text) no
 }
 
 gm::api::Real gm_free(gm::api::Real font_id) noexcept {
-    auto iter{ font.find(static_cast<std::size_t>(font_id)) };
-    if (iter == font.end() || &iter->second == draw.setting().font) {
+    auto iter{ font_map.find(static_cast<std::size_t>(font_id)) };
+    if (iter == font_map.end() || &iter->second == draw.setting().font) {
         return false;
     }
-    font.erase(iter);
+    font_map.erase(iter);
     return true;
 }
 
 gm::api::Real gm_clear() noexcept {
-    font.clear();
+    font_map.clear();
     return true;
 }
 
 gm::api::Real gm_set_font(gm::api::Real font_id) noexcept {
-    auto iter{ font.find(static_cast<std::size_t>(font_id)) };
-    if (iter == font.end()) {
+    auto iter{ font_map.find(static_cast<std::size_t>(font_id)) };
+    if (iter == font_map.end()) {
         return false;
     }
     draw.setting().font = &iter->second;
