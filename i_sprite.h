@@ -27,7 +27,7 @@ namespace gm {
 
             struct SpriteResource {
                 SpriteData** sprites;
-                char** names;
+                wchar_t** names;
                 std::size_t size;
             };
 

@@ -52,12 +52,12 @@ namespace gm {
             IFunction() noexcept :
                 _resource{ reinterpret_cast<FunctionResource*>(0x00686b1c) } {};
 
-            void draw_sprite_general(std::size_t sprite_id, std::int32_t image_index, std::uint32_t x, std::uint32_t y, std::size_t width, std::size_t height, double offset_x, double offset_y, double scale_x, double scale_y, double rotate, std::uint32_t color1, std::uint32_t color2, std::uint32_t color3, std::uint32_t color4, double alpha) const noexcept {
-                _call<void, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real>(FunctionId::draw_sprite_general, sprite_id, image_index, x, y, width, height, offset_x, offset_y, scale_x, scale_y, rotate, color1, color2, color3, color4, alpha);
+            void draw_sprite_general(std::size_t sprite_id, std::int32_t image_index, std::uint32_t image_x, std::uint32_t image_y, std::size_t width, std::size_t height, double x, double y, double scale_x, double scale_y, double rotate, std::uint32_t color1, std::uint32_t color2, std::uint32_t color3, std::uint32_t color4, double alpha) const noexcept {
+                _call<void, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real>(FunctionId::draw_sprite_general, sprite_id, image_index, image_x, image_y, width, height, x, y, scale_x, scale_y, rotate, color1, color2, color3, color4, alpha);
             }
 
-            std::size_t sprite_add(std::string_view filename, std::size_t image_number, bool remove_background, bool smooth, std::int32_t x, std::int32_t y) const noexcept {
-                return _call<std::size_t, gm::api::String, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real>(FunctionId::sprite_add, filename.data(), image_number, remove_background, smooth, x, y);
+            std::size_t sprite_add(std::string_view path, std::size_t image_count, bool remove_background, bool smooth_edges, std::int32_t origin_x, std::int32_t origin_y) const noexcept {
+                return _call<std::size_t, gm::api::String, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real, gm::api::Real>(FunctionId::sprite_add, path.data(), image_count, remove_background, smooth_edges, origin_x, origin_y);
             }
 
             void sprite_delete(std::size_t sprite_id) const noexcept {
