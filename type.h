@@ -4,8 +4,8 @@ namespace gm {
 
     namespace api {
 
-        using real = double;
-        using string = const char*;
+        using Real = double;
+        using String = const char*;
 
     }
 

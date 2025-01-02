@@ -7,21 +7,21 @@ namespace gm {
     namespace api {
 
         template<class R, class... Args>
-        class function {
+        class Function {
             void* _ptr;
 
         public:
-            function(void* ptr = nullptr) noexcept :
+            Function(void* ptr = nullptr) noexcept :
                 _ptr{ ptr } {}
 
             R operator()(Args... args) const noexcept {
                 assert(_ptr != nullptr);
 
-                gm::api::value args_wrapped[]{ args... }, ret;
+                gm::api::Value args_wrapped[]{ args... }, ret;
 
-                gm::api::value* argv{ args_wrapped };
+                gm::api::Value* argv{ args_wrapped };
                 constexpr std::uint32_t argc{ sizeof...(args) };
-                gm::api::value* pret{ &ret };
+                gm::api::Value* pret{ &ret };
                 void* pfn{ _ptr };
                 __asm {
                     push argv;

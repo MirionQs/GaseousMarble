@@ -9,23 +9,23 @@ namespace gm {
 
     namespace api {
 
-        class value {
+        class Value {
             bool _is_string;
-            gm::api::real _real;
-            gm::api::string _string;
+            gm::api::Real _real;
+            gm::api::String _string;
 
         public:
-            value() noexcept :
+            Value() noexcept :
                 _is_string{},
                 _real{},
                 _string{} {}
 
-            value(gm::api::real num) noexcept :
+            Value(gm::api::Real num) noexcept :
                 _is_string{},
                 _real{ num },
                 _string{} {}
 
-            value(gm::api::string str) noexcept :
+            Value(gm::api::String str) noexcept :
                 _is_string{ true },
                 _real{} {
 
@@ -40,21 +40,21 @@ namespace gm {
                 _string = pas_str + 12;
             }
 
-            value(const value& other) noexcept {
+            Value(const Value& other) noexcept {
                 *this = other;
             };
 
-            value(value&& other) noexcept {
+            Value(Value&& other) noexcept {
                 *this = std::move(other);
             };
 
-            ~value() noexcept {
+            ~Value() noexcept {
                 if (_is_string) {
                     delete[](_string - 12);
                 }
             }
 
-            value& operator=(const value& other) noexcept {
+            Value& operator=(const Value& other) noexcept {
                 _is_string = other._is_string;
                 if (_is_string) {
                     std::size_t len{ std::strlen(other._string - 12) };
@@ -68,19 +68,19 @@ namespace gm {
                 return *this;
             }
 
-            value& operator=(value&& other) noexcept {
+            Value& operator=(Value&& other) noexcept {
                 _is_string = other._is_string;
                 _real = other._real;
                 _string = std::exchange(other._string, nullptr);
                 return *this;
             }
 
-            operator gm::api::real() const noexcept {
+            operator gm::api::Real() const noexcept {
                 assert(!_is_string);
                 return _real;
             }
 
-            operator gm::api::string() const noexcept {
+            operator gm::api::String() const noexcept {
                 assert(_is_string);
                 return _string;
             }
