@@ -48,6 +48,9 @@
     <ClInclude Include="i_sprite.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
+    <ClInclude Include="i_texture.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">

@@ -81,6 +81,7 @@
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
     <ClInclude Include="i_sprite.h" />
+    <ClInclude Include="i_texture.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="type.h" />
     <ClInclude Include="utils.h" />
