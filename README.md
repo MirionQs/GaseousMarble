@@ -1,8 +1,8 @@
 # GaseousMarble
 
-Draw CJK characters in GameMaker 8.2.
+Draw UCS-2 characters in GameMaker 8.2.
 
-## Usage
+## Functions
 
 GaseousMarble provides following functions for drawing texts
 
@@ -15,7 +15,7 @@ GaseousMarble provides following functions for drawing texts
 | `gm_clear()` | Frees all loaded fonts. | Use this function before calling `game_restart` to prevent memory leaks. |
 | `gm_draw(x, y, text)` | Draws a UTF-8 encoded string. Returns `false` if failed. | |
 
-as well as setters and getters for configuring the drawing arguments
+as well as setters and getters for configuring the drawing parameters
 
 | **Setter** | **Getter** |
 | -- | -- |
@@ -30,8 +30,10 @@ as well as setters and getters for configuring the drawing arguments
 | `gm_set_offset(x, y)`| `gm_get_offset_x()`<br>`gm_get_offset_y()` |
 | `gm_set_scale(x, y)` | `gm_get_scale_x()`<br>`gm_get_scale_y()` |
 
-If the operation fails (e.g., due to invalid arguments), these functions will return `false`.
+If the operation fails (e.g., due to invalid arguments), the corresponding function will return `false`.
 
-## Development
+## Comment
 
-The files under the filter `api` are used for interacting with GameMaker, the files under the filter `gm` (which is short for GaseousMarble) implement text drawing, and `utils.h` implements encoding conversion.
+The current drawing principle of GaseousMarble is: use a python script to generate a sprite image and glyph data first, then call GameMaker built-in functions to draw part of the sprite. But this is not flexible, so I plan to extract textures from the font file, put them on a specific sprite, then draw the sprite.
+
+Open the project with Visual Studio 2022. The files under the filter `api` are the underlying interfaces for interacting with GameMaker. The files under the filter `gm` (which stands for GaseousMarble) implement the drawing function, and `utils.h` implements the encoding conversion.
