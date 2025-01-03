@@ -11,7 +11,7 @@ namespace gm {
             struct BitmapData {
                 void* rtti;
                 std::size_t width, height;
-                char* data;
+                std::uint32_t* data;
             };
 
             struct SpriteData {
