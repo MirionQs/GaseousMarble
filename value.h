@@ -60,7 +60,7 @@ namespace gm {
                     std::size_t len{ std::strlen(other._string - 12) };
                     char* str{ new char[len + 1] };
                     std::memcpy(str, other._string - 12, len + 1);
-                    _string = str;
+                    _string = str + 12;
                 }
                 else {
                     _real = other._real;
