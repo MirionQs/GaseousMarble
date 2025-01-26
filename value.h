@@ -55,16 +55,22 @@ namespace gm {
             }
 
             Value& operator=(const Value& other) noexcept {
+                if (_is_string) {
+                    delete[](_string - 12);
+                }
+
                 _is_string = other._is_string;
                 if (_is_string) {
                     std::size_t len{ std::strlen(other._string - 12) };
                     char* str{ new char[len + 1] };
                     std::memcpy(str, other._string - 12, len + 1);
+
                     _string = str + 12;
                 }
                 else {
                     _real = other._real;
                 }
+
                 return *this;
             }
 
