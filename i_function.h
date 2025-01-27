@@ -10,7 +10,7 @@ namespace gm {
 
         class IFunction {
             struct FunctionData {
-                std::uint8_t name_size;
+                std::uint8_t name_length;
                 char name[67];
                 void* address;
                 std::size_t argument_count;
@@ -19,7 +19,7 @@ namespace gm {
 
             struct FunctionResource {
                 FunctionData* functions;
-                std::size_t size;
+                std::size_t count;
             };
 
             enum class FunctionId {

@@ -16,7 +16,7 @@ namespace gm {
 
             struct SpriteData {
                 void* rtti;
-                std::size_t size;
+                std::size_t subimage_count;
                 BitmapData** bitmaps;
                 std::int32_t origin_x, origin_y;
                 std::int32_t bbox_left, bbox_top, bbox_right, bbox_bottom;
@@ -28,7 +28,7 @@ namespace gm {
             struct SpriteResource {
                 SpriteData** sprites;
                 wchar_t** names;
-                std::size_t size;
+                std::size_t count;
             };
 
             SpriteResource* _resource;

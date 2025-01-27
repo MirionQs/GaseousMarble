@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 namespace gm {
 
     namespace api {
@@ -13,12 +15,12 @@ namespace gm {
             };
 
             TextureData** _textures;
-            std::size_t* _size;
+            std::size_t* _count;
 
         public:
             ITexture() noexcept :
                 _textures{ reinterpret_cast<TextureData**>(0x0085b3c4) },
-                _size{ reinterpret_cast<std::size_t*>(0x006886f0) } {};
+                _count{ reinterpret_cast<std::size_t*>(0x006886f0) } {};
         };
 
         inline gm::api::ITexture texture;
