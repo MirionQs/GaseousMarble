@@ -32,15 +32,16 @@ namespace gm {
                 assert(str != nullptr);
 
                 std::size_t len{ std::strlen(str) };
-                char* pas_str{ new char[len + 13] };
-                new(pas_str) std::uint64_t{};
-                new(pas_str + 8) std::uint32_t{ len };
-                std::memcpy(pas_str + 12, str, len + 1);
+                char* pascal_str{ new char[len + 13] };
+                new(pascal_str) std::uint64_t{};
+                new(pascal_str + 8) std::size_t{ len };
+                std::memcpy(pascal_str + 12, str, len + 1);
 
-                _string = pas_str + 12;
+                _string = pascal_str + 12;
             }
 
-            Value(const Value& other) noexcept {
+            Value(const Value& other) noexcept :
+                _is_string{} {
                 *this = other;
             };
 
@@ -61,7 +62,7 @@ namespace gm {
 
                 _is_string = other._is_string;
                 if (_is_string) {
-                    std::size_t len{ std::strlen(other._string - 12) };
+                    std::size_t len{ *reinterpret_cast<const std::size_t*>(other._string - 4) };
                     char* str{ new char[len + 1] };
                     std::memcpy(str, other._string - 12, len + 1);
 
