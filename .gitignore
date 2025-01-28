@@ -365,5 +365,6 @@ FodyWeavers.xsd
 /*.gm82/cache/
 /*.gm82/plugins/
 /tools/fonts/
+/dx81sdk/
 **.exe
 **.gex

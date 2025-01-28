@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <d3dx8.h>
 
 namespace gm {
 
@@ -8,7 +9,7 @@ namespace gm {
 
         class ITexture {
             struct TextureData {
-                void* texture; // IDirect3DTexture8
+                IDirect3DTexture8* texture;
                 std::size_t image_width, image_height;
                 std::size_t texture_width, texture_height;
                 bool is_valid;

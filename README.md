@@ -37,3 +37,5 @@ If the operation fails (e.g., due to invalid arguments), the corresponding funct
 The current drawing principle of GaseousMarble is using a python script to generate sprite images and glyph data, and then calling GameMaker built-in functions to draw part of the sprites. But this is not flexible, so I plan to extract textures from the font file, put them on a specific sprite, and draw the sprite.
 
 Open the project with Visual Studio 2022. The files under the filter `api` are the underlying interfaces for interacting with GameMaker. The files under the filter `gm` (which stands for GaseousMarble) implement the drawing function, and `utils.h` implements the encoding conversion.
+
+You should install the DirectX 8.1 SDK under `dx81sdk`.
