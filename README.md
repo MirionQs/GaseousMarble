@@ -2,7 +2,7 @@
 
 Draw UCS-2 characters in GameMaker 8.2.
 
-## Functions
+## Usage
 
 GaseousMarble provides following functions for drawing texts
 
@@ -30,12 +30,22 @@ as well as setters and getters for configuring the drawing parameters
 | `gm_set_offset(x, y)`| `gm_get_offset_x()`<br>`gm_get_offset_y()` |
 | `gm_set_scale(x, y)` | `gm_get_scale_x()`<br>`gm_get_scale_y()` |
 
-If the operation fails (e.g., due to invalid arguments), the corresponding function will return `false`.
+If any operation fails (for example, due to invalid arguments), the corresponding function will return `false`.
 
-## Comment
+## Development
 
-The current drawing principle of GaseousMarble is using a python script to generate sprite images and glyph data, and then calling GameMaker built-in functions to draw part of the sprites. But this is not flexible, so I plan to extract textures from the font file, put them on a specific sprite, and draw the sprite.
+1. Install the DirectX 8.1 SDK under the `dx81sdk` directory.
+1. Open the project in Visual Studio 2022.
+    - The files under the `api` filter define the underlying interfaces for interacting with GameMaker.
+    - The files under the `gm` filter (short for GaseousMarble) implement the drawing functionality.
+    - The `utils.h` file handles encoding conversion.
 
-Open the project with Visual Studio 2022. The files under the filter `api` are the underlying interfaces for interacting with GameMaker. The files under the filter `gm` (which stands for GaseousMarble) implement the drawing function, and `utils.h` implements the encoding conversion.
+The current drawing mechanism of GaseousMarble relies on a Python script to generate sprite images and glyph data, which are then rendered using GameMaker's built-in functions to draw portions of the sprites. However, this approach lacks flexibility. To address this, I plan to extract textures directly from the font file, map them onto a dedicated sprite, and render the sprite instead.
 
-You should install the DirectX 8.1 SDK under `dx81sdk`.
+## Credits
+
+This project was inspired by the following open-source projects. Their code wasn't directly copied but was adapted and modified to better suit the needs of this project. Thank you to the developers for their efforts and contributions.
+
+- [FoxWriting](https://github.com/Noisyfox/FoxWriting)
+- [GMAPI](https://github.com/snakedeveloper/gmapi)
+- [GMAPI 8.1](https://github.com/gm-archive/gmapi-8.1)
