@@ -89,10 +89,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="api\bitmap.h" />
     <ClInclude Include="api\function.h" />
     <ClInclude Include="api\i_function.h" />
     <ClInclude Include="api\i_sprite.h" />
     <ClInclude Include="api\i_texture.h" />
+    <ClInclude Include="api\sprite.h" />
     <ClInclude Include="api\type.h" />
     <ClInclude Include="api\value.h" />
     <ClInclude Include="draw.h" />

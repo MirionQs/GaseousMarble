@@ -1,30 +1,12 @@
 #pragma once
 
-#include <cstddef>
-#include <cstdint>
+#include "sprite.h"
 
 namespace gm {
 
     namespace api {
 
         class ISprite {
-            struct BitmapData {
-                void* rtti;
-                std::size_t width, height;
-                std::uint32_t* data;
-            };
-
-            struct SpriteData {
-                void* rtti;
-                std::size_t subimage_count;
-                BitmapData** bitmaps;
-                std::int32_t origin_x, origin_y;
-                std::int32_t bbox_left, bbox_top, bbox_right, bbox_bottom;
-                void* masks;
-                bool seperate_masks;
-                std::size_t* texture_ids;
-            };
-
             struct SpriteResource {
                 SpriteData** sprites;
                 wchar_t** names;
@@ -36,6 +18,14 @@ namespace gm {
         public:
             ISprite() noexcept :
                 _resource{ reinterpret_cast<SpriteResource*>(0x00686ac8) } {};
+
+            const Sprite& operator[](std::size_t id) const noexcept {
+                return { _resource->sprites[id], _resource->names[id] };
+            }
+
+            std::size_t count() const noexcept {
+                return _resource->count;
+            }
         };
 
         inline gm::api::ISprite sprite;
