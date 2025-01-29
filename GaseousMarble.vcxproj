@@ -98,6 +98,7 @@
     <ClInclude Include="draw.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
+    <ClInclude Include="function.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

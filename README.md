@@ -34,11 +34,8 @@ If any operation fails (for example, due to invalid arguments), the correspondin
 
 ## Development
 
-1. Install the DirectX 8.1 SDK under the `dx81sdk` directory.
+1. Install DirectX 8.1 SDK to the `dx81sdk` folder.
 1. Open the project in Visual Studio 2022.
-    - The files under the `api` filter define the underlying interfaces for interacting with GameMaker.
-    - The files under the `gm` filter (short for GaseousMarble) implement the drawing functionality.
-    - The `utils.h` file handles encoding conversion.
 
 The current drawing mechanism of GaseousMarble relies on a Python script to generate sprite images and glyph data, which are then rendered using GameMaker's built-in functions to draw portions of the sprites. However, this approach lacks flexibility. To address this, I plan to extract textures directly from the font file, map them onto a dedicated sprite, and render the sprite instead.
 

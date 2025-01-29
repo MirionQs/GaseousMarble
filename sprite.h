@@ -1,6 +1,6 @@
 #pragma once
 
-#include "api/i_function.h"
+#include "function.h"
 
 namespace gm {
 
@@ -34,7 +34,7 @@ namespace gm {
         using pointer = gm::SpriteHandle;
 
         void operator()(gm::SpriteHandle handle) const noexcept {
-            gm::api::function.sprite_delete(handle.id());
+            gm::sprite_delete(handle.id());
         }
     };
 
