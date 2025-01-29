@@ -51,6 +51,9 @@
     <ClInclude Include="i_texture.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">
