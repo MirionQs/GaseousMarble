@@ -36,22 +36,22 @@
     <ClInclude Include="gm.h">
       <Filter>Header Files\gm</Filter>
     </ClInclude>
-    <ClInclude Include="i_function.h">
+    <ClInclude Include="api\function.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="type.h">
+    <ClInclude Include="api\i_function.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="value.h">
+    <ClInclude Include="api\i_sprite.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="i_sprite.h">
+    <ClInclude Include="api\i_texture.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="i_texture.h">
+    <ClInclude Include="api\type.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="function.h">
+    <ClInclude Include="api\value.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
   </ItemGroup>

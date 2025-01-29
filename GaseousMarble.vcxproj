@@ -89,17 +89,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="function.h" />
-    <ClInclude Include="i_function.h" />
+    <ClInclude Include="api\function.h" />
+    <ClInclude Include="api\i_function.h" />
+    <ClInclude Include="api\i_sprite.h" />
+    <ClInclude Include="api\i_texture.h" />
+    <ClInclude Include="api\type.h" />
+    <ClInclude Include="api\value.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
-    <ClInclude Include="i_sprite.h" />
-    <ClInclude Include="i_texture.h" />
     <ClInclude Include="sprite.h" />
-    <ClInclude Include="type.h" />
     <ClInclude Include="utils.h" />
-    <ClInclude Include="value.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
