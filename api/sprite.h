@@ -21,7 +21,7 @@ namespace gm {
 
         class Sprite {
             SpriteData* _data;
-            wchar_t* _name;
+            std::wstring_view _name;
 
         public:
             Sprite() = delete;
