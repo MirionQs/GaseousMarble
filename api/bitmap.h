@@ -7,33 +7,22 @@ namespace gm {
 
     namespace api {
 
+        struct BitmapSize {
+            std::size_t width, height;
+        };
+
         class Bitmap {
             void* _rtti;
-            std::size_t _width, _height;
+            BitmapSize _size;
             std::uint32_t* _data;
 
         public:
-            Bitmap() = delete;
-            Bitmap(const Bitmap&) = delete;
-            Bitmap(Bitmap&&) = delete;
-
-            Bitmap& operator=(const Bitmap&) = delete;
-            Bitmap& operator=(Bitmap&&) = delete;
-
-            std::size_t width() const noexcept {
-                return _width;
+            BitmapSize& size() noexcept {
+                return _size;
             }
 
-            std::size_t height() const noexcept {
-                return _height;
-            }
-
-            void set_width(std::size_t new_width) noexcept {
-                _width = new_width;
-            }
-
-            void set_height(std::size_t new_height) noexcept {
-                _height = new_height;
+            const std::uint32_t* data() const noexcept {
+                return _data;
             }
         };
 
