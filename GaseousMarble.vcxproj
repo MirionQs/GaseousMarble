@@ -103,6 +103,7 @@
     <ClInclude Include="function.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="utils\int.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

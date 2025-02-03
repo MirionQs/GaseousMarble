@@ -79,7 +79,7 @@ namespace gm {
             Real,
             Real
         >(
-            path.data(),
+            path,
             image_count,
             remove_background,
             smooth_edges,
