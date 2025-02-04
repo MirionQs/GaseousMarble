@@ -33,7 +33,7 @@
     <ClInclude Include="api\i_texture.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="api\type.h">
+    <ClInclude Include="api\string.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
     <ClInclude Include="api\value.h">
@@ -65,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="utils\convert.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="api\type.h">
+      <Filter>Header Files\api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

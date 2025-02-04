@@ -95,6 +95,7 @@
     <ClInclude Include="api\i_sprite.h" />
     <ClInclude Include="api\i_texture.h" />
     <ClInclude Include="api\sprite.h" />
+    <ClInclude Include="api\string.h" />
     <ClInclude Include="api\type.h" />
     <ClInclude Include="api\value.h" />
     <ClInclude Include="draw.h" />
