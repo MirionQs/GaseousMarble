@@ -7,10 +7,10 @@ namespace gm {
     namespace api {
 
         class Function {
-            std::uint8_t _name_length;
+            gm::u8 _name_length;
             char _name[67];
             void* _address;
-            std::size_t _arg_count;
+            gm::u32 _arg_count;
             bool _require_pro;
 
         public:
@@ -25,7 +25,7 @@ namespace gm {
                 return { _name, _name_length };
             }
 
-            std::size_t arg_count() const noexcept {
+            gm::u32 arg_count() const noexcept {
                 return _arg_count;
             }
 
@@ -33,10 +33,12 @@ namespace gm {
             R call(Args... args) const noexcept {
                 gm::api::Value args_wrapped[]{ args... }, returned;
                 gm::api::Value* argv{ args_wrapped };
-                constexpr std::size_t argc{ sizeof...(args) };
+                constexpr gm::u32 argc{ sizeof...(args) };
                 gm::api::Value* pret{ &returned };
                 void* pfn{ _address };
 
+                // The assertion will fail when quitting the game because the
+                // resources have already been released by GameMaker.
                 assert(argc == _arg_count);
 
                 __asm {

@@ -1292,8 +1292,8 @@ namespace gm {
 
         class IFunction {
             struct FunctionResource {
-                Function* functions;
-                std::size_t count;
+                gm::api::Function* functions;
+                gm::u32 count;
             };
 
             FunctionResource* _resource;
@@ -1302,11 +1302,11 @@ namespace gm {
             IFunction() noexcept :
                 _resource{ reinterpret_cast<FunctionResource*>(0x00686b1c) } {};
 
-            const Function& operator[](FunctionId id) const noexcept {
-                return _resource->functions[static_cast<std::size_t>(id)];
+            const Function& operator[](gm::api::FunctionId id) const noexcept {
+                return _resource->functions[static_cast<gm::u32>(id)];
             }
 
-            std::size_t count() const noexcept {
+            gm::u32 count() const noexcept {
                 return _resource->count;
             }
         };
