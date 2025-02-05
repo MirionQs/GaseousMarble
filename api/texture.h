@@ -9,13 +9,9 @@ namespace gm {
     namespace api {
 
         class Texture {
-            struct Size {
-                gm::u32 width, height;
-            };
-
             IDirect3DTexture8* _data;
-            Size _image_size;
-            Size _texture_size;
+            gm::Size _image_size;
+            gm::Size _texture_size;
             bool _is_valid;
 
         public:

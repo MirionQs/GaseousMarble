@@ -8,7 +8,7 @@ namespace gm {
 
         class ISprite {
             struct SpriteResource {
-                SpriteData** sprites;
+                gm::api::SpriteData** sprites;
                 wchar_t** names;
                 gm::u32 count;
             };
@@ -19,7 +19,7 @@ namespace gm {
             ISprite() noexcept :
                 _resource{ reinterpret_cast<SpriteResource*>(0x00686ac8) } {};
 
-            const Sprite& operator[](gm::u32 id) const noexcept {
+            const gm::api::Sprite& operator[](gm::u32 id) const noexcept {
                 return { _resource->sprites[id], _resource->names[id] };
             }
 

@@ -1,18 +1,15 @@
 #pragma once
 
 #include "../utils/integer.h"
+#include "../utils/structure.h"
 
 namespace gm {
 
     namespace api {
 
         class Bitmap {
-            struct Size {
-                gm::u32 width, height;
-            };
-
             void* _rtti;
-            Size _size;
+            gm::Size _size;
             void* _data;
 
         public:

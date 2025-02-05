@@ -72,6 +72,9 @@
     <ClInclude Include="api\texture.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
+    <ClInclude Include="utils\structure.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">

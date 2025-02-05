@@ -106,6 +106,7 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="utils\convert.h" />
     <ClInclude Include="utils\integer.h" />
+    <ClInclude Include="utils\structure.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

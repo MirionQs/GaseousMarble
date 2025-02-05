@@ -9,22 +9,18 @@ namespace gm {
     namespace api {
 
         struct SpriteData {
-            struct BoundingBox {
-                gm::i32 left, top, right, bottom;
-            };
-
             void* rtti;
             gm::u32 subimage_count;
-            Bitmap** bitmaps;
+            gm::api::Bitmap** bitmaps;
             gm::i32 origin_x, origin_y;
-            BoundingBox bounding_box;
+            gm::BoundingBox bounding_box;
             void* masks;
             bool seperate_masks;
             gm::u32* texture_ids;
         };
 
         class Sprite {
-            SpriteData* _data;
+            gm::api::SpriteData* _data;
             std::wstring_view _name;
 
         public:
@@ -35,7 +31,7 @@ namespace gm {
             Sprite& operator=(const Sprite&) = delete;
             Sprite& operator=(Sprite&&) = delete;
 
-            Sprite(SpriteData* data, wchar_t* name) noexcept : _data{ data }, _name{ name } {}
+            Sprite(gm::api::SpriteData* data, wchar_t* name) noexcept : _data{ data }, _name{ name } {}
 
             std::wstring_view name() const noexcept {
                 return _name;
