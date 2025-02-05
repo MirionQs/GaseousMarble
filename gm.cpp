@@ -7,7 +7,7 @@ std::unordered_map<std::size_t, gm::Font> font_map;
 
 gm::Draw draw;
 
-gm::api::Real gm_font(gm::api::String sprite_path, gm::api::String glyph_path) noexcept {
+gm::api::Real gm_font(gm::api::StringView sprite_path, gm::api::StringView glyph_path) noexcept {
     gm::Font font{ sprite_path, glyph_path };
     if (!font) {
         return 0;
@@ -17,15 +17,15 @@ gm::api::Real gm_font(gm::api::String sprite_path, gm::api::String glyph_path) n
     return font_id;
 }
 
-gm::api::Real gm_width(gm::api::String text) noexcept {
+gm::api::Real gm_width(gm::api::StringView text) noexcept {
     return draw.width(gm::utf8_to_ucs2(text));
 }
 
-gm::api::Real gm_height(gm::api::String text) noexcept {
+gm::api::Real gm_height(gm::api::StringView text) noexcept {
     return draw.height(gm::utf8_to_ucs2(text));
 }
 
-gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::String text) noexcept {
+gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::StringView text) noexcept {
     return draw.text(x, y, gm::utf8_to_ucs2(text));
 }
 

@@ -6,18 +6,18 @@ namespace gm {
 
     namespace api {
 
-        class String {
-            struct Header {
-                gm::u16 code_page;
-                gm::u16 char_size;
-                gm::u32 ref_count;
-                gm::u32 length;
-            };
+        struct StringHeader {
+            gm::u16 code_page;
+            gm::u16 char_size;
+            gm::u32 ref_count;
+            gm::u32 length;
+        };
 
+        class String {
             char* _data;
 
             decltype(auto) _header(this auto& self) noexcept {
-                return *reinterpret_cast<Header*>(self._data - sizeof(Header));
+                return *reinterpret_cast<StringHeader*>(self._data - sizeof(StringHeader));
             }
 
         public:
@@ -25,16 +25,14 @@ namespace gm {
                 String{ "" } {}
 
             String(std::string_view string) noexcept :
-                String{ string.data(), string.length() } {}
+                _data{ new char[sizeof(StringHeader) + string.length() + 1] + sizeof(StringHeader) } {
 
-            String(const char* string, gm::usize length) noexcept :
-                _data{ new char[length + sizeof(Header) + 1] + sizeof(Header) } {
-                _header() = { 65001, 1, 0, length };
-                std::memcpy(_data, string, length + 1);
+                _header() = { 65001, 1, 0, string.length() };
+                std::memcpy(_data, string.data(), string.length() + 1);
             }
 
             String(const String& other) noexcept :
-                String{ other._data, other.length() } {}
+                String{ { other._data, other.length() } } {}
 
             String(String&& other) noexcept :
                 _data{ std::exchange(other._data, nullptr) } {}
@@ -43,7 +41,7 @@ namespace gm {
                 if (_header().ref_count != 0) { // avoid releasing external strings
                     return;
                 }
-                delete[](_data - sizeof(Header));
+                delete[](_data - sizeof(StringHeader));
             }
 
             String& operator=(const String& other) noexcept {
@@ -67,6 +65,38 @@ namespace gm {
 
             gm::u32 length() const noexcept {
                 return _header().length;
+            }
+
+            gm::u32 use_count() const noexcept {
+                return _header().ref_count;
+            }
+
+            const char* data() const noexcept {
+                return _data;
+            }
+        };
+
+        class StringView {
+            const char* _data;
+
+            const StringHeader& _header() const noexcept {
+                return *reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
+            }
+
+        public:
+            StringView(gm::api::String string) noexcept :
+                _data{ string.data() } {}
+
+            operator std::string_view() const noexcept {
+                return { _data, length() };
+            }
+
+            gm::u32 length() const noexcept {
+                return _header().length;
+            }
+
+            gm::u32 use_count() const noexcept {
+                return _header().ref_count;
             }
 
             const char* data() const noexcept {

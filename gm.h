@@ -10,10 +10,10 @@
 
 extern "C" {
 
-    GASEOUSMARBLE_API gm::api::Real gm_font(gm::api::String sprite_path, gm::api::String glyph_path) noexcept;
-    GASEOUSMARBLE_API gm::api::Real gm_width(gm::api::String text) noexcept;
-    GASEOUSMARBLE_API gm::api::Real gm_height(gm::api::String text) noexcept;
-    GASEOUSMARBLE_API gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::String text) noexcept;
+    GASEOUSMARBLE_API gm::api::Real gm_font(gm::api::StringView sprite_path, gm::api::StringView glyph_path) noexcept;
+    GASEOUSMARBLE_API gm::api::Real gm_width(gm::api::StringView text) noexcept;
+    GASEOUSMARBLE_API gm::api::Real gm_height(gm::api::StringView text) noexcept;
+    GASEOUSMARBLE_API gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::StringView text) noexcept;
     GASEOUSMARBLE_API gm::api::Real gm_free(gm::api::Real font_id) noexcept;
     GASEOUSMARBLE_API gm::api::Real gm_clear() noexcept;
 
