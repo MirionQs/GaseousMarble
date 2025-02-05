@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/int.h"
+
 #include <string_view>
 
 namespace gm {
@@ -16,32 +18,40 @@ namespace gm {
         class String {
             char* _data;
 
-            decltype(auto) _header(this auto& self) noexcept {
-                return *reinterpret_cast<StringHeader*>(self._data - sizeof(StringHeader));
+            StringHeader& _header() noexcept {
+                return *reinterpret_cast<StringHeader*>(_data - sizeof(StringHeader));
+            }
+
+            const StringHeader& _header() const noexcept {
+                return *reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
             }
 
         public:
-            String() noexcept :
-                String{ "" } {}
+            String() noexcept {
+                static String empty_str{ "" };
+                _data = empty_str._data;
+            }
 
             String(std::string_view string) noexcept :
                 _data{ new char[sizeof(StringHeader) + string.length() + 1] + sizeof(StringHeader) } {
 
-                _header() = { 65001, 1, 0, string.length() };
+                _header() = { 65001, 1, 1, string.length() };
                 std::memcpy(_data, string.data(), string.length() + 1);
             }
 
             String(const String& other) noexcept :
-                String{ { other._data, other.length() } } {}
+                _data{ other._data } {
+
+                ++_header().ref_count;
+            }
 
             String(String&& other) noexcept :
                 _data{ std::exchange(other._data, nullptr) } {}
 
             ~String() noexcept {
-                if (_header().ref_count != 0) { // avoid releasing external strings
-                    return;
+                if (--_header().ref_count == 0) {
+                    delete[](_data - sizeof(StringHeader));
                 }
-                delete[](_data - sizeof(StringHeader));
             }
 
             String& operator=(const String& other) noexcept {
@@ -84,7 +94,7 @@ namespace gm {
             }
 
         public:
-            StringView(gm::api::String string) noexcept :
+            StringView(gm::api::String string = {}) noexcept :
                 _data{ string.data() } {}
 
             operator std::string_view() const noexcept {
