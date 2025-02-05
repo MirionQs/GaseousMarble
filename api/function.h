@@ -29,6 +29,10 @@ namespace gm {
                 return _arg_count;
             }
 
+            void* address() const noexcept {
+                return _address;
+            }
+
             template<class R, class... Args>
             R call(Args... args) const noexcept {
                 gm::api::Value args_wrapped[]{ args... }, returned;

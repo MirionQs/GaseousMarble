@@ -1,28 +1,23 @@
 #pragma once
 
-#include <cstddef>
-#include <cstdint>
+#include "../utils/int.h"
 
 namespace gm {
 
     namespace api {
 
-        struct BitmapSize {
-            std::size_t width, height;
-        };
-
         class Bitmap {
+            struct Size {
+                gm::u32 width, height;
+            };
+
             void* _rtti;
-            BitmapSize _size;
-            std::uint32_t* _data;
+            Size _size;
+            void* _data;
 
         public:
-            BitmapSize& size() noexcept {
-                return _size;
-            }
-
-            const std::uint32_t* data() const noexcept {
-                return _data;
+            decltype(auto) size(this auto& self) noexcept {
+                return self._size;
             }
         };
 

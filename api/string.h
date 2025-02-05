@@ -69,6 +69,10 @@ namespace gm {
                 return _header().size;
             }
 
+            gm::u32 ref_count() const noexcept {
+                return _header().ref_count;
+            }
+
             const char* data() const noexcept {
                 return _data;
             }
@@ -91,6 +95,10 @@ namespace gm {
 
             gm::u32 size() const noexcept {
                 return _header().size;
+            }
+
+            gm::u32 ref_count() const noexcept {
+                return _header().ref_count;
             }
 
             const char* data() const noexcept {
