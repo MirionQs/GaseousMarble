@@ -30,6 +30,7 @@ namespace gm {
             String() noexcept {
                 static String empty_str{ "" };
                 _data = empty_str._data;
+                ++_header().ref_count;
             }
 
             String(std::string_view string) noexcept :
