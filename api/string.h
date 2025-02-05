@@ -45,9 +45,6 @@ namespace gm {
                 ++_header().ref_count;
             }
 
-            String(String&& other) noexcept :
-                _data{ std::exchange(other._data, nullptr) } {}
-
             ~String() noexcept {
                 if (--_header().ref_count == 0) {
                     delete[](_data - sizeof(StringHeader));
@@ -59,18 +56,12 @@ namespace gm {
                     return *this;
                 }
                 String temp{ other };
-                std::swap(*this, temp);
-                return *this;
-            }
-
-            String& operator=(String&& other) noexcept {
-                String temp{ std::move(other) };
                 std::swap(_data, temp._data);
                 return *this;
             }
 
             operator std::string_view() const noexcept {
-                return { _data, length() };
+                return { _data, _header().length };
             }
 
             gm::u32 length() const noexcept {
@@ -98,7 +89,7 @@ namespace gm {
                 _data{ string.data() } {}
 
             operator std::string_view() const noexcept {
-                return { _data, length() };
+                return { _data, _header().length };
             }
 
             gm::u32 length() const noexcept {
