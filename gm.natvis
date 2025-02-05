@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<Type Name="gm::api::String">
+		<Intrinsic Name="length" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->length"/>
+		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
+		<DisplayString>{_data,[length()]}</DisplayString>
+		<Expand>
+			<Item Name="[length]">length()</Item>
+			<Item Name="[use_count]">ref_count()</Item>
+			<ArrayItems>
+				<Size>length()</Size>
+				<ValuePointer>_data</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::StringView">
+		<Intrinsic Name="length" Expression="((gm::api::StringHeader*)(_data - 12))->length"/>
+		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - 12))->ref_count"/>
+		<DisplayString>{_data,[length()]}</DisplayString>
+		<Expand>
+			<Item Name="[length]">length()</Item>
+			<Item Name="[use_count]">ref_count()</Item>
+			<ArrayItems>
+				<Size>length()</Size>
+				<ValuePointer>_data</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::Value">
+		<DisplayString Condition="_type == gm::api::ValueType::real">{_real}</DisplayString>
+		<DisplayString Condition="_type == gm::api::ValueType::string">{_string}</DisplayString>
+		<Expand>
+			<ExpandedItem Condition="_type == gm::api::ValueType::real">_real</ExpandedItem>
+			<ExpandedItem Condition="_type == gm::api::ValueType::string">_string</ExpandedItem>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>
