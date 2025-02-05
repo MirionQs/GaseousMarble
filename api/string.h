@@ -12,7 +12,7 @@ namespace gm {
             gm::u16 code_page;
             gm::u16 char_size;
             gm::u32 ref_count;
-            gm::u32 length;
+            gm::u32 size;
         };
 
         class String {
@@ -28,16 +28,16 @@ namespace gm {
 
         public:
             String() noexcept {
-                static String empty_str{ "" };
-                _data = empty_str._data;
+                static String empty_string{ "" };
+                _data = empty_string._data;
                 ++_header().ref_count;
             }
 
             String(std::string_view string) noexcept :
-                _data{ new char[sizeof(gm::api::StringHeader) + string.length() + 1] + sizeof(gm::api::StringHeader) } {
+                _data{ new char[sizeof(gm::api::StringHeader) + string.size() + 1] + sizeof(gm::api::StringHeader) } {
 
-                _header() = { 65001, 1, 1, string.length() };
-                std::memcpy(_data, string.data(), string.length() + 1);
+                _header() = { 65001, 1, 1, string.size() };
+                std::memcpy(_data, string.data(), string.size() + 1);
             }
 
             String(const String& other) noexcept :
@@ -62,15 +62,11 @@ namespace gm {
             }
 
             operator std::string_view() const noexcept {
-                return { _data, _header().length };
+                return { _data, _header().size };
             }
 
-            gm::u32 length() const noexcept {
-                return _header().length;
-            }
-
-            gm::u32 use_count() const noexcept {
-                return _header().ref_count;
+            gm::u32 size() const noexcept {
+                return _header().size;
             }
 
             const char* data() const noexcept {
@@ -90,15 +86,11 @@ namespace gm {
                 _data{ string.data() } {}
 
             operator std::string_view() const noexcept {
-                return { _data, _header().length };
+                return { _data, _header().size };
             }
 
-            gm::u32 length() const noexcept {
-                return _header().length;
-            }
-
-            gm::u32 use_count() const noexcept {
-                return _header().ref_count;
+            gm::u32 size() const noexcept {
+                return _header().size;
             }
 
             const char* data() const noexcept {

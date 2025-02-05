@@ -2,28 +2,28 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
 	<Type Name="gm::api::String">
-		<Intrinsic Name="length" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->length"/>
+		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
 		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
-		<DisplayString>{_data,[length()]}</DisplayString>
+		<DisplayString>{_data, [size()]}</DisplayString>
 		<Expand>
-			<Item Name="[length]">length()</Item>
-			<Item Name="[use_count]">ref_count()</Item>
+			<Item Name="[size]">size()</Item>
+			<Item Name="[ref count]">ref_count()</Item>
 			<ArrayItems>
-				<Size>length()</Size>
+				<Size>size()</Size>
 				<ValuePointer>_data</ValuePointer>
 			</ArrayItems>
 		</Expand>
 	</Type>
 
 	<Type Name="gm::api::StringView">
-		<Intrinsic Name="length" Expression="((gm::api::StringHeader*)(_data - 12))->length"/>
+		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - 12))->size"/>
 		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - 12))->ref_count"/>
-		<DisplayString>{_data,[length()]}</DisplayString>
+		<DisplayString>{_data, [size()]}</DisplayString>
 		<Expand>
-			<Item Name="[length]">length()</Item>
-			<Item Name="[use_count]">ref_count()</Item>
+			<Item Name="[size]">size()</Item>
+			<Item Name="[ref count]">ref_count()</Item>
 			<ArrayItems>
-				<Size>length()</Size>
+				<Size>size()</Size>
 				<ValuePointer>_data</ValuePointer>
 			</ArrayItems>
 		</Expand>
@@ -35,6 +35,27 @@
 		<Expand>
 			<ExpandedItem Condition="_type == gm::api::ValueType::real">_real</ExpandedItem>
 			<ExpandedItem Condition="_type == gm::api::ValueType::string">_string</ExpandedItem>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::Function">
+		<DisplayString>{_name}</DisplayString>
+		<Expand>
+			<Item Name="[name]">_name</Item>
+			<Item Name="[arg count]">_arg_count</Item>
+			<Item Name="[address]">_address</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::IFunction">
+		<Intrinsic Name="count" Expression="_resource->count"/>
+		<DisplayString>{{ count={count()} }}</DisplayString>
+		<Expand>
+			<Item Name="[count]">count()</Item>
+			<ArrayItems>
+				<Size>count()</Size>
+				<ValuePointer>_resource->functions</ValuePointer>
+			</ArrayItems>
 		</Expand>
 	</Type>
 

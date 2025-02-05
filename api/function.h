@@ -12,7 +12,7 @@ namespace gm {
             std::uint8_t _name_length;
             char _name[67];
             void* _address;
-            std::size_t _argument_count;
+            std::size_t _arg_count;
             bool _require_pro;
 
         public:
@@ -27,8 +27,8 @@ namespace gm {
                 return { _name, _name_length };
             }
 
-            std::size_t argument_count() const noexcept {
-                return _argument_count;
+            std::size_t arg_count() const noexcept {
+                return _arg_count;
             }
 
             template<class R, class... Args>
@@ -39,7 +39,7 @@ namespace gm {
                 gm::api::Value* pret{ &returned };
                 void* pfn{ _address };
 
-                assert(argc == _argument_count);
+                assert(argc == _arg_count);
 
                 __asm {
                     push argv;
