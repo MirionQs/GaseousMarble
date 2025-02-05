@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../utils/integer.h"
 #include "../utils/structure.h"
 
 namespace gm {
