@@ -18,12 +18,12 @@ namespace gm {
         class String {
             char* _data;
 
-            StringHeader& _header() noexcept {
-                return *reinterpret_cast<StringHeader*>(_data - sizeof(StringHeader));
+            gm::api::StringHeader& _header() noexcept {
+                return *reinterpret_cast<gm::api::StringHeader*>(_data - sizeof(gm::api::StringHeader));
             }
 
-            const StringHeader& _header() const noexcept {
-                return *reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
+            const gm::api::StringHeader& _header() const noexcept {
+                return *reinterpret_cast<const gm::api::StringHeader*>(_data - sizeof(gm::api::StringHeader));
             }
 
         public:
@@ -34,7 +34,7 @@ namespace gm {
             }
 
             String(std::string_view string) noexcept :
-                _data{ new char[sizeof(StringHeader) + string.length() + 1] + sizeof(StringHeader) } {
+                _data{ new char[sizeof(gm::api::StringHeader) + string.length() + 1] + sizeof(gm::api::StringHeader) } {
 
                 _header() = { 65001, 1, 1, string.length() };
                 std::memcpy(_data, string.data(), string.length() + 1);
@@ -48,7 +48,7 @@ namespace gm {
 
             ~String() noexcept {
                 if (--_header().ref_count == 0) {
-                    delete[](_data - sizeof(StringHeader));
+                    delete[](_data - sizeof(gm::api::StringHeader));
                 }
             }
 
@@ -81,8 +81,8 @@ namespace gm {
         class StringView {
             const char* _data;
 
-            const StringHeader& _header() const noexcept {
-                return *reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
+            const gm::api::StringHeader& _header() const noexcept {
+                return *reinterpret_cast<const gm::api::StringHeader*>(_data - sizeof(gm::api::StringHeader));
             }
 
         public:

@@ -14,7 +14,7 @@ namespace gm {
         };
 
         class Value {
-            ValueType _type{ ValueType::real };
+            gm::api::ValueType _type{ gm::api::ValueType::real };
             gm::api::Real _real{};
             gm::api::String _string{};
 
@@ -25,20 +25,20 @@ namespace gm {
                 _real{ real } {}
 
             Value(gm::api::String string) noexcept :
-                _type{ ValueType::string },
+                _type{ gm::api::ValueType::string },
                 _string{ string } {}
 
             operator gm::api::Real() const noexcept {
-                assert(_type == ValueType::real);
+                assert(_type == gm::api::ValueType::real);
                 return _real;
             }
 
             operator gm::api::String() const noexcept {
-                assert(_type == ValueType::string);
+                assert(_type == gm::api::ValueType::string);
                 return _string;
             }
 
-            ValueType type() const noexcept {
+            gm::api::ValueType type() const noexcept {
                 return _type;
             }
         };
