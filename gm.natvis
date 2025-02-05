@@ -4,7 +4,7 @@
 	<Type Name="gm::api::String">
 		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
 		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
-		<DisplayString>{_data, [size()]}</DisplayString>
+		<DisplayString>{_data, [size()] na}</DisplayString>
 		<Expand>
 			<Item Name="[size]">size()</Item>
 			<Item Name="[ref count]">ref_count()</Item>
@@ -16,9 +16,9 @@
 	</Type>
 
 	<Type Name="gm::api::StringView">
-		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - 12))->size"/>
-		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - 12))->ref_count"/>
-		<DisplayString>{_data, [size()]}</DisplayString>
+		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
+		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
+		<DisplayString>{_data, [size()] na}</DisplayString>
 		<Expand>
 			<Item Name="[size]">size()</Item>
 			<Item Name="[ref count]">ref_count()</Item>
@@ -39,11 +39,16 @@
 	</Type>
 
 	<Type Name="gm::api::Function">
-		<DisplayString>{_name}</DisplayString>
+		<Intrinsic Name="name" Expression="_name"/>
+		<Intrinsic Name="arg_count" Expression="_arg_count"/>
+		<Intrinsic Name="address" Expression="_address"/>
+		<DisplayString Condition="arg_count() == 0">{name(), sb}()</DisplayString>
+		<DisplayString Condition="arg_count() == 1">{name(), sb}(&lt;arg&gt;)</DisplayString>
+		<DisplayString Condition="arg_count() &gt; 1">{name(), sb}(&lt;{arg_count()} args&gt;)</DisplayString>
 		<Expand>
-			<Item Name="[name]">_name</Item>
-			<Item Name="[arg count]">_arg_count</Item>
-			<Item Name="[address]">_address</Item>
+			<Item Name="[name]">name()</Item>
+			<Item Name="[arg count]">arg_count()</Item>
+			<Item Name="[address]">address()</Item>
 		</Expand>
 	</Type>
 

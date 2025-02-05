@@ -37,7 +37,7 @@ namespace gm {
                 gm::api::Value* pret{ &returned };
                 void* pfn{ _address };
 
-                // The assertion will fail when quitting the game because the
+                // This assertion will fail when quitting the game because the
                 // resources have already been released by GameMaker.
                 assert(argc == _arg_count);
 
