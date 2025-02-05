@@ -2,8 +2,6 @@
 
 #include "value.h"
 
-#include <string_view>
-
 namespace gm {
 
     namespace api {
