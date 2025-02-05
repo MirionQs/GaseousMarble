@@ -8,19 +8,19 @@ namespace gm {
 
     namespace api {
 
-        struct SpriteBoundingBox {
-            std::int32_t left, top, right, bottom;
-        };
-
         struct SpriteData {
+            struct BoundingBox {
+                gm::i32 left, top, right, bottom;
+            };
+
             void* rtti;
-            std::size_t subimage_count;
+            gm::u32 subimage_count;
             Bitmap** bitmaps;
-            std::int32_t origin_x, origin_y;
-            SpriteBoundingBox bounding_box;
+            gm::i32 origin_x, origin_y;
+            BoundingBox bounding_box;
             void* masks;
             bool seperate_masks;
-            std::size_t* texture_ids;
+            gm::u32* texture_ids;
         };
 
         class Sprite {
@@ -41,11 +41,13 @@ namespace gm {
                 return _name;
             }
 
-            std::size_t subimage_count() const noexcept {
+            gm::u32 subimage_count() const noexcept {
                 return _data->subimage_count;
             }
 
-
+            decltype(auto) bounding_box(this auto& self) noexcept {
+                return self.bounding_box;
+            }
         };
 
     }

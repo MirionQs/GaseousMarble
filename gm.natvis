@@ -64,4 +64,16 @@
 		</Expand>
 	</Type>
 
+	<Type Name="gm::api::ITexture">
+		<Intrinsic Name="count" Expression="*_count"/>
+		<DisplayString>{{ count={count()} }}</DisplayString>
+		<Expand>
+			<Item Name="[count]">count()</Item>
+			<ArrayItems>
+				<Size>count()</Size>
+				<ValuePointer>*_textures</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

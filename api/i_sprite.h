@@ -10,7 +10,7 @@ namespace gm {
             struct SpriteResource {
                 SpriteData** sprites;
                 wchar_t** names;
-                std::size_t count;
+                gm::u32 count;
             };
 
             SpriteResource* _resource;
@@ -19,11 +19,11 @@ namespace gm {
             ISprite() noexcept :
                 _resource{ reinterpret_cast<SpriteResource*>(0x00686ac8) } {};
 
-            const Sprite& operator[](std::size_t id) const noexcept {
+            const Sprite& operator[](gm::u32 id) const noexcept {
                 return { _resource->sprites[id], _resource->names[id] };
             }
 
-            std::size_t count() const noexcept {
+            gm::u32 count() const noexcept {
                 return _resource->count;
             }
         };
