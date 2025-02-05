@@ -69,6 +69,9 @@
     <ClInclude Include="api\type.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
+    <ClInclude Include="api\texture.h">
+      <Filter>Header Files\api</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">

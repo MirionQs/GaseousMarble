@@ -76,4 +76,16 @@
 		</Expand>
 	</Type>
 
+	<Type Name="gm::api::ISprite">
+		<Intrinsic Name="count" Expression="_resource->count"/>
+		<DisplayString>{{ count={count()} }}</DisplayString>
+		<Expand>
+			<Item Name="[count]">count()</Item>
+			<ArrayItems>
+				<Size>count()</Size>
+				<ValuePointer>_resource->sprites</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>
