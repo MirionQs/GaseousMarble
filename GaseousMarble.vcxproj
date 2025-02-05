@@ -105,7 +105,7 @@
     <ClInclude Include="function.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="utils\convert.h" />
-    <ClInclude Include="utils\int.h" />
+    <ClInclude Include="utils\integer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

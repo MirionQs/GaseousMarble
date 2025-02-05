@@ -60,7 +60,7 @@
     <ClInclude Include="api\bitmap.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="utils\int.h">
+    <ClInclude Include="utils\integer.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\convert.h">

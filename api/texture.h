@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../utils/int.h"
+#include "../utils/integer.h"
 
 #include <d3dx8.h>
 
