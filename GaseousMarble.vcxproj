@@ -100,6 +100,7 @@
     <ClInclude Include="api\type.h" />
     <ClInclude Include="api\value.h" />
     <ClInclude Include="draw.h" />
+    <ClInclude Include="draw\font.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="gm.h" />
     <ClInclude Include="function.h" />

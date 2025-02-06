@@ -19,6 +19,9 @@
     <Filter Include="Header Files\utils">
       <UniqueIdentifier>{e40de689-9773-435b-bbe1-63e913f49499}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\draw">
+      <UniqueIdentifier>{768b74b6-13f9-4bbe-a540-1282ab9930c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="api\function.h">
@@ -74,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="utils\structure.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="draw\font.h">
+      <Filter>Header Files\draw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
