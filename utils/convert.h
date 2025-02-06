@@ -4,7 +4,7 @@
 
 namespace gm {
 
-    inline std::wstring utf8_to_ucs2(std::string_view str) noexcept {
+    inline std::wstring utf8_to_ucs2(std::string_view str, wchar_t unknown = '?') noexcept {
         std::wstring ret;
         auto i{ str.begin() }, end{ str.end() };
         while (i != end) {
@@ -21,6 +21,7 @@ namespace gm {
                 i += 3;
             }
             else {
+                ret.push_back(unknown);
                 ++i;
             }
         }
