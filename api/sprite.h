@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bitmap.h"
+#include "i_texture.h"
 
 #include <string_view>
 
@@ -44,20 +45,12 @@ namespace gm {
                 return std::forward_like<decltype(self)>(self._data->bounding_box);
             }
 
-            auto&& bitmaps(this auto&& self) noexcept {
-                return std::forward_like<decltype(self)>(self._data->bitmaps);
-            }
-
             auto&& bitmap(this auto&& self, gm::u32 index) noexcept {
-                return std::forward_like<decltype(self)>(self._data->bitmap[index]);
+                return std::forward_like<decltype(self)>(self._data->bitmaps[index]);
             }
 
-            auto&& texture_ids(this auto&& self) noexcept {
-                return std::forward_like<decltype(self)>(self._data->texture_ids);
-            }
-
-            auto&& texture_id(this auto&& self, gm::u32 index) noexcept {
-                return std::forward_like<decltype(self)>(self._data->texture_ids[index]);
+            auto&& texture(this auto&& self, gm::u32 index) noexcept {
+                return std::forward_like<decltype(self)>(gm::api::texture[self._data->texture_ids[index]]);
             }
         };
 
