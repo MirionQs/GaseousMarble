@@ -17,7 +17,7 @@ namespace gm {
                 _textures{ reinterpret_cast<gm::api::Texture**>(0x0085b3c4) },
                 _count{ reinterpret_cast<gm::u32*>(0x006886f0) } {};
 
-            const gm::api::Texture& operator[](gm::u32 id) const noexcept {
+            gm::api::Texture& operator[](gm::u32 id) const noexcept {
                 assert(id < *_count);
                 return (*_textures)[id];
             }

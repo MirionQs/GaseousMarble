@@ -1302,7 +1302,7 @@ namespace gm {
             IFunction() noexcept :
                 _resource{ reinterpret_cast<FunctionResource*>(0x00686b1c) } {};
 
-            const gm::api::Function& operator[](gm::api::FunctionId id) const noexcept {
+            gm::api::Function& operator[](gm::api::FunctionId id) const noexcept {
                 return _resource->functions[static_cast<gm::u32>(id)];
             }
 
