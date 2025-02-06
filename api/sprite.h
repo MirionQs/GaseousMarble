@@ -36,28 +36,28 @@ namespace gm {
                 return _data->subimage_count;
             }
 
-            decltype(auto) origin(this auto& self) noexcept {
-                return self._data->origin;
+            auto&& origin(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(self._data->origin);
             }
 
-            decltype(auto) bounding_box(this auto& self) noexcept {
-                return self._data->bounding_box;
+            auto&& bounding_box(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(self._data->bounding_box);
             }
 
-            decltype(auto) bitmaps(this auto& self) noexcept {
-                return self._data->bitmaps;
+            auto&& bitmaps(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(self._data->bitmaps);
             }
 
-            decltype(auto) bitmap(this auto& self, gm::u32 index) noexcept {
-                return self._data->bitmap[index];
+            auto&& bitmap(this auto&& self, gm::u32 index) noexcept {
+                return std::forward_like<decltype(self)>(self._data->bitmap[index]);
             }
 
-            decltype(auto) texture_ids(this auto& self) noexcept {
-                return self._data->texture_ids;
+            auto&& texture_ids(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(self._data->texture_ids);
             }
 
-            decltype(auto) texture_id(this auto& self, gm::u32 index) noexcept {
-                return self._data->texture_ids[index];
+            auto&& texture_id(this auto&& self, gm::u32 index) noexcept {
+                return std::forward_like<decltype(self)>(self._data->texture_ids[index]);
             }
         };
 

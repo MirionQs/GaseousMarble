@@ -2,6 +2,8 @@
 
 #include "../utils/structure.h"
 
+#include <utility>
+
 namespace gm {
 
     namespace api {
@@ -14,8 +16,8 @@ namespace gm {
         public:
             Bitmap() = delete;
 
-            decltype(auto) size(this auto& self) noexcept {
-                return self._size;
+            auto&& size(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(self._size);
             }
         };
 

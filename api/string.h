@@ -18,12 +18,8 @@ namespace gm {
         class String {
             char* _data;
 
-            gm::api::StringHeader& _header() noexcept {
-                return *reinterpret_cast<gm::api::StringHeader*>(_data - sizeof(gm::api::StringHeader));
-            }
-
-            const gm::api::StringHeader& _header() const noexcept {
-                return *reinterpret_cast<const gm::api::StringHeader*>(_data - sizeof(gm::api::StringHeader));
+            auto&& _header(this auto&& self) noexcept {
+                return std::forward_like<decltype(self)>(*reinterpret_cast<gm::api::StringHeader*>(self._data - sizeof(gm::api::StringHeader)));
             }
 
         public:

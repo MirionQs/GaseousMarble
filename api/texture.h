@@ -17,16 +17,16 @@ namespace gm {
         public:
             Texture() = delete;
 
-            decltype(auto) image_size(this auto& self) noexcept {
-                return self._image_size;
+            auto&& image_size(this auto& self) noexcept {
+                return std::forward_like<decltype(self)>(self._image_size);
             }
 
-            decltype(auto) texture_size(this auto& self) noexcept {
-                return self._texture_size;
+            auto&& texture_size(this auto& self) noexcept {
+                return std::forward_like<decltype(self)>(self._texture_size);
             }
 
-            decltype(auto) data(this auto& self) noexcept {
-                return self._data;
+            auto&& data(this auto& self) noexcept {
+                return std::forward_like<decltype(self)>(self._data);
             }
         };
 
