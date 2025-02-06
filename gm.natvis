@@ -42,9 +42,10 @@
 		<Intrinsic Name="name" Expression="_name"/>
 		<Intrinsic Name="arg_count" Expression="_arg_count"/>
 		<Intrinsic Name="address" Expression="_address"/>
+		<DisplayString Condition="arg_count() == -1">{name(), sb}(...)</DisplayString>
 		<DisplayString Condition="arg_count() == 0">{name(), sb}()</DisplayString>
-		<DisplayString Condition="arg_count() == 1">{name(), sb}(&lt;arg&gt;)</DisplayString>
-		<DisplayString Condition="arg_count() &gt; 1">{name(), sb}(&lt;{arg_count()} args&gt;)</DisplayString>
+		<DisplayString Condition="arg_count() == 1">{name(), sb}(arg)</DisplayString>
+		<DisplayString Condition="arg_count() >= 2">{name(), sb}({arg_count()} args)</DisplayString>
 		<Expand>
 			<Item Name="[name]">name()</Item>
 			<Item Name="[arg count]">arg_count()</Item>

@@ -10,7 +10,7 @@ namespace gm {
             gm::u8 _name_length;
             char _name[67];
             void* _address;
-            gm::u32 _arg_count;
+            gm::i32 _arg_count; // -1 indicates variable arguments
             bool _require_pro;
 
         public:
@@ -25,7 +25,7 @@ namespace gm {
                 return { _name, _name_length };
             }
 
-            gm::u32 arg_count() const noexcept {
+            gm::i32 arg_count() const noexcept {
                 return _arg_count;
             }
 
@@ -43,7 +43,7 @@ namespace gm {
 
                 // This assertion will fail when quitting the game because the
                 // resources have already been released by GameMaker.
-                assert(argc == _arg_count);
+                assert(_arg_count == -1 || _arg_count == argc);
 
                 __asm {
                     push argv;
