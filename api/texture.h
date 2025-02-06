@@ -16,11 +16,6 @@ namespace gm {
 
         public:
             Texture() = delete;
-            Texture(const Texture&) = delete;
-            Texture(Texture&&) = delete;
-
-            Texture& operator=(const Texture&) = delete;
-            Texture& operator=(Texture&&) = delete;
 
             decltype(auto) image_size(this auto& self) noexcept {
                 return self._image_size;

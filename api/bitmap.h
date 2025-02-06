@@ -13,11 +13,6 @@ namespace gm {
 
         public:
             Bitmap() = delete;
-            Bitmap(const Bitmap&) = delete;
-            Bitmap(Bitmap&&) = delete;
-
-            Bitmap& operator=(const Bitmap&) = delete;
-            Bitmap& operator=(Bitmap&&) = delete;
 
             decltype(auto) size(this auto& self) noexcept {
                 return self._size;

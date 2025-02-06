@@ -15,11 +15,6 @@ namespace gm {
 
         public:
             Function() = delete;
-            Function(const Function&) = delete;
-            Function(Function&&) = delete;
-
-            Function& operator=(const Function&) = delete;
-            Function& operator=(Function&&) = delete;
 
             std::string_view name() const noexcept {
                 return { _name, _name_length };
