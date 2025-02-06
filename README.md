@@ -1,6 +1,6 @@
 # GaseousMarble
 
-Draw UCS-2 characters in GameMaker 8.2.
+Draw UCS-2 texts in GameMaker 8.2.
 
 ## Usage
 
