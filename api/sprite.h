@@ -37,27 +37,27 @@ namespace gm {
             }
 
             decltype(auto) origin(this auto& self) noexcept {
-                return self.origin;
+                return self._data->origin;
             }
 
             decltype(auto) bounding_box(this auto& self) noexcept {
-                return self.bounding_box;
+                return self._data->bounding_box;
             }
 
             decltype(auto) bitmaps(this auto& self) noexcept {
-                return self.bitmaps;
+                return self._data->bitmaps;
             }
 
             decltype(auto) bitmap(this auto& self, gm::u32 index) noexcept {
-                return self.bitmap[index];
+                return self._data->bitmap[index];
             }
 
             decltype(auto) texture_ids(this auto& self) noexcept {
-                return self.texture_ids;
+                return self._data->texture_ids;
             }
 
             decltype(auto) texture_id(this auto& self, gm::u32 index) noexcept {
-                return self.texture_ids[index];
+                return self._data->texture_ids[index];
             }
         };
 
