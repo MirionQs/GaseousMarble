@@ -21,11 +21,11 @@ namespace gm {
             ISprite() noexcept :
                 _resource{ reinterpret_cast<SpriteResource*>(0x00686ac8) } {};
 
-            const gm::api::Sprite& operator[](gm::u32 id) const noexcept {
+            gm::api::Sprite operator[](gm::u32 id) const noexcept {
                 return { _resource->sprites[id], _resource->names[id] };
             }
 
-            const gm::api::Sprite& operator[](std::wstring_view name) const {
+            gm::api::Sprite operator[](std::wstring_view name) const {
                 gm::u32 id{ find(name) };
                 if (id == -1) {
                     throw std::runtime_error{ "Sprite not found." };
