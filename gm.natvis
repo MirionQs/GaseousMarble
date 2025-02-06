@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
+	<Type Name="gm::Size">
+		<DisplayString>[{width} x {height}]</DisplayString>
+ 	</Type>
+	
 	<Type Name="gm::api::String">
 		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
 		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
@@ -49,7 +53,7 @@
 		<Expand>
 			<Item Name="[name]">name()</Item>
 			<Item Name="[arg count]">arg_count()</Item>
-			<Item Name="[address]">address()</Item>
+			<Item Name="[address]">address(), nvo</Item>
 		</Expand>
 	</Type>
 
@@ -62,6 +66,18 @@
 				<Size>count()</Size>
 				<ValuePointer>_resource->functions</ValuePointer>
 			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::Texture">
+		<Intrinsic Name="image_size" Expression="_image_size"/>
+		<Intrinsic Name="texture_size" Expression="_texture_size"/>
+		<Intrinsic Name="data" Expression="_data"/>
+		<DisplayString>{{ image_size={image_size()} texture_size={texture_size()} }}</DisplayString>
+		<Expand>
+			<Item Name="image_size">image_size()</Item>
+			<Item Name="texture_size">texture_size()</Item>
+			<Item Name="data">data(), nvo</Item>
 		</Expand>
 	</Type>
 
