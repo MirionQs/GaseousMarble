@@ -8,17 +8,17 @@
 namespace gm {
 
     struct GlyphData {
-        std::uint16_t x, y;
-        std::uint16_t width;
-        std::int16_t left;
+        gm::u16 x, y;
+        gm::u16 width;
+        gm::i16 left;
     };
 
     class Font {
-        static inline std::size_t _counter;
+        static inline gm::u32 _counter;
 
-        std::size_t _id;
-        std::uint16_t _size;
-        std::uint16_t _height;
+        gm::u32 _id;
+        gm::u16 _size;
+        gm::u16 _height;
         std::unique_ptr<gm::SpriteHandle, gm::SpriteDeleter> _sprite;
         std::unordered_map<wchar_t, gm::GlyphData> _glyph;
 
@@ -64,16 +64,16 @@ namespace gm {
             return _id == other.id();
         }
 
-        std::size_t id() const noexcept {
+        gm::u32 id() const noexcept {
             return _id;
         }
 
-        std::uint16_t size() const noexcept {
+        gm::u16 size() const noexcept {
             assert(_id != 0);
             return _size;
         }
 
-        std::uint16_t height() const noexcept {
+        gm::u16 height() const noexcept {
             assert(_id != 0);
             return _height;
         }

@@ -5,22 +5,22 @@
 namespace gm {
 
     void draw_sprite_general(
-        std::size_t sprite_id,
-        std::int32_t image_index,
-        std::uint32_t image_x,
-        std::uint32_t image_y,
-        std::size_t width,
-        std::size_t height,
-        double x,
-        double y,
-        double scale_x,
-        double scale_y,
-        double rotate,
-        std::uint32_t color1,
-        std::uint32_t color2,
-        std::uint32_t color3,
-        std::uint32_t color4,
-        double alpha
+        gm::u32 sprite_id,
+        gm::i32 image_index, // -1 indicates the current subimage
+        gm::u32 image_x,
+        gm::u32 image_y,
+        gm::u32 width,
+        gm::u32 height,
+        gm::f64 x,
+        gm::f64 y,
+        gm::f64 scale_x,
+        gm::f64 scale_y,
+        gm::f64 rotate,
+        gm::u32 color1,
+        gm::u32 color2,
+        gm::u32 color3,
+        gm::u32 color4,
+        gm::f64 alpha
     ) noexcept {
         using namespace gm::api;
         function[FunctionId::draw_sprite_general].call<
@@ -61,17 +61,17 @@ namespace gm {
         );
     }
 
-    std::size_t sprite_add(
+    gm::u32 sprite_add(
         std::string_view path,
-        std::size_t image_count,
+        gm::u32 image_count,
         bool remove_background,
         bool smooth_edges,
-        std::int32_t origin_x,
-        std::int32_t origin_y
+        gm::i32 origin_x,
+        gm::i32 origin_y
     ) noexcept {
         using namespace gm::api;
         return function[FunctionId::sprite_add].call<
-            std::size_t,
+            u32,
             String,
             Real,
             Real,
@@ -88,7 +88,7 @@ namespace gm {
         );
     }
 
-    void sprite_delete(std::size_t sprite_id) noexcept {
+    void sprite_delete(gm::u32 sprite_id) noexcept {
         using namespace gm::api;
         function[FunctionId::sprite_delete].call<void, Real>(sprite_id);
     }

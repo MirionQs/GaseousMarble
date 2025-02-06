@@ -1,9 +1,9 @@
+#include "gm.h"
+
 #include "draw.h"
 #include "utils/convert.h"
 
-#include "gm.h"
-
-std::unordered_map<std::size_t, gm::Font> font_map;
+std::unordered_map<gm::u32, gm::Font> font_map;
 
 gm::Draw draw;
 
@@ -12,7 +12,7 @@ gm::api::Real gm_font(gm::api::StringView sprite_path, gm::api::StringView glyph
     if (!font) {
         return 0;
     }
-    std::size_t font_id{ font.id() };
+    gm::u32 font_id{ font.id() };
     font_map.emplace(font_id, std::move(font));
     return font_id;
 }
@@ -30,7 +30,7 @@ gm::api::Real gm_draw(gm::api::Real x, gm::api::Real y, gm::api::StringView text
 }
 
 gm::api::Real gm_free(gm::api::Real font_id) noexcept {
-    auto iter{ font_map.find(static_cast<std::size_t>(font_id)) };
+    auto iter{ font_map.find(static_cast<gm::u32>(font_id)) };
     if (iter == font_map.end() || &iter->second == draw.setting().font) {
         return false;
     }
@@ -44,7 +44,7 @@ gm::api::Real gm_clear() noexcept {
 }
 
 gm::api::Real gm_set_font(gm::api::Real font_id) noexcept {
-    auto iter{ font_map.find(static_cast<std::size_t>(font_id)) };
+    auto iter{ font_map.find(static_cast<gm::u32>(font_id)) };
     if (iter == font_map.end()) {
         return false;
     }
@@ -57,8 +57,8 @@ gm::api::Real gm_set_color(gm::api::Real color) noexcept {
 }
 
 gm::api::Real gm_set_color2(gm::api::Real color_top, gm::api::Real color_bottom) noexcept {
-    draw.setting().color_top = static_cast<std::uint32_t>(color_top);
-    draw.setting().color_bottom = static_cast<std::uint32_t>(color_bottom);
+    draw.setting().color_top = static_cast<gm::u32>(color_top);
+    draw.setting().color_bottom = static_cast<gm::u32>(color_bottom);
     return true;
 }
 

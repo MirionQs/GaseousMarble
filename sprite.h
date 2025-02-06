@@ -5,7 +5,7 @@
 namespace gm {
 
     class SpriteHandle {
-        std::size_t _id;
+        gm::u32 _id;
 
     public:
         SpriteHandle() noexcept :
@@ -14,7 +14,7 @@ namespace gm {
         SpriteHandle(std::nullptr_t) noexcept :
             _id{} {}
 
-        SpriteHandle(std::size_t id) noexcept :
+        SpriteHandle(gm::u32 id) noexcept :
             _id{ id } {}
 
         operator bool() const noexcept {
@@ -25,7 +25,7 @@ namespace gm {
             return _id == other._id;
         }
 
-        std::size_t id() const noexcept {
+        gm::u32 id() const noexcept {
             return _id;
         }
     };
