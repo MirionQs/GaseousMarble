@@ -3,8 +3,16 @@
 
 	<Type Name="gm::Size">
 		<DisplayString>[{width} x {height}]</DisplayString>
- 	</Type>
-	
+	</Type>
+
+	<Type Name="gm::Position">
+		<DisplayString>({x}, {y})</DisplayString>
+	</Type>
+
+	<Type Name="gm::BoundingBox">
+		<DisplayString>[({left}, {top}) : ({right}, {bottom})]</DisplayString>
+	</Type>
+
 	<Type Name="gm::api::String">
 		<Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
 		<Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
@@ -49,7 +57,7 @@
 		<DisplayString Condition="arg_count() == -1">{name(), sb}(...)</DisplayString>
 		<DisplayString Condition="arg_count() == 0">{name(), sb}()</DisplayString>
 		<DisplayString Condition="arg_count() == 1">{name(), sb}(arg)</DisplayString>
-		<DisplayString Condition="arg_count() >= 2">{name(), sb}({arg_count()} args)</DisplayString>
+		<DisplayString Condition="arg_count() > 1">{name(), sb}({arg_count()} args)</DisplayString>
 		<Expand>
 			<Item Name="[name]">name()</Item>
 			<Item Name="[arg count]">arg_count()</Item>
@@ -57,9 +65,61 @@
 		</Expand>
 	</Type>
 
+	<Type Name="gm::api::Texture">
+		<Intrinsic Name="image_size" Expression="_image_size"/>
+		<Intrinsic Name="texture_size" Expression="_texture_size"/>
+		<Intrinsic Name="data" Expression="_data"/>
+		<DisplayString>{{ image={image_size()} texture={texture_size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[image size]">image_size()</Item>
+			<Item Name="[texture size]">texture_size()</Item>
+			<Item Name="[data]">data(), nvo</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::Bitmap">
+		<Intrinsic Name="size" Expression="_size"/>
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[size]">size()</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::SpriteData">
+		<Intrinsic Name="subimage_count_" Expression="subimage_count"/>
+		<Intrinsic Name="origin_" Expression="origin"/>
+		<Intrinsic Name="bounding_box_" Expression="bounding_box"/>
+		<Intrinsic Name="bitmaps_" Expression="bitmaps"/>
+		<Intrinsic Name="texture_ids_" Expression="texture_ids"/>
+		<DisplayString Condition="subimage_count == 0">[No subimage]</DisplayString>
+		<DisplayString Condition="subimage_count == 1">[1 subimage]</DisplayString>
+		<DisplayString Condition="subimage_count > 1">[{subimage_count} subimages]</DisplayString>
+		<Expand>
+			<Item Name="[subimage count]">subimage_count_()</Item>
+			<Item Name="[origin]">origin_()</Item>
+			<Item Name="[bounding box]">bounding_box_()</Item>
+			<Item Name="[texture ids]">texture_ids_(), [subimage_count] na</Item>
+			<ArrayItems>
+				<Size>subimage_count_()</Size>
+				<ValuePointer>bitmaps_(), na</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<Type Name="gm::api::Sprite">
+		<Intrinsic Name="name" Expression="_name"/>
+		<DisplayString>{{ name={name(), na} subimage_count={_data->subimage_count} }}</DisplayString>
+		<Expand>
+			<Item Name="[name]">name(), na</Item>
+			<ExpandedItem>_data</ExpandedItem>
+		</Expand>
+	</Type>
+
 	<Type Name="gm::api::IFunction">
 		<Intrinsic Name="count" Expression="_resource->count"/>
-		<DisplayString>{{ count={count()} }}</DisplayString>
+		<DisplayString Condition="count() == 0">[No function]</DisplayString>
+		<DisplayString Condition="count() == 1">[1 function]</DisplayString>
+		<DisplayString Condition="count() > 1">[{count()} functions]</DisplayString>
 		<Expand>
 			<Item Name="[count]">count()</Item>
 			<ArrayItems>
@@ -69,21 +129,11 @@
 		</Expand>
 	</Type>
 
-	<Type Name="gm::api::Texture">
-		<Intrinsic Name="image_size" Expression="_image_size"/>
-		<Intrinsic Name="texture_size" Expression="_texture_size"/>
-		<Intrinsic Name="data" Expression="_data"/>
-		<DisplayString>{{ image_size={image_size()} texture_size={texture_size()} }}</DisplayString>
-		<Expand>
-			<Item Name="image_size">image_size()</Item>
-			<Item Name="texture_size">texture_size()</Item>
-			<Item Name="data">data(), nvo</Item>
-		</Expand>
-	</Type>
-
 	<Type Name="gm::api::ITexture">
 		<Intrinsic Name="count" Expression="*_count"/>
-		<DisplayString>{{ count={count()} }}</DisplayString>
+		<DisplayString Condition="count() == 0">[No texture]</DisplayString>
+		<DisplayString Condition="count() == 1">[1 texture]</DisplayString>
+		<DisplayString Condition="count() > 1">[{count()} textures]</DisplayString>
 		<Expand>
 			<Item Name="[count]">count()</Item>
 			<ArrayItems>
@@ -95,12 +145,14 @@
 
 	<Type Name="gm::api::ISprite">
 		<Intrinsic Name="count" Expression="_resource->count"/>
-		<DisplayString>{{ count={count()} }}</DisplayString>
+		<DisplayString Condition="count() == 0">[No sprite]</DisplayString>
+		<DisplayString Condition="count() == 1">[1 sprite]</DisplayString>
+		<DisplayString Condition="count() > 1">[{count()} sprites]</DisplayString>
 		<Expand>
 			<Item Name="[count]">count()</Item>
 			<ArrayItems>
 				<Size>count()</Size>
-				<ValuePointer>_resource->sprites</ValuePointer>
+				<ValuePointer>_resource->sprites, na</ValuePointer>
 			</ArrayItems>
 		</Expand>
 	</Type>
