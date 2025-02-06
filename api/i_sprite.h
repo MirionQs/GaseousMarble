@@ -2,6 +2,7 @@
 
 #include "sprite.h"
 
+#include <cassert>
 #include <stdexcept>
 
 namespace gm {
@@ -22,6 +23,7 @@ namespace gm {
                 _resource{ reinterpret_cast<SpriteResource*>(0x00686ac8) } {};
 
             gm::api::Sprite operator[](gm::u32 id) const noexcept {
+                assert(id < _resource->count);
                 return { _resource->sprites[id], _resource->names[id] };
             }
 

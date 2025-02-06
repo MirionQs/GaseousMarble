@@ -2,6 +2,8 @@
 
 #include "texture.h"
 
+#include <cassert>
+
 namespace gm {
 
     namespace api {
@@ -16,6 +18,7 @@ namespace gm {
                 _count{ reinterpret_cast<gm::u32*>(0x006886f0) } {};
 
             const gm::api::Texture& operator[](gm::u32 id) const noexcept {
+                assert(id < *_count);
                 return (*_textures)[id];
             }
 
