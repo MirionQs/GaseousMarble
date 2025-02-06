@@ -12,7 +12,7 @@ namespace gm {
             void* rtti;
             gm::u32 subimage_count;
             gm::api::Bitmap** bitmaps;
-            gm::i32 origin_x, origin_y;
+            gm::Position origin;
             gm::BoundingBox bounding_box;
             void* masks;
             bool seperate_masks;
@@ -41,8 +41,28 @@ namespace gm {
                 return _data->subimage_count;
             }
 
+            decltype(auto) origin(this auto& self) noexcept {
+                return self.origin;
+            }
+
             decltype(auto) bounding_box(this auto& self) noexcept {
                 return self.bounding_box;
+            }
+
+            decltype(auto) bitmaps(this auto& self) noexcept {
+                return self.bitmaps;
+            }
+
+            decltype(auto) bitmap(this auto& self, gm::u32 index) noexcept {
+                return self.bitmap[index];
+            }
+
+            decltype(auto) texture_ids(this auto& self) noexcept {
+                return self.texture_ids;
+            }
+
+            decltype(auto) texture_id(this auto& self, gm::u32 index) noexcept {
+                return self.texture_ids[index];
             }
         };
 
