@@ -2,6 +2,8 @@
 
 #include "sprite.h"
 
+#include <stdexcept>
+
 namespace gm {
 
     namespace api {
@@ -23,8 +25,25 @@ namespace gm {
                 return { _resource->sprites[id], _resource->names[id] };
             }
 
+            const gm::api::Sprite& operator[](std::wstring_view name) const {
+                gm::u32 id{ find(name) };
+                if (id == -1) {
+                    throw std::runtime_error{ "Sprite not found." };
+                }
+                return (*this)[id];
+            }
+
             gm::u32 count() const noexcept {
                 return _resource->count;
+            }
+
+            gm::u32 find(std::wstring_view name) const noexcept {
+                for (gm::u32 id{}; id != _resource->count; ++id) {
+                    if (std::wcscmp(name.data(), _resource->names[id]) == 0) {
+                        return id;
+                    }
+                }
+                return -1;
             }
         };
 
