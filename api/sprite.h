@@ -46,7 +46,7 @@ namespace gm {
             }
 
             auto&& bitmap(this auto&& self, gm::u32 index) noexcept {
-                return std::forward_like<decltype(self)>(self._data->bitmaps[index]);
+                return std::forward_like<decltype(self)>(*self._data->bitmaps[index]);
             }
 
             auto&& texture(this auto&& self, gm::u32 index) noexcept {
