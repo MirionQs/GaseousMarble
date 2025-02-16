@@ -22,6 +22,9 @@
     <Filter Include="Header Files\draw">
       <UniqueIdentifier>{768b74b6-13f9-4bbe-a540-1282ab9930c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\old_draw">
+      <UniqueIdentifier>{d5dc98bc-5e3a-4102-a4b7-57037a842c24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="api\function.h">
@@ -42,19 +45,7 @@
     <ClInclude Include="api\value.h">
       <Filter>Header Files\api</Filter>
     </ClInclude>
-    <ClInclude Include="draw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="api\sprite.h">
@@ -81,6 +72,18 @@
     <ClInclude Include="draw\font.h">
       <Filter>Header Files\draw</Filter>
     </ClInclude>
+    <ClInclude Include="draw.h">
+      <Filter>Header Files\old_draw</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>Header Files\old_draw</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Header Files\old_draw</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Header Files\old_draw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">
@@ -88,6 +91,15 @@
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="draw.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine.ixx">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -111,7 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="draw.ixx" />
+    <ClCompile Include="engine.ixx" />
     <ClCompile Include="gm.cpp" />
+    <ClCompile Include="core.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
