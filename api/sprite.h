@@ -13,7 +13,7 @@ namespace gm {
             void* rtti;
             gm::u32 subimage_count;
             gm::api::Bitmap** bitmaps;
-            gm::Position origin;
+            gm::Point origin;
             gm::BoundingBox bounding_box;
             void* masks;
             bool seperate_masks;

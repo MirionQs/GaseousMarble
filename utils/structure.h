@@ -8,12 +8,12 @@ namespace gm {
         gm::u32 width, height;
     };
 
-    struct Position {
+    struct Point {
         gm::i32 x, y;
     };
 
     struct BoundingBox {
         gm::i32 left, top, right, bottom;
     };
-
+    
 }
