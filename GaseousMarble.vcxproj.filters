@@ -20,9 +20,6 @@
       <UniqueIdentifier>{e40de689-9773-435b-bbe1-63e913f49499}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\draw">
-      <UniqueIdentifier>{768b74b6-13f9-4bbe-a540-1282ab9930c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\old_draw">
       <UniqueIdentifier>{d5dc98bc-5e3a-4102-a4b7-57037a842c24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -69,20 +66,17 @@
     <ClInclude Include="utils\structure.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="draw\draw.h">
+      <Filter>Header Files\draw</Filter>
+    </ClInclude>
     <ClInclude Include="draw\font.h">
       <Filter>Header Files\draw</Filter>
     </ClInclude>
-    <ClInclude Include="draw.h">
-      <Filter>Header Files\old_draw</Filter>
+    <ClInclude Include="draw\function.h">
+      <Filter>Header Files\draw</Filter>
     </ClInclude>
-    <ClInclude Include="font.h">
-      <Filter>Header Files\old_draw</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files\old_draw</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite.h">
-      <Filter>Header Files\old_draw</Filter>
+    <ClInclude Include="draw\sprite.h">
+      <Filter>Header Files\draw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
