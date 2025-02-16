@@ -16,7 +16,7 @@ namespace gm {
         };
 
         class String {
-            char* _data;
+            alignas(gm::api::StringHeader) char* _data;
 
             auto&& _header(this auto&& self) noexcept {
                 return std::forward_like<decltype(self)>(*reinterpret_cast<gm::api::StringHeader*>(self._data - sizeof(gm::api::StringHeader)));
