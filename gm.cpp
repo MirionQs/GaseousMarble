@@ -1,7 +1,9 @@
-#include "gm.h"
+module;
 
 #include "draw/draw.h"
 #include "utils/convert.h"
+
+module gm;
 
 std::unordered_map<gm::u32, gm::Font> font_map;
 

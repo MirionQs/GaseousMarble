@@ -103,15 +103,15 @@
     <ClInclude Include="draw\font.h" />
     <ClInclude Include="draw\function.h" />
     <ClInclude Include="draw\sprite.h" />
-    <ClInclude Include="gm.h" />
     <ClInclude Include="utils\convert.h" />
     <ClInclude Include="utils\integer.h" />
     <ClInclude Include="utils\structure.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.ixx" />
+    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="draw.ixx" />
     <ClCompile Include="engine.ixx" />
+    <ClCompile Include="gm.ixx" />
     <ClCompile Include="gm.cpp" />
     <ClCompile Include="core.ixx" />
   </ItemGroup>
