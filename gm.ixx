@@ -3,7 +3,6 @@ export module gm;
 import gm.core;
 import gm.engine;
 
-using namespace gm::core;
 using namespace gm::engine;
 
 #ifdef GASEOUSMARBLE_EXPORTS

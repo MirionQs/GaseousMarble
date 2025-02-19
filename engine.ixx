@@ -10,22 +10,10 @@ import gm.core;
 
 using namespace gm::core;
 
-class Bitmap;
+// fundamental types of GML
+namespace gm::engine {
 
-struct SpriteData {
-    void* rtti;
-    u32 subimage_count;
-    Bitmap** bitmaps;
-    Point origin;
-    BoundingBox bounding_box;
-    void* masks;
-    bool seperate_masks;
-    u32* texture_ids;
-};
-
-export namespace gm::engine {
-
-    using Real = f64;
+    export using Real = f64;
 
     struct StringHeader {
         u16 code_page;
@@ -34,7 +22,7 @@ export namespace gm::engine {
         u32 size;
     };
 
-    class String {
+    export class String {
         char* _data;
 
         auto _header() noexcept {
@@ -97,7 +85,8 @@ export namespace gm::engine {
         }
     };
 
-    class StringView {
+    // used for external strings as their lifetime cannot be managed
+    export class StringView {
         const char* _data;
 
         auto _header() const noexcept {
@@ -124,6 +113,11 @@ export namespace gm::engine {
             return _data;
         }
     };
+
+}
+
+// Function
+namespace gm::engine {
 
     enum class ValueType {
         real,
@@ -160,7 +154,7 @@ export namespace gm::engine {
         }
     };
 
-    class Function {
+    export class Function {
         u8 _name_length;
         char _name[67];
         void* _address;
@@ -205,6 +199,10 @@ export namespace gm::engine {
             return static_cast<R>(returned);
         }
     };
+
+}
+
+export namespace gm::engine{
 
     enum class FunctionId {
         display_get_width,
@@ -1567,6 +1565,17 @@ export namespace gm::engine {
         auto&& size(this auto&& self) noexcept {
             return std::forward_like<decltype(self)>(self._size);
         }
+    };
+
+    struct SpriteData {
+        void* rtti;
+        u32 subimage_count;
+        Bitmap** bitmaps;
+        Point origin;
+        BoundingBox bounding_box;
+        void* masks;
+        bool seperate_masks;
+        u32* texture_ids;
     };
 
     class Sprite {

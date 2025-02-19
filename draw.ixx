@@ -9,7 +9,6 @@ import gm.core;
 import gm.engine;
 
 using namespace gm::core;
-using namespace gm::engine;
 
 // image_index == -1 indicates the current subimage
 void draw_sprite_general(
@@ -30,6 +29,7 @@ void draw_sprite_general(
     u32 color4,
     f64 alpha
 ) noexcept {
+    using namespace gm::engine;
     function[FunctionId::draw_sprite_general].call<void, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real>(
         sprite_id,
         image_index,
@@ -58,6 +58,7 @@ u32 sprite_add(
     i32 origin_x,
     i32 origin_y
 ) noexcept {
+    using namespace gm::engine;
     return function[FunctionId::sprite_add].call<u32, String, Real, Real, Real, Real, Real>(
         path,
         image_count,
@@ -69,6 +70,7 @@ u32 sprite_add(
 }
 
 void sprite_delete(u32 sprite_id) noexcept {
+    using namespace gm::engine;
     function[FunctionId::sprite_delete].call<void, Real>(sprite_id);
 }
 
@@ -106,6 +108,7 @@ struct SpriteDeleter {
     }
 };
 
+// Font
 export namespace gm::draw {
 
     struct GlyphData {
@@ -189,6 +192,11 @@ export namespace gm::draw {
             return _glyph;
         }
     };
+
+}
+
+// Draw
+export namespace gm::draw {
 
     struct DrawSetting {
         Font* font;
