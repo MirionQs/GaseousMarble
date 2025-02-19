@@ -2,6 +2,7 @@ export module gm.core;
 
 import std;
 
+// fundamental types
 export namespace gm::core {
 
     using i8 = std::int8_t;
@@ -17,6 +18,11 @@ export namespace gm::core {
     using f32 = float;
     using f64 = double;
 
+}
+
+// common structures
+export namespace gm::core {
+
     struct Size {
         u32 width, height;
     };
@@ -29,7 +35,12 @@ export namespace gm::core {
         i32 left, top, right, bottom;
     };
 
-    // doesn't fully conform to the standard
+}
+
+// utility functions
+export namespace gm::core {
+
+    // doesn't fully conform to RFC 3629
     std::u32string utf8_decode(std::string_view str) noexcept {
         std::u32string res;
 
