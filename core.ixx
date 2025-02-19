@@ -29,6 +29,7 @@ export namespace gm::core {
         i32 left, top, right, bottom;
     };
 
+    // doesn't fully conform to the standard
     std::u32string utf8_decode(std::string_view str) noexcept {
         std::u32string res;
 
