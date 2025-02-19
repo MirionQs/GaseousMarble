@@ -83,7 +83,7 @@
     <ClCompile Include="gm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="dllmain.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core.ixx">

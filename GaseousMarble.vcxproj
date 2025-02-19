@@ -109,7 +109,7 @@
     <ClInclude Include="utils\structure.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="dllmain.ixx" />
     <ClCompile Include="draw.ixx" />
     <ClCompile Include="engine.ixx" />
     <ClCompile Include="gm.cpp" />
