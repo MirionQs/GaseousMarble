@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-    <Type Name="gm::Size">
+    <Type Name="gm::core::Size">
         <DisplayString>[{width} x {height}]</DisplayString>
     </Type>
 
-    <Type Name="gm::Position">
+    <Type Name="gm::core::Point">
         <DisplayString>({x}, {y})</DisplayString>
     </Type>
 
-    <Type Name="gm::BoundingBox">
+    <Type Name="gm::core::BoundingBox">
         <DisplayString>[({left}, {top}) : ({right}, {bottom})]</DisplayString>
     </Type>
 
-    <Type Name="gm::api::String">
-        <Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
-        <Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
+    <Type Name="gm::engine::String">
+        <Intrinsic Name="size" Expression="((gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader)))->size"/>
+        <Intrinsic Name="ref_count" Expression="((gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader)))->ref_count"/>
         <DisplayString>{_data, [size()] na}</DisplayString>
         <Expand>
             <Item Name="[size]">size()</Item>
@@ -27,9 +27,9 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::StringView">
-        <Intrinsic Name="size" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->size"/>
-        <Intrinsic Name="ref_count" Expression="((gm::api::StringHeader*)(_data - sizeof(gm::api::StringHeader)))->ref_count"/>
+    <Type Name="gm::engine::StringView">
+        <Intrinsic Name="size" Expression="((gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader)))->size"/>
+        <Intrinsic Name="ref_count" Expression="((gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader)))->ref_count"/>
         <DisplayString>{_data, [size()] na}</DisplayString>
         <Expand>
             <Item Name="[size]">size()</Item>
@@ -39,18 +39,18 @@
                 <ValuePointer>_data</ValuePointer>
             </ArrayItems>
         </Expand>
-    </Type>
+    </Type>z
 
-    <Type Name="gm::api::Value">
-        <DisplayString Condition="_type == gm::api::ValueType::real">{_real}</DisplayString>
-        <DisplayString Condition="_type == gm::api::ValueType::string">{_string}</DisplayString>
+    <Type Name="gm::engine::Value">
+        <DisplayString Condition="_type == gm::engine::ValueType::real">{_real}</DisplayString>
+        <DisplayString Condition="_type == gm::engine::ValueType::string">{_string}</DisplayString>
         <Expand>
-            <ExpandedItem Condition="_type == gm::api::ValueType::real">_real</ExpandedItem>
-            <ExpandedItem Condition="_type == gm::api::ValueType::string">_string</ExpandedItem>
+            <ExpandedItem Condition="_type == gm::engine::ValueType::real">_real</ExpandedItem>
+            <ExpandedItem Condition="_type == gm::engine::ValueType::string">_string</ExpandedItem>
         </Expand>
     </Type>
 
-    <Type Name="gm::api::Function">
+    <Type Name="gm::engine::Function">
         <Intrinsic Name="name" Expression="_name"/>
         <Intrinsic Name="arg_count" Expression="_arg_count"/>
         <Intrinsic Name="address" Expression="_address"/>
@@ -65,7 +65,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::Texture">
+    <Type Name="gm::engine::Texture">
         <Intrinsic Name="image_size" Expression="_image_size"/>
         <Intrinsic Name="texture_size" Expression="_texture_size"/>
         <Intrinsic Name="data" Expression="_data"/>
@@ -77,7 +77,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::Bitmap">
+    <Type Name="gm::engine::Bitmap">
         <Intrinsic Name="size" Expression="_size"/>
         <DisplayString>{{ size={size()} }}</DisplayString>
         <Expand>
@@ -85,7 +85,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::SpriteData">
+    <Type Name="gm::engine::SpriteData">
         <Intrinsic Name="subimage_count_" Expression="subimage_count"/>
         <Intrinsic Name="origin_" Expression="origin"/>
         <Intrinsic Name="bounding_box_" Expression="bounding_box"/>
@@ -106,7 +106,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::Sprite">
+    <Type Name="gm::engine::Sprite">
         <Intrinsic Name="name" Expression="_name"/>
         <DisplayString>{{ name={name(), na} subimage_count={_data->subimage_count} }}</DisplayString>
         <Expand>
@@ -115,7 +115,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::IFunction">
+    <Type Name="gm::engine::IFunction">
         <Intrinsic Name="count" Expression="_resource->count"/>
         <DisplayString Condition="count() == 0">[No function]</DisplayString>
         <DisplayString Condition="count() == 1">[1 function]</DisplayString>
@@ -129,7 +129,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::ITexture">
+    <Type Name="gm::engine::ITexture">
         <Intrinsic Name="count" Expression="*_count"/>
         <DisplayString Condition="count() == 0">[No texture]</DisplayString>
         <DisplayString Condition="count() == 1">[1 texture]</DisplayString>
@@ -143,7 +143,7 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::api::ISprite">
+    <Type Name="gm::engine::ISprite">
         <Intrinsic Name="count" Expression="_resource->count"/>
         <DisplayString Condition="count() == 0">[No sprite]</DisplayString>
         <DisplayString Condition="count() == 1">[1 sprite]</DisplayString>
