@@ -22,12 +22,21 @@ applies_to=self
 */
 external_call(global.gm_clear)
 game_restart()
+#define Keyboard_88
+/*"/*'/**//* YYD ACTION
+lib_id=1
+action_id=603
+applies_to=self
+*/
+game_end()
 #define Draw_0
 /*"/*'/**//* YYD ACTION
 lib_id=1
 action_id=603
 applies_to=self
 */
+draw_self()
+
 external_call(global.gm_set_color2, c_yellow, c_orange)
 external_call(global.gm_set_align, 0, 0)
 external_call(global.gm_draw, room_width / 2, room_height / 2, 'To be or not to be, that is the question

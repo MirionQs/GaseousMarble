@@ -89,25 +89,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="api\bitmap.h" />
-    <ClInclude Include="api\function.h" />
-    <ClInclude Include="api\i_function.h" />
-    <ClInclude Include="api\i_sprite.h" />
-    <ClInclude Include="api\i_texture.h" />
-    <ClInclude Include="api\sprite.h" />
-    <ClInclude Include="api\string.h" />
-    <ClInclude Include="api\texture.h" />
-    <ClInclude Include="api\type.h" />
-    <ClInclude Include="api\value.h" />
-    <ClInclude Include="draw\draw.h" />
-    <ClInclude Include="draw\font.h" />
-    <ClInclude Include="draw\function.h" />
-    <ClInclude Include="draw\sprite.h" />
-    <ClInclude Include="utils\convert.h" />
-    <ClInclude Include="utils\integer.h" />
-    <ClInclude Include="utils\structure.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="draw.ixx" />
     <ClCompile Include="engine.ixx" />

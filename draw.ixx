@@ -121,7 +121,7 @@ export namespace gm::draw {
         u16 _size;
         u16 _height;
         std::unique_ptr<SpriteHandle, SpriteDeleter> _sprite;
-        std::unordered_map<wchar_t, GlyphData> _glyph;
+        std::unordered_map<u32, GlyphData> _glyph;
 
     public:
         Font() noexcept :
@@ -205,23 +205,23 @@ export namespace gm::draw {
     class Draw {
         DrawSetting _setting;
 
-        std::wstring _filter(std::wstring_view text) const noexcept {
-            std::wstring filtered;
+        std::u32string _filter(std::u32string_view text) const noexcept {
+            std::u32string filtered;
             auto& glyph_map{ _setting.font->glyph() };
 
             for (auto& ch : text) {
                 if (std::iswblank(ch)) {
-                    filtered.push_back(' ');
+                    filtered += ' ';
                 }
                 else if (ch == '\n' || !std::iswcntrl(ch) && glyph_map.find(ch) != glyph_map.end()) {
-                    filtered.push_back(ch);
+                    filtered += ch;
                 }
             }
             return filtered;
         }
 
-        auto _split(std::wstring_view text) const noexcept {
-            std::vector<std::pair<std::wstring, f64>> line;
+        auto _split(std::u32string_view text) const noexcept {
+            std::vector<std::pair<std::u32string, f64>> line;
             auto& glyph_map{ _setting.font->glyph() };
             f64 max_line_width{ _setting.max_line_width * _setting.scale_x };
             f64 word_spacing{ _setting.word_spacing * _setting.scale_x };
@@ -231,7 +231,7 @@ export namespace gm::draw {
             f64 line_width{}, last_spacing{};
             while (i != end) {
                 if (*i == '\n') {
-                    line.emplace_back(std::wstring{ begin, i }, line_width - last_spacing);
+                    line.emplace_back(std::u32string{ begin, i }, line_width - last_spacing);
                     line_width = last_spacing = 0;
                     begin = ++i;
                     continue;
@@ -248,14 +248,14 @@ export namespace gm::draw {
                     line_width += char_width;
                 }
                 else {
-                    line.emplace_back(std::wstring{ begin, i }, line_width - last_spacing);
+                    line.emplace_back(std::u32string{ begin, i }, line_width - last_spacing);
                     line_width = char_width;
                     begin = i;
                 }
                 last_spacing = spacing;
                 ++i;
             }
-            line.emplace_back(std::wstring{ begin, end }, line_width - last_spacing);
+            line.emplace_back(std::u32string{ begin, end }, line_width - last_spacing);
             return line;
         }
 
@@ -280,7 +280,7 @@ export namespace gm::draw {
             );
         }
 
-        void _line(f64 x, f64 y, std::wstring_view text) const noexcept {
+        void _line(f64 x, f64 y, std::u32string_view text) const noexcept {
             auto& glyph_map{ _setting.font->glyph() };
             f64 word_spacing{ _setting.word_spacing * _setting.scale_x };
             f64 letter_spacing{ _setting.letter_spacing * _setting.scale_x };
@@ -312,7 +312,7 @@ export namespace gm::draw {
             return _setting;
         }
 
-        f64 width(std::wstring_view text) const noexcept {
+        f64 width(std::u32string_view text) const noexcept {
             auto line{ _split(_filter(text)) };
             f64 max_width{};
             for (auto& [text, width] : line) {
@@ -321,18 +321,18 @@ export namespace gm::draw {
             return max_width;
         }
 
-        f64 height(std::wstring_view text) const noexcept {
+        f64 height(std::u32string_view text) const noexcept {
             auto line{ _split(_filter(text)) };
             f64 line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
             return line_height * line.size();
         }
 
-        bool text(f64 x, f64 y, std::wstring_view text) const noexcept {
+        bool text(f64 x, f64 y, std::u32string_view text) const noexcept {
             if (_setting.font == nullptr) {
                 return false;
             }
 
-            std::wstring filtered{ _filter(text) };
+            std::u32string filtered{ _filter(text) };
             auto line{ _split(filtered) };
             f64 line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
             f64 offset_x{ _setting.offset_x * _setting.scale_x };

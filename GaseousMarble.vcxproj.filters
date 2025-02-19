@@ -13,68 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\api">
-      <UniqueIdentifier>{c496aa6a-ad0b-42f6-85af-ddbe2d9f9f8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{e40de689-9773-435b-bbe1-63e913f49499}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\draw">
-      <UniqueIdentifier>{d5dc98bc-5e3a-4102-a4b7-57037a842c24}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="api\function.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\i_function.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\i_sprite.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\i_texture.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\string.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\value.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\sprite.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\bitmap.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\integer.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\convert.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="api\type.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="api\texture.h">
-      <Filter>Header Files\api</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\structure.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\draw.h">
-      <Filter>Header Files\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\font.h">
-      <Filter>Header Files\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\function.h">
-      <Filter>Header Files\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="draw\sprite.h">
-      <Filter>Header Files\draw</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">
