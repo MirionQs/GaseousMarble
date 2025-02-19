@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\inc">
+      <UniqueIdentifier>{cf292287-2c0f-4381-ab11-c86dea4dfcdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gm.cpp">
@@ -42,6 +45,9 @@
   <ItemGroup>
     <None Include="README.md">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="inc\FunctionId.inc">
+      <Filter>Header Files\inc</Filter>
     </None>
   </ItemGroup>
 </Project>

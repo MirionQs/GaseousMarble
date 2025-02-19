@@ -97,6 +97,7 @@
     <ClCompile Include="core.ixx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="inc\FunctionId.inc" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
