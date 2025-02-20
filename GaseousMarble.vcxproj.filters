@@ -36,6 +36,9 @@
     <ClCompile Include="gm.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="draw.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="gm.natvis">
