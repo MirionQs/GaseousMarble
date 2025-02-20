@@ -144,11 +144,11 @@ namespace gm::draw {
     export class Draw {
         DrawSetting _setting;
 
-        std::u32string _filter(std::u32string_view text) const noexcept {
+        std::u32string _filter(std::string_view text) const noexcept {
             std::u32string filtered;
             auto& glyph_map{ _setting.font->glyph() };
 
-            for (u32 ch : text) {
+            for (u32 ch : utf8_decode(text)) {
                 if (ch == ' ' || ch == '\t') {
                     filtered += ' ';
                 }
@@ -252,7 +252,7 @@ namespace gm::draw {
             return _setting;
         }
 
-        f64 width(std::u32string_view text) const noexcept {
+        f64 width(std::string_view text) const noexcept {
             auto line{ _split(_filter(text)) };
             f64 max_width{};
             for (auto& [text, width] : line) {
@@ -261,13 +261,13 @@ namespace gm::draw {
             return max_width;
         }
 
-        f64 height(std::u32string_view text) const noexcept {
+        f64 height(std::string_view text) const noexcept {
             auto line{ _split(_filter(text)) };
             f64 line_height{ _setting.line_height * _setting.scale_y * _setting.font->size() };
             return line_height * line.size();
         }
 
-        bool text(f64 x, f64 y, std::u32string_view text) const noexcept {
+        bool text(f64 x, f64 y, std::string_view text) const noexcept {
             if (_setting.font == nullptr) {
                 return false;
             }

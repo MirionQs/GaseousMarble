@@ -23,15 +23,15 @@ Real gm_font(StringView sprite_path, StringView glyph_path) noexcept {
 }
 
 Real gm_width(StringView text) noexcept {
-    return draw.width(utf8_decode(text));
+    return draw.width(text);
 }
 
 Real gm_height(StringView text) noexcept {
-    return draw.height(utf8_decode(text));
+    return draw.height(text);
 }
 
 Real gm_draw(Real x, Real y, StringView text) noexcept {
-    return draw.text(x, y, utf8_decode(text));
+    return draw.text(x, y, text);
 }
 
 Real gm_free(Real font_id) noexcept {

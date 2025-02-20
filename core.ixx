@@ -41,9 +41,7 @@ export namespace gm::core {
 export namespace gm::core {
 
     // not fully conforming to RFC 3629
-    std::u32string utf8_decode(std::string_view str) noexcept {
-        std::u32string res;
-
+    std::generator<u32> utf8_decode(std::string_view str) noexcept {
         auto i{ reinterpret_cast<const u8*>(str.data()) }, end{ i + str.size() };
         while (i != end) {
             u32 ch{ 0xfffd };
@@ -71,10 +69,8 @@ export namespace gm::core {
             }
             ++i;
 
-            res += ch;
+            co_yield ch;
         }
-
-        return res;
     }
 
 }
