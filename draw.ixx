@@ -10,134 +10,62 @@ import gm.engine;
 
 using namespace gm::core;
 
-// image_index == -1 indicates the current subimage
-void draw_sprite_general(
-    u32 sprite_id,
-    i32 image_index,
-    u32 image_x,
-    u32 image_y,
-    u32 width,
-    u32 height,
-    f64 x,
-    f64 y,
-    f64 scale_x,
-    f64 scale_y,
-    f64 rotate,
-    u32 color1,
-    u32 color2,
-    u32 color3,
-    u32 color4,
-    f64 alpha
-) noexcept {
-    using namespace gm::engine;
-    function[FunctionId::draw_sprite_general].call<void, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real>(
-        sprite_id,
-        image_index,
-        image_x,
-        image_y,
-        width,
-        height,
-        x,
-        y,
-        scale_x,
-        scale_y,
-        rotate,
-        color1,
-        color2,
-        color3,
-        color4,
-        alpha
-    );
-}
-
-u32 sprite_add(
-    std::string_view path,
-    u32 image_count,
-    bool remove_background,
-    bool smooth_edges,
-    i32 origin_x,
-    i32 origin_y
-) noexcept {
-    using namespace gm::engine;
-    return function[FunctionId::sprite_add].call<u32, String, Real, Real, Real, Real, Real>(
-        path,
-        image_count,
-        remove_background,
-        smooth_edges,
-        origin_x,
-        origin_y
-    );
-}
-
-void sprite_delete(u32 sprite_id) noexcept {
-    using namespace gm::engine;
-    function[FunctionId::sprite_delete].call<void, Real>(sprite_id);
-}
-
-class SpriteHandle {
-    u32 _id;
-
-public:
-    SpriteHandle() noexcept :
-        _id{} {}
-
-    SpriteHandle(std::nullptr_t) noexcept :
-        _id{} {}
-
-    SpriteHandle(u32 id) noexcept :
-        _id{ id } {}
-
-    operator bool() const noexcept {
-        return _id != 0;
-    }
-
-    bool operator==(SpriteHandle other) const noexcept {
-        return _id == other._id;
-    }
-
-    u32 id() const noexcept {
-        return _id;
-    }
-};
-
-struct SpriteDeleter {
-    using pointer = SpriteHandle;
-
-    void operator()(SpriteHandle handle) const noexcept {
-        sprite_delete(handle.id());
-    }
-};
-
 // Font
-export namespace gm::draw {
+namespace gm::draw {
 
-    struct GlyphData {
+    class SpriteHandle {
+        u32 _id{};
+
+    public:
+        SpriteHandle() noexcept = default;
+
+        SpriteHandle(std::nullptr_t) noexcept {};
+
+        SpriteHandle(u32 id) noexcept :
+            _id{ id } {}
+
+        operator bool() const noexcept {
+            return _id != 0;
+        }
+
+        bool operator==(SpriteHandle other) const noexcept {
+            return _id == other._id;
+        }
+
+        u32 id() const noexcept {
+            return _id;
+        }
+    };
+
+    struct SpriteDeleter {
+        using pointer = SpriteHandle;
+
+        void operator()(SpriteHandle handle) const noexcept {
+            using namespace gm::engine;
+            function[FunctionId::sprite_delete].call<void, Real>(handle.id());
+        }
+    };
+
+    export struct GlyphData {
         u16 x, y;
         u16 width;
         i16 left;
     };
 
-    class Font {
-        static inline u32 _counter;
+    export class Font {
+        static inline u32 _counter{};
 
-        u32 _id;
-        u16 _size;
-        u16 _height;
+        u32 _id{};
+        u16 _size{};
+        u16 _height{};
         std::unique_ptr<SpriteHandle, SpriteDeleter> _sprite;
         std::unordered_map<u32, GlyphData> _glyph;
 
     public:
-        Font() noexcept :
-            _id{},
-            _size{},
-            _height{},
-            _sprite{} {}
+        Font() noexcept = default;
 
         Font(std::string_view sprite_path, std::string_view glyph_path) noexcept :
-            _id{ ++_counter },
-            _size{},
-            _height{},
-            _sprite{ sprite_add(sprite_path, 1, false, false, 0, 0) } {
+            _id{ ++_counter } {
 
             std::ifstream file{ glyph_path.data(), std::ios::binary };
             if (!file.is_open()) {
@@ -158,6 +86,9 @@ export namespace gm::draw {
                 file.read(reinterpret_cast<char*>(&ch), sizeof(ch));
                 file.read(reinterpret_cast<char*>(&_glyph[ch]), sizeof(_glyph[ch]));
             }
+
+            using namespace gm::engine;
+            _sprite.reset(function[FunctionId::sprite_add].call<u32, String, Real, Real, Real, Real, Real>(sprite_path, 1, false, false, 0, 0));
         }
 
         operator bool() const noexcept {
@@ -196,9 +127,9 @@ export namespace gm::draw {
 }
 
 // Draw
-export namespace gm::draw {
+namespace gm::draw {
 
-    struct DrawSetting {
+    export struct DrawSetting {
         Font* font;
         u32 color_top, color_bottom;
         f64 alpha;
@@ -210,7 +141,7 @@ export namespace gm::draw {
         f64 scale_x, scale_y;
     };
 
-    class Draw {
+    export class Draw {
         DrawSetting _setting;
 
         std::u32string _filter(std::u32string_view text) const noexcept {
@@ -268,7 +199,8 @@ export namespace gm::draw {
         }
 
         void _glyph(f64 x, f64 y, const GlyphData& glyph) const noexcept {
-            draw_sprite_general(
+            using namespace gm::engine;
+            function[FunctionId::draw_sprite_general].call<void, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real, Real>(
                 _setting.font->sprite().id(),
                 0,
                 glyph.x,
