@@ -309,16 +309,16 @@ namespace gm::engine {
 
     export class Sprite {
         SpriteData* _data;
-        std::wstring_view _name;
+        std::u16string_view _name;
 
     public:
         Sprite() = delete;
 
-        Sprite(SpriteData* data, wchar_t* name) noexcept :
+        Sprite(SpriteData* data, char16_t* name) noexcept :
             _data{ data },
             _name{ name } {}
 
-        std::wstring_view name() const noexcept {
+        std::u16string_view name() const noexcept {
             return _name;
         }
 
@@ -352,7 +352,7 @@ namespace gm::engine {
 
     struct SpriteResource {
         SpriteData** sprites;
-        wchar_t** names;
+        char16_t** names;
         u32 count;
     };
 
@@ -372,9 +372,9 @@ namespace gm::engine {
             return _resource->count;
         }
 
-        u32 find(std::wstring_view name) const noexcept {
+        u32 find(std::u16string_view name) const noexcept {
             for (u32 id{}; id != _resource->count; ++id) {
-                if (std::wcscmp(name.data(), _resource->names[id]) == 0) {
+                if (name == _resource->names[id]) {
                     return id;
                 }
             }
