@@ -3,7 +3,7 @@ module gm;
 import std;
 import gm.core;
 import gm.engine;
-import gm.draw;
+import gm.old.draw;
 
 using namespace gm::core;
 using namespace gm::engine;

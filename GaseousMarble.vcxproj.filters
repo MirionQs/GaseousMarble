@@ -27,7 +27,7 @@
     <ClCompile Include="core.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="draw.ixx">
+    <ClCompile Include="old.draw.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="engine.ixx">

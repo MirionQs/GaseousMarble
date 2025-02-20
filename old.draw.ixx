@@ -2,7 +2,7 @@ module;
 
 #include <assert.h>
 
-export module gm.draw;
+export module gm.old.draw;
 
 import std;
 import gm.core;
