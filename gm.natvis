@@ -77,10 +77,8 @@
     </Type>
 
     <Type Name="gm::engine::Texture">
-        <Intrinsic Name="image_size" Expression="_image_size"/>
-        <Intrinsic Name="texture_size" Expression="_texture_size"/>
         <Intrinsic Name="data" Expression="_data"/>
-        <DisplayString>{{ image={image_size()} texture={texture_size()} }}</DisplayString>
+        <DisplayString>{{ image={_image_size} texture={_texture_size} }}</DisplayString>
         <Expand>
             <Item Name="[data]">data(), nvo</Item>
         </Expand>
@@ -100,8 +98,7 @@
     </Type>
 
     <Type Name="gm::engine::Bitmap">
-        <Intrinsic Name="size" Expression="_size"/>
-        <DisplayString>{{ size={size()} }}</DisplayString>
+        <DisplayString>{{ size={_size} }}</DisplayString>
     </Type>
 
     <Type Name="gm::engine::SpriteData">
