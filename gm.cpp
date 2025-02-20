@@ -7,14 +7,13 @@ import gm.draw;
 
 using namespace gm::core;
 using namespace gm::engine;
-using namespace gm::draw;
 
-std::unordered_map<u32, Font> font_map;
+std::unordered_map<u32, gm::draw::Font> font_map;
 
-Draw draw;
+gm::draw::Draw draw;
 
 Real gm_font(StringView sprite_path, StringView glyph_path) noexcept {
-    Font font{ sprite_path, glyph_path };
+    gm::draw::Font font{ sprite_path, glyph_path };
     if (!font) {
         return 0;
     }
