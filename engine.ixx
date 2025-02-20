@@ -22,53 +22,61 @@ namespace gm::engine {
         u32 size;
     };
 
-    export class String {
-        char* _data;
+    export // not that I want to insert a line break. If I don't, VS' formatter will indent the next line.
+        template<class T>
+    class BasicString {
+        static constexpr u32 _offset{ sizeof(StringHeader) / sizeof(T) };
+
+        T* _data;
 
         auto _header() noexcept {
-            return reinterpret_cast<StringHeader*>(_data - sizeof(StringHeader));
+            return reinterpret_cast<StringHeader*>(_data - _offset);
         }
 
         auto _header() const noexcept {
-            return reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
+            return reinterpret_cast<const StringHeader*>(_data - _offset);
         }
 
     public:
-        String() noexcept {
-            static String empty_string{ "" };
-            _data = empty_string._data;
+        BasicString() noexcept {
+            static BasicString empty_str{ "" };
+            _data = empty_str._data;
             ++_header()->ref_count;
         }
 
-        String(std::string_view string) noexcept :
-            _data{ new char[sizeof(StringHeader) + string.size() + 1] + sizeof(StringHeader) } {
+        BasicString(std::basic_string_view<T> str) noexcept :
+            _data{ new char[_offset + str.size() + 1] + _offset } {
 
-            new(_header()) StringHeader{ 65001, 1, 1, string.size() };
-            std::memcpy(_data, string.data(), string.size() + 1);
+            static constexpr u16 char_size{ sizeof(T) };
+            static constexpr u16 code_page{ char_size == 1 ? 65001 : char_size == 2 ? 1200 : 12000 };
+            new(_header()) StringHeader{ code_page, char_size, 1, str.size() };
+            *std::copy(str.begin(), str.end(), _data) = 0;
         }
 
-        String(const String& other) noexcept :
+        BasicString(const BasicString& other) noexcept :
             _data{ other._data } {
 
             ++_header()->ref_count;
         }
 
-        ~String() noexcept {
+        ~BasicString() noexcept {
             if (--_header()->ref_count == 0) {
-                delete[](_data - sizeof(StringHeader));
+                delete[](_data - _offset);
             }
         }
 
-        String& operator=(const String& other) noexcept {
+        BasicString& operator=(const BasicString& other) noexcept {
             if (this == &other) {
                 return *this;
             }
-            String temp{ other };
+
+            BasicString temp{ other };
             std::swap(_data, temp._data);
+
             return *this;
         }
 
-        operator std::string_view() const noexcept {
+        operator std::basic_string_view<T>() const noexcept {
             return { _data, _header()->size };
         }
 
@@ -80,24 +88,32 @@ namespace gm::engine {
             return _header()->ref_count;
         }
 
-        const char* data() const noexcept {
+        const T* data() const noexcept {
             return _data;
         }
     };
 
+    export using String = BasicString<char>;
+    export using String16 = BasicString<char16_t>;
+    export using String32 = BasicString<char32_t>;
+
     // used for external strings as their lifetime cannot be managed
-    export class StringView {
-        const char* _data;
+    export
+        template<class T>
+    class BasicStringView {
+        static constexpr u32 _offset{ sizeof(StringHeader) / sizeof(T) };
+
+        const T* _data;
 
         auto _header() const noexcept {
-            return reinterpret_cast<const StringHeader*>(_data - sizeof(StringHeader));
+            return reinterpret_cast<const StringHeader*>(_data - _offset);
         }
 
     public:
-        StringView(String string = {}) noexcept :
-            _data{ string.data() } {}
+        BasicStringView(BasicString<T> str = {}) noexcept :
+            _data{ str.data() } {}
 
-        operator std::string_view() const noexcept {
+        operator std::basic_string_view<T>() const noexcept {
             return { _data, _header()->size };
         }
 
@@ -109,10 +125,14 @@ namespace gm::engine {
             return _header()->ref_count;
         }
 
-        const char* data() const noexcept {
+        const T* data() const noexcept {
             return _data;
         }
     };
+
+    export using StringView = BasicStringView<char>;
+    export using String16View = BasicStringView<char16_t>;
+    export using String32View = BasicStringView<char32_t>;
 
 }
 
@@ -309,12 +329,12 @@ namespace gm::engine {
 
     export class Sprite {
         SpriteData* _data;
-        std::u16string_view _name;
+        String16View _name;
 
     public:
         Sprite() = delete;
 
-        Sprite(SpriteData* data, char16_t* name) noexcept :
+        Sprite(SpriteData* data, String16View name) noexcept :
             _data{ data },
             _name{ name } {}
 
@@ -352,7 +372,7 @@ namespace gm::engine {
 
     struct SpriteResource {
         SpriteData** sprites;
-        char16_t** names;
+        String16View* names;
         u32 count;
     };
 
@@ -374,7 +394,7 @@ namespace gm::engine {
 
         u32 find(std::u16string_view name) const noexcept {
             for (u32 id{}; id != _resource->count; ++id) {
-                if (name == _resource->names[id]) {
+                if (_resource->names[id] == name) {
                     return id;
                 }
             }

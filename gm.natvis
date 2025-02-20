@@ -13,8 +13,8 @@
         <DisplayString>[({left}, {top}) : ({right}, {bottom})]</DisplayString>
     </Type>
 
-    <Type Name="gm::engine::String">
-        <Intrinsic Name="header" Expression="(gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader))"/>
+    <Type Name="gm::engine::BasicString&lt;*&gt;">
+        <Intrinsic Name="header" Expression="(gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader) / sizeof($T1))"/>
         <Intrinsic Name="size" Expression="header()->size"/>
         <Intrinsic Name="ref_count" Expression="header()->ref_count"/>
         <DisplayString>{_data, [size()] na}</DisplayString>
@@ -28,8 +28,8 @@
         </Expand>
     </Type>
 
-    <Type Name="gm::engine::StringView">
-        <Intrinsic Name="header" Expression="(gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader))"/>
+    <Type Name="gm::engine::BasicStringView&lt;*&gt;">
+        <Intrinsic Name="header" Expression="(gm::engine::StringHeader*)(_data - sizeof(gm::engine::StringHeader) / sizeof($T1))"/>
         <Intrinsic Name="size" Expression="header()->size"/>
         <Intrinsic Name="ref_count" Expression="header()->ref_count"/>
         <DisplayString>{_data, [size()] na}</DisplayString>
