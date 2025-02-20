@@ -40,7 +40,7 @@ export namespace gm::core {
 // utility functions
 export namespace gm::core {
 
-    // doesn't fully conform to RFC 3629
+    // not fully conforming to RFC 3629
     std::u32string utf8_decode(std::string_view str) noexcept {
         std::u32string res;
 

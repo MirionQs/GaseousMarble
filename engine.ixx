@@ -125,14 +125,13 @@ namespace gm::engine {
     };
 
     class Value {
-        ValueType _type{ ValueType::real };
-        Real _real{};
-        String _string{};
+        ValueType _type;
+        Real _real;
+        String _string;
 
     public:
-        Value() noexcept = default;
-
-        Value(Real real) noexcept :
+        Value(Real real = 0) noexcept :
+            _type{ ValueType::real },
             _real{ real } {}
 
         Value(String string) noexcept :
@@ -249,8 +248,12 @@ namespace gm::engine {
             return std::forward_like<decltype(self)>(self._texture_size);
         }
 
-        auto&& data(this auto& self) noexcept {
-            return std::forward_like<decltype(self)>(self._data);
+        IDirect3DTexture8* data() noexcept {
+            return _data;
+        }
+
+        const IDirect3DTexture8* data() const noexcept {
+            return _data;
         }
     };
 
@@ -311,7 +314,9 @@ namespace gm::engine {
     public:
         Sprite() = delete;
 
-        Sprite(SpriteData* data, wchar_t* name) noexcept : _data{ data }, _name{ name } {}
+        Sprite(SpriteData* data, wchar_t* name) noexcept :
+            _data{ data },
+            _name{ name } {}
 
         std::wstring_view name() const noexcept {
             return _name;
@@ -345,13 +350,13 @@ namespace gm::engine {
         }
     };
 
-    class ISprite {
-        struct SpriteResource {
-            SpriteData** sprites;
-            wchar_t** names;
-            u32 count;
-        };
+    struct SpriteResource {
+        SpriteData** sprites;
+        wchar_t** names;
+        u32 count;
+    };
 
+    class ISprite {
         SpriteResource* _resource;
 
     public:
