@@ -82,7 +82,7 @@ namespace gm::draw {
             file.read(reinterpret_cast<char*>(&_height), sizeof(_height));
 
             while (file) {
-                wchar_t ch;
+                u16 ch;
                 file.read(reinterpret_cast<char*>(&ch), sizeof(ch));
                 file.read(reinterpret_cast<char*>(&_glyph[ch]), sizeof(_glyph[ch]));
             }
@@ -148,11 +148,11 @@ namespace gm::draw {
             std::u32string filtered;
             auto& glyph_map{ _setting.font->glyph() };
 
-            for (auto& ch : text) {
-                if (std::iswblank(ch)) {
+            for (u32 ch : text) {
+                if (ch == ' ' || ch == '\t') {
                     filtered += ' ';
                 }
-                else if (ch == '\n' || !std::iswcntrl(ch) && glyph_map.find(ch) != glyph_map.end()) {
+                else if (ch == '\n' || ch >= ' ' && ch != '\x7f' && glyph_map.find(ch) != glyph_map.end()) {
                     filtered += ch;
                 }
             }
@@ -225,7 +225,7 @@ namespace gm::draw {
             f64 word_spacing{ _setting.word_spacing * _setting.scale_x };
             f64 letter_spacing{ _setting.letter_spacing * _setting.scale_x };
 
-            for (auto& ch : text) {
+            for (u32 ch : text) {
                 auto& glyph{ glyph_map.at(ch) };
                 _glyph(x, y, glyph);
                 x += (glyph.left + glyph.width) * _setting.scale_x + letter_spacing;
